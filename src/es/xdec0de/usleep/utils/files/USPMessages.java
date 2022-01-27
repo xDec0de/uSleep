@@ -118,6 +118,43 @@ public class USPMessages {
 		// It's not necessary to null check as applyColor does it.
 	}
 
+	// Broadcast //
+
+	/**
+	 * Broadcasts a message to all players online and the console, uses {@link #getMessage(USPMessage)}
+	 * 
+	 * @param msg The message to be broadcasted.
+	 */
+	public static void broadcast(USPMessage msg) {
+		String str = getMessage(msg);
+		Bukkit.getOnlinePlayers().forEach(on -> on.sendMessage(str));
+		Bukkit.getConsoleSender().sendMessage(str);
+	}
+
+	/**
+	 * Broadcasts a message to all players online and the console, uses {@link #getMessage(USPMessage, Replacer)}
+	 * 
+	 * @param msg The message to be broadcasted.
+	 * @param replacer The replacer to apply.
+	 */
+	public static void broadcast(USPMessage msg, Replacer replacer) {
+		String str = getMessage(msg, replacer);
+		Bukkit.getOnlinePlayers().forEach(on -> on.sendMessage(str));
+		Bukkit.getConsoleSender().sendMessage(str);
+	}
+
+	/**
+	 * Broadcasts a message to all players online and the console, uses {@link #getMessage(USPMessage, String...)}
+	 * 
+	 * @param msg The message to be broadcasted.
+	 * @param replacements The replacements to apply.
+	 */
+	public static void broadcast(USPMessage msg, String... replacements) {
+		String str = getMessage(msg, replacements);
+		Bukkit.getOnlinePlayers().forEach(on -> on.sendMessage(str));
+		Bukkit.getConsoleSender().sendMessage(str);
+	}
+
 	// Message getters //
 
 	/**

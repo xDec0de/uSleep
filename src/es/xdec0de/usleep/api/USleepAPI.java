@@ -27,16 +27,14 @@ public class USleepAPI {
 	private static List<UUID> onDelay = new ArrayList<UUID>();
 
 	public static boolean handleSleep(Player player) {
-		boolean instant = USPConfig.getBoolean(USPSetting.INSTANT_SLEEP_ENABLED) && player.hasPermission(USPConfig.getString(USPSetting.INSTANT_SLEEP_PERM));
-		boolean percent = USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_ENABLED) && player.hasPermission(USPConfig.getString(USPSetting.PERCENT_SLEEP_ENABLED));
 		if(USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_PREVENT_SPAM)) { 
 			UUID uuid = player.getUniqueId();
 			onDelay.add(uuid);
 			Bukkit.getScheduler().runTaskTimerAsynchronously(USleep.getInstance(), () -> onDelay.remove(uuid), 0L, USPConfig.getInt(USPSetting.PERCENT_SLEEP_PREVENT_SPAM_COOLDOWN) * 20L);
 		}
-		if(instant)
+		if(USPConfig.getBoolean(USPSetting.INSTANT_SLEEP_ENABLED) && player.hasPermission(USPConfig.getString(USPSetting.INSTANT_SLEEP_PERM))) // instant
 			resetDay(player.getWorld(), player);
-		if(percent) {
+		else if(USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_ENABLED) && player.hasPermission(USPConfig.getString(USPSetting.PERCENT_SLEEP_ENABLED))) { // percent
 			numSleep++;
 			if(getRequiredPlayers() <= numSleep)
 				broadcastSleep(false);
@@ -52,14 +50,14 @@ public class USleepAPI {
 	}
 
 	public static void handleWakeUp() {
-		if(numSleep != 0) {
+		if(numSleep > 0) {
 			numSleep--;
 			broadcastSleep(true);
 		}
 	}
 
 	private static void resetDay(World world, Player player) {
-		USleepAPI.numSleep = 0;
+		numSleep = 0;
 		world.setTime(0L);
 		world.setThundering(false);
 		world.setStorm(false);

@@ -25,16 +25,14 @@ public class SleepAPI {
 	public static boolean handleSleep(Player player) {
 		boolean instant = USPConfig.getBoolean(USPSetting.INSTANT_SLEEP_ENABLED) && player.hasPermission(USPConfig.getString(USPSetting.INSTANT_SLEEP_PERM));
 		boolean percent = USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_ENABLED) && player.hasPermission(USPConfig.getString(USPSetting.PERCENT_SLEEP_ENABLED));
-		if(instant) {
-			resetDay(player.getWorld());
-			broadcastInstantNextDay(player);
-		} if(percent) {
+		if(instant)
+			resetDay(player.getWorld(), player);
+		if(percent) {
 			numSleep++;
-			if(getRequiredPlayers() <= numSleep) {
-				resetDay(player.getWorld());
+			if(getRequiredPlayers() <= numSleep)
 				broadcastSleep(false);
-			} else
-				broadcastPercentNextDay();
+			else
+				resetDay(player.getWorld(), null);
 		} else
 			return false;
 		return true;
@@ -47,11 +45,15 @@ public class SleepAPI {
 		}
 	}
 
-	private static void resetDay(World world) {
+	private static void resetDay(World world, Player player) {
 		SleepAPI.numSleep = 0;
 		world.setTime(0L);
 		world.setThundering(false);
 		world.setStorm(false);
+		if(player != null)
+			broadcastInstantNextDay(player);
+		else
+			broadcastPercentNextDay();
 	}
 
 	public static int getRequiredPlayers() {

@@ -24,8 +24,10 @@ public class SleepHandler implements Listener {
 		if(e.getBed().getLocation().getWorld().getEnvironment().equals(Environment.NORMAL)) {
 			if(e.getBedEnterResult().equals(BedEnterResult.OK)) {
 				if(!USleepAPI.hasSleepCooldown(p)) {
-					if(!USleepAPI.handleSleep(p))
-						USPMessages.sendSleepMessage(p, USPMessage.NO_PERMS);
+					if(!USleepAPI.handleSleep(p)) {
+						e.setCancelled(true);
+						USPMessages.sendSleepMessage(p, USPMessage.NO_PERMS, "%perm%", USPConfig.getString(USPSetting.PERCENT_SLEEP_PERM));
+					}
 				} else
 					USPMessages.sendSleepMessage(p, USPMessage.PERCENT_TOO_FAST);
 			} else {

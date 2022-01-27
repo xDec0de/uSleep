@@ -1,4 +1,4 @@
-package es.xdec0de.usleep.bedinteract;
+package es.xdec0de.usleep;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBedEnterEvent;
+import org.bukkit.event.player.PlayerBedLeaveEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent.BedEnterResult;
 
 import es.xdec0de.usleep.api.SleepAPI;
@@ -18,18 +19,16 @@ import es.xdec0de.usleep.utils.USPSetting;
 import es.xdec0de.usleep.utils.files.USPConfig;
 import es.xdec0de.usleep.utils.files.USPMessages;
 
-public class Sleep implements Listener {
+public class SleepHandler implements Listener {
 
-	SleepAPI uSleepAPI = new SleepAPI();
-
-	public static List<String> onDelay = new ArrayList<>();
+	public static List<String> onDelay = new ArrayList<>(); // TODO delay
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBedEnter(PlayerBedEnterEvent e) {
 		Player p = e.getPlayer();
 		if(e.getBed().getLocation().getWorld().getEnvironment().equals(Environment.NORMAL)) {
 			if(e.getBedEnterResult().equals(BedEnterResult.OK)) {
-				if(!uSleepAPI.handleSleep(p))
+				if(!SleepAPI.handleSleep(p))
 					USPMessages.sendMessage(p, USPMessage.NO_PERMS);
 			} else {
 				e.setCancelled(true);
@@ -40,5 +39,10 @@ public class Sleep implements Listener {
 					p.playSound(p.getLocation(), Sound.valueOf(USPConfig.getString(USPSetting.PERCENT_SLEEP_ERROR_SOUND)), 1.0F, 1.0F); 
 			}
 		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onBedLeave(PlayerBedLeaveEvent e) {
+		SleepAPI.handleWakeUp();
 	}
 }

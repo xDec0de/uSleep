@@ -4,8 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import es.xdec0de.usleep.bedinteract.Sleep;
-import es.xdec0de.usleep.bedinteract.WakeUp;
 import es.xdec0de.usleep.cmds.BedTP;
 import es.xdec0de.usleep.cmds.USleepCMD;
 import es.xdec0de.usleep.utils.USPSetting;
@@ -63,8 +61,7 @@ public class USleep  extends JavaPlugin {
 	}
 
 	private void registerEvents() {
-		this.getServer().getPluginManager().registerEvents(new Sleep(), this);
-		this.getServer().getPluginManager().registerEvents(new WakeUp(), this);
+		this.getServer().getPluginManager().registerEvents(new SleepHandler(), this);
 		this.getServer().getPluginManager().registerEvents(new UpdateChecker(), this);
 	}
 

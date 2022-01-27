@@ -320,4 +320,110 @@ public class USPMessages {
 		if(!send.isEmpty())
 			player.sendMessage(send);
 	}
+
+	// Actionbar senders //
+
+	/**
+	 * Sends an actionbar with colors {@link #applyColor(String)} and the default {@link Replacer}, empty messages will be ignored and the message wont be sent.
+	 * 
+	 * @param player The player that will receive the message.
+	 * @param msg The message to get.
+	 * 
+	 * @see #getMessage(USPMessage)
+	 */
+	public static void sendActionbar(Player player, USPMessage msg) {
+		String send = getMessage(msg);
+		if(!send.isEmpty())
+			player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(send));
+	}
+
+	/**
+	 * Sends an actionbar with colors {@link #applyColor(String)} and the default {@link Replacer}, also, 
+	 * the specified replacer is added to the default replacer, empty messages will be ignored and the message wont be sent.
+	 * 
+	 * @param player The player that will receive the message.
+	 * @param msg The message to get.
+	 * @param replacer The replacer to apply.
+	 * 
+	 * @see #getMessage(USPMessage, Replacer)
+	 */
+	public static void sendActionbar(Player player, USPMessage msg, Replacer replacer) {
+		String send = getMessage(msg, replacer);
+		if(!send.isEmpty())
+			player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(send));
+	}
+
+	/**
+	 * Sends an actionbar with colors {@link #applyColor(String)} and the default {@link Replacer}, also, a new replacer made with 
+	 * the specified strings is added to the default replacer, empty messages will be ignored and the message wont be sent.
+	 * 
+	 * @param player The player that will receive the message.
+	 * @param msg The message to get.
+	 * @param replacements The replacements to apply.
+	 * 
+	 * @see #getMessage(USPMessage, String...)
+	 */
+	public static void sendActionbar(Player player, USPMessage msg, String... replacements) {
+		String send = getMessage(msg, replacements);
+		if(!send.isEmpty())
+			player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(send));
+	}
+
+	/**
+	 * Sends an actionbar with colors {@link #applyColor(String)} and the default {@link Replacer}, empty messages will be ignored and the message wont be sent. 
+	 * Applies a 1 tick delay.
+	 * 
+	 * @param player The player that will receive the message.
+	 * @param msg The message to get.
+	 * 
+	 * @see #getMessage(USPMessage)
+	 */
+	public static void sendDelayedActionbar(Player player, USPMessage msg) {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(USleep.getInstance(), new Runnable() {
+			@Override
+			public void run() {
+				sendActionbar(player, msg);
+			}
+		}, 1L);
+	}
+
+	/**
+	 * Sends an actionbar with colors {@link #applyColor(String)} and the default {@link Replacer}, also, 
+	 * the specified replacer is added to the default replacer, empty messages will be ignored and the message wont be sent. 
+	 * Applies a 1 tick delay.
+	 * 
+	 * @param player The player that will receive the message.
+	 * @param msg The message to get.
+	 * @param replacer The replacer to apply.
+	 * 
+	 * @see #getMessage(USPMessage, Replacer)
+	 */
+	public static void sendDelayedActionbar(Player player, USPMessage msg, Replacer replacer) {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(USleep.getInstance(), new Runnable() {
+			@Override
+			public void run() {
+				sendActionbar(player, msg, replacer);
+			}
+		}, 1L);
+	}
+
+	/**
+	 * Sends an actionbar with colors {@link #applyColor(String)} and the default {@link Replacer}, also, a new replacer made with 
+	 * the specified strings is added to the default replacer, empty messages will be ignored and the message wont be sent. 
+	 * Applies a 1 tick delay.
+	 * 
+	 * @param player The player that will receive the message.
+	 * @param msg The message to get.
+	 * @param replacements The replacements to apply.
+	 * 
+	 * @see #getMessage(USPMessage, String...)
+	 */
+	public static void sendDelayedActionbar(Player player, USPMessage msg, String... replacements) {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(USleep.getInstance(), new Runnable() {
+			@Override
+			public void run() {
+				sendActionbar(player, msg, replacements);
+			}
+		}, 1L);
+	}
 }

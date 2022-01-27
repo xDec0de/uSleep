@@ -12,8 +12,8 @@ public class WakeUp implements Listener {
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBedLeave(PlayerBedLeaveEvent e) {
-		if(SleepAPI.NumSleep != 0) {
-	      SleepAPI.NumSleep--;
+		if(SleepAPI.numSleep != 0) {
+	      SleepAPI.numSleep--;
 	      uSleepAPI.broadcastWakeUp();
 	    } 
 	}

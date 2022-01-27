@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import com.earth2me.essentials.Essentials;
@@ -18,7 +19,36 @@ import es.xdec0de.usleep.utils.files.USPMessages;
 
 public class SleepAPI {
 
-	public static int NumSleep = 0;	
+	public static int numSleep = 0;	
+
+	public boolean handleSleep(Player player) {
+		boolean instant = USPConfig.getBoolean(USPSetting.INSTANT_SLEEP_ENABLED) && player.hasPermission(USPConfig.getString(USPSetting.INSTANT_SLEEP_PERM));
+		boolean percent = USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_ENABLED) && player.hasPermission(USPConfig.getString(USPSetting.PERCENT_SLEEP_ENABLED));
+		if(instant) {
+			resetDay(player.getWorld());
+			broadcastInstantNextDay(player);
+		} if(percent) {
+			numSleep++;
+			if(getRequiredPlayers() <= numSleep) {
+				resetDay(player.getWorld());
+				broadcastSleep();
+			} else
+				broadcastPercentNextDay();
+		} else
+			return false;
+		return true;
+	}
+
+	private void resetDay(World world) {
+		SleepAPI.numSleep = 0;
+		world.setTime(0L);
+		world.setThundering(false);
+		world.setStorm(false);
+	}
+
+	private int getRequiredPlayers() {
+		return Math.round(getPlayerCount() * USPConfig.getInt(USPSetting.PERCENT_SLEEP_PERCENT) / 100.0F);
+	}
 
 	public int getPlayerCount() {
 		List<Player> list = new ArrayList<Player>();
@@ -43,7 +73,7 @@ public class SleepAPI {
 		}
 		return Bukkit.getOnlinePlayers().size() - list.size();
 	}
-	
+
 	public void broadcastInstantNextDay(Player p) {
 		USPMessages.broadcast(USPMessage.INSTANT_OK, "%player%", p.getName());
 		if(USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_SOUNDS_ENABLED))
@@ -57,8 +87,8 @@ public class SleepAPI {
 	}
 	
 	public void broadcastSleep() {
-		String required = Integer.toString(Math.round(getPlayerCount() * USPConfig.get().getInt("Events.PercentSleep.Percentage") / 100.0F));
-		String current = Integer.toString(NumSleep);
+		String required = Integer.toString(getRequiredPlayers());
+		String current = Integer.toString(numSleep);
 		if(USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED))
 			USPMessages.broadcastActionbar(USPMessage.PERCENT_OK, "%required%", required, "%current%", current);
 		else
@@ -68,8 +98,8 @@ public class SleepAPI {
 	}
 	
 	public void broadcastWakeUp() {
-		String required = Integer.toString(Math.round(getPlayerCount() * USPConfig.get().getInt("Events.PercentSleep.Percentage") / 100.0F));
-		String current = Integer.toString(NumSleep);
+		String required = Integer.toString(getRequiredPlayers());
+		String current = Integer.toString(numSleep);
 		if(USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED))
 			USPMessages.broadcastActionbar(USPMessage.PERCENT_OK, "%required%", required, "%current%", current);
 		else

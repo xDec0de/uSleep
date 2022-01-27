@@ -1,7 +1,7 @@
-name: uSleep
+name: ${project.name}
 main: es.xdec0de.usleep.USPMain
 author: xDec0de_
-version: 1.3.1
+version: ${project.version}
 softdepend: [Essentials]
 commands:
   usleep:

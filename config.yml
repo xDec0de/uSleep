@@ -1,0 +1,42 @@
+# |------------------------------------------------------------------------| #
+# | #                                                                    # | #
+# | #                    --------------------------                      # | #
+# | #                    | uSleep v1.3 by Dec0de_ |                      # | #
+# | #                    --------------------------                      # | #
+# | #                                                                    # | #
+# |------------------------------------------------------------------------| #
+
+Updater:
+  Enabled: true
+  Message:
+    Permission: "us.updater.notify"
+    Console: true
+    Players: true
+Essentials:
+  IgnoreAFK: true
+IgnoreVanished: true
+Commands:
+  usleep:
+    ReloadPerm: "us.reload"
+  Bed:
+    UseSelfPerm: "us.bed"
+    UseOtherPerm: "us.bed.other"
+Events:
+  InstantSleep:
+    Enabled: true
+    Permission: "us.instant"
+  PercentSleep:
+    Enabled: true
+    PreventSpam: true
+    PreventSpamCooldown: 5
+    Percentage: 50
+    Permission: "us.percent"
+    Sounds: 
+      Enabled: true
+      Sleep: "BLOCK_NOTE_BLOCK_PLING"
+      Error: "BLOCK_NOTE_BLOCK_BASS"
+      Leave: "BLOCK_NOTE_BLOCK_BASS"
+      NextDay: "ENTITY_PLAYER_LEVELUP"
+Visuals:
+  Titles: true
+  UseActionBar: true

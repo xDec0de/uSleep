@@ -1,0 +1,40 @@
+# |------------------------------------------------------------------------| #
+# | #                                                                    # | #
+# | #                    --------------------------                      # | #
+# | #                    | uSleep v1.3 by Dec0de_ |                      # | #
+# | #                    --------------------------                      # | #
+# | #                                                                    # | #
+# |------------------------------------------------------------------------| #
+
+Core:
+  Prefix: "&7&l<&b&lu&9&lSleep&7&l>"
+  ErrorPrefix: "&8&l[&4&l!&8&l]"
+  NoPerms: "%error% &cInsufficient permissions &8(&e%perm%&8)&c."
+  NoConsole: "%error% &cThis command can't be executed from the console."
+  PlayerNotFound: "%error% &cThat player is not online."
+Commands:
+  usleep:
+    Reload: "%prefix% &aPlugin reloaded."
+    Usage: "%error% &cUsage&8: /&eusleep &8<&ereload&8>&c."
+  BedTP:
+    Teleport: "%prefix% &bYou have been teleported to &eyour &bbed."
+    TeleportOther: "%prefix% &bYou have been teleported to &e%player%'s &bbed."
+    Error: "%error% &cBed is missing or obstructed."
+    Usage: "%error% &cUsage&8: /&ebedtp &8<&eplayer&8>&c."
+Events:
+  Sleep:
+    NOT_POSSIBLE_HERE: "&cWhoops!"
+    NOT_POSSIBLE_NOW: "&cYou can sleep only at night and during thunderstorms."
+    NOT_SAFE: "&cYou may not rest now, there are monsters nearby"
+    OTHER_PROBLEM: "&cYou can't sleep right now."
+    TOO_FAR_AWAY: "&cYou may not rest now; the bed is too far away."
+  InstantSleep:
+    OK: "%prefix% &e%player% &bhas slept, we move on to the next day."
+  PercentSleep:
+    OK: "&7Players sleeping: &8[&b%current%&7/&9%required%&8]"
+    NextDay: "%prefix% &bThere are enough players sleeping, we move on to the next day"
+    TooFast: "%error% &cYou are sleeping too fast!"
+    Title: "&7&lPlayers sleeping"
+    SubTitle: "&b&l%current%&7&l/&9&l%required%"
+  Updater:
+    Join: "%prefix% &7A new version &8(&6v%ver%&8) &7is available, using&8: &cv%current%&7."

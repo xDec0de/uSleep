@@ -1,7 +1,9 @@
 package es.xdec0de.usleep.api;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
@@ -12,6 +14,7 @@ import org.bukkit.entity.Player;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 
+import es.xdec0de.usleep.USleep;
 import es.xdec0de.usleep.utils.SuperVanish;
 import es.xdec0de.usleep.utils.USPMessage;
 import es.xdec0de.usleep.utils.USPSetting;
@@ -20,11 +23,17 @@ import es.xdec0de.usleep.utils.files.USPMessages;
 
 public class SleepAPI {
 
-	private static int numSleep = 0;	
+	private static int numSleep = 0;
+	private static List<UUID> onDelay = new ArrayList<UUID>();
 
 	public static boolean handleSleep(Player player) {
 		boolean instant = USPConfig.getBoolean(USPSetting.INSTANT_SLEEP_ENABLED) && player.hasPermission(USPConfig.getString(USPSetting.INSTANT_SLEEP_PERM));
 		boolean percent = USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_ENABLED) && player.hasPermission(USPConfig.getString(USPSetting.PERCENT_SLEEP_ENABLED));
+		if(USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_PREVENT_SPAM)) { 
+			UUID uuid = player.getUniqueId();
+			onDelay.add(uuid);
+			Bukkit.getScheduler().runTaskTimerAsynchronously(USleep.getInstance(), () -> onDelay.remove(uuid), 0L, USPConfig.getInt(USPSetting.PERCENT_SLEEP_PREVENT_SPAM_COOLDOWN) * 20L);
+		}
 		if(instant)
 			resetDay(player.getWorld(), player);
 		if(percent) {
@@ -36,6 +45,10 @@ public class SleepAPI {
 		} else
 			return false;
 		return true;
+	}
+
+	public static boolean hasSleepCooldown(Player player) {
+		return onDelay.contains(player.getUniqueId());
 	}
 
 	public static void handleWakeUp() {

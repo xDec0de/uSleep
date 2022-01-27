@@ -1,8 +1,5 @@
 package es.xdec0de.usleep;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.Sound;
 import org.bukkit.World.Environment;
 import org.bukkit.entity.Player;
@@ -10,8 +7,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBedEnterEvent;
-import org.bukkit.event.player.PlayerBedLeaveEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent.BedEnterResult;
+import org.bukkit.event.player.PlayerBedLeaveEvent;
 
 import es.xdec0de.usleep.api.SleepAPI;
 import es.xdec0de.usleep.utils.USPMessage;
@@ -21,15 +18,16 @@ import es.xdec0de.usleep.utils.files.USPMessages;
 
 public class SleepHandler implements Listener {
 
-	public static List<String> onDelay = new ArrayList<>(); // TODO delay
-
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBedEnter(PlayerBedEnterEvent e) {
 		Player p = e.getPlayer();
 		if(e.getBed().getLocation().getWorld().getEnvironment().equals(Environment.NORMAL)) {
 			if(e.getBedEnterResult().equals(BedEnterResult.OK)) {
-				if(!SleepAPI.handleSleep(p))
-					USPMessages.sendMessage(p, USPMessage.NO_PERMS);
+				if(!SleepAPI.hasSleepCooldown(p)) {
+					if(!SleepAPI.handleSleep(p))
+						USPMessages.sendMessage(p, USPMessage.NO_PERMS);
+				} else
+					USPMessages.sendMessage(p, USPMessage.PERCENT_TOO_FAST);
 			} else {
 				e.setCancelled(true);
 				USPMessage msg = USPMessage.valueOf(e.getBedEnterResult().name());

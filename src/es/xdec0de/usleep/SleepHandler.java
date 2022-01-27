@@ -25,14 +25,12 @@ public class SleepHandler implements Listener {
 			if(e.getBedEnterResult().equals(BedEnterResult.OK)) {
 				if(!SleepAPI.hasSleepCooldown(p)) {
 					if(!SleepAPI.handleSleep(p))
-						USPMessages.sendMessage(p, USPMessage.NO_PERMS);
+						USPMessages.sendSleepMessage(p, USPMessage.NO_PERMS);
 				} else
-					USPMessages.sendMessage(p, USPMessage.PERCENT_TOO_FAST);
+					USPMessages.sendSleepMessage(p, USPMessage.PERCENT_TOO_FAST);
 			} else {
 				e.setCancelled(true);
-				USPMessage msg = USPMessage.valueOf(e.getBedEnterResult().name());
-				if(USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED))
-					USPMessages.sendDelayedActionbar(p, msg);
+				USPMessages.sendSleepMessage(p, USPMessage.valueOf(e.getBedEnterResult().name()));
 				if(USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_SOUNDS_ENABLED))
 					p.playSound(p.getLocation(), Sound.valueOf(USPConfig.getString(USPSetting.PERCENT_SLEEP_ERROR_SOUND)), 1.0F, 1.0F); 
 			}

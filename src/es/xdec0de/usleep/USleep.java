@@ -55,7 +55,6 @@ public class USleep  extends JavaPlugin {
 		USPConfig.setup();
 		USPConfig.save(); // TODO What?
 		USPMessages.setup();
-		USPMessages.save(); // TODO Why?
 	}
 
 	private void registerCommands() {

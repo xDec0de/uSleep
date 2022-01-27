@@ -9,12 +9,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import es.xdec0de.usleep.USPMain;
-import es.xdec0de.usleep.utils.Setting;
+import es.xdec0de.usleep.USleep;
+import es.xdec0de.usleep.utils.USPSetting;
 
-public class Config {
+public class USPConfig {
 	
-	private static USPMain plugin = USPMain.getPlugin(USPMain.class);
+	private static USleep plugin = USleep.getPlugin(USleep.class);
 	public static FileConfiguration cfg;
 	public static File file;
 	
@@ -71,11 +71,11 @@ public class Config {
 	public static void reload() {
 	    cfg = (FileConfiguration)YamlConfiguration.loadConfiguration(file);
 	}
-	public static String getString(Setting setting) {
+	public static String getString(USPSetting setting) {
     	return ChatColor.translateAlternateColorCodes('&', get().getString(setting.getPath()));
     }
     
-    public static List<String> getStringList(Setting setting) {
+    public static List<String> getStringList(USPSetting setting) {
     	List<String> list = new ArrayList<String>();
     	for(String s : get().getStringList(setting.getPath())) {
     		list.add(ChatColor.translateAlternateColorCodes('&', s));
@@ -83,19 +83,19 @@ public class Config {
     	return list;
     }
     
-    public static int getInt(Setting setting) {
+    public static int getInt(USPSetting setting) {
     	return get().getInt(setting.getPath());
     }
     
-    public static long getLong(Setting setting) {
+    public static long getLong(USPSetting setting) {
     	return get().getLong(setting.getPath());
     }
     
-    public static double getDouble(Setting setting) {
+    public static double getDouble(USPSetting setting) {
     	return get().getDouble(setting.getPath());
     }
     
-    public static boolean getBoolean(Setting setting) {
+    public static boolean getBoolean(USPSetting setting) {
     	return get().getBoolean(setting.getPath());
     }
 }

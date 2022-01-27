@@ -1,6 +1,6 @@
 package es.xdec0de.usleep.utils;
 
-public enum Message {
+public enum USPMessage {
 	
 	UPDATE_AVAILABLE_PLAYER("Events.Updater.Join"),
 	
@@ -34,7 +34,7 @@ public enum Message {
 	
 	private String path;
 	
-	Message(String string) {
+	USPMessage(String string) {
 		this.path = string;
 	}
 	

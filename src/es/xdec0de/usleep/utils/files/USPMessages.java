@@ -8,12 +8,12 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import es.xdec0de.usleep.USPMain;
-import es.xdec0de.usleep.utils.Message;
+import es.xdec0de.usleep.USleep;
+import es.xdec0de.usleep.utils.USPMessage;
 
-public class Messages {
+public class USPMessages {
 	
-	private static USPMain plugin = USPMain.getPlugin(USPMain.class);
+	private static USleep plugin = USleep.getPlugin(USleep.class);
 	public static FileConfiguration cfg;
 	public static File file;
 	  
@@ -71,15 +71,15 @@ public class Messages {
 	    cfg = (FileConfiguration)YamlConfiguration.loadConfiguration(file);
 	}
 	
-	public static void sendMessage(CommandSender sndr, Message msg) {
-		sndr.sendMessage(ChatColor.translateAlternateColorCodes('&', get().getString(msg.getPath()).replaceAll("%prefix%", get().getString(Message.PREFIX.getPath())).replaceAll("%error%", get().getString(Message.ERROR_PREFIX.getPath()))));
+	public static void sendMessage(CommandSender sndr, USPMessage msg) {
+		sndr.sendMessage(ChatColor.translateAlternateColorCodes('&', get().getString(msg.getPath()).replaceAll("%prefix%", get().getString(USPMessage.PREFIX.getPath())).replaceAll("%error%", get().getString(USPMessage.ERROR_PREFIX.getPath()))));
 	}
 	
-	public static void sendMessage(Player p, Message msg) {
-		p.sendMessage(ChatColor.translateAlternateColorCodes('&', get().getString(msg.getPath()).replaceAll("%prefix%", get().getString(Message.PREFIX.getPath())).replaceAll("%error%", get().getString(Message.ERROR_PREFIX.getPath()))));
+	public static void sendMessage(Player p, USPMessage msg) {
+		p.sendMessage(ChatColor.translateAlternateColorCodes('&', get().getString(msg.getPath()).replaceAll("%prefix%", get().getString(USPMessage.PREFIX.getPath())).replaceAll("%error%", get().getString(USPMessage.ERROR_PREFIX.getPath()))));
 	}
 	
-	public static String getMessage(Message msg) {
-		return ChatColor.translateAlternateColorCodes('&', get().getString(msg.getPath()).replaceAll("%prefix%", get().getString(Message.PREFIX.getPath())).replaceAll("%error%", get().getString(Message.ERROR_PREFIX.getPath())));
+	public static String getMessage(USPMessage msg) {
+		return ChatColor.translateAlternateColorCodes('&', get().getString(msg.getPath()).replaceAll("%prefix%", get().getString(USPMessage.PREFIX.getPath())).replaceAll("%error%", get().getString(USPMessage.ERROR_PREFIX.getPath())));
 	}
 }

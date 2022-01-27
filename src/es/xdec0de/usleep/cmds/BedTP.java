@@ -5,10 +5,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import es.xdec0de.usleep.utils.Message;
-import es.xdec0de.usleep.utils.Setting;
-import es.xdec0de.usleep.utils.files.Config;
-import es.xdec0de.usleep.utils.files.Messages;
+import es.xdec0de.usleep.utils.USPMessage;
+import es.xdec0de.usleep.utils.USPSetting;
+import es.xdec0de.usleep.utils.files.USPConfig;
+import es.xdec0de.usleep.utils.files.USPMessages;
 
 public class BedTP implements CommandExecutor {
 	
@@ -16,35 +16,35 @@ public class BedTP implements CommandExecutor {
 		if(sndr instanceof Player) {
 			Player p = (Player)sndr;
 			if(args.length == 0) {
-				if(p.hasPermission(Config.getString(Setting.BEDTP_PERM))) {
+				if(p.hasPermission(USPConfig.getString(USPSetting.BEDTP_PERM))) {
 					if(((Player) sndr).getBedLocation() != null) {
 						p.teleport(p.getBedSpawnLocation());
 					} else {
-						Messages.sendMessage(sndr, Message.BEDTP_ERROR);
+						USPMessages.sendMessage(sndr, USPMessage.BEDTP_ERROR);
 					}
 				} else {
-					sndr.sendMessage(Messages.getMessage(Message.NO_PERMS).replaceAll("%perm%", Config.getString(Setting.BEDTP_PERM)));
+					sndr.sendMessage(USPMessages.getMessage(USPMessage.NO_PERMS).replaceAll("%perm%", USPConfig.getString(USPSetting.BEDTP_PERM)));
 				}
 			} else if(args.length == 1) {
-				if(sndr.hasPermission(Config.getString(Setting.BEDTP_OTHER_PERM))) {
+				if(sndr.hasPermission(USPConfig.getString(USPSetting.BEDTP_OTHER_PERM))) {
 					if(getBedLocation(args[0]) != null) {
 						((Player) sndr).teleport(getBedLocation(args[0]));
 						if(Bukkit.getPlayer(args[0]) != null) {
-							sndr.sendMessage(Messages.getMessage(Message.BEDTP_TELEPORT_OTHER).replaceAll("%player%", Bukkit.getPlayer(args[0]).getName()));
+							sndr.sendMessage(USPMessages.getMessage(USPMessage.BEDTP_TELEPORT_OTHER).replaceAll("%player%", Bukkit.getPlayer(args[0]).getName()));
 						} else {
-							sndr.sendMessage(Messages.getMessage(Message.BEDTP_TELEPORT_OTHER).replaceAll("%player%", args[0]));
+							sndr.sendMessage(USPMessages.getMessage(USPMessage.BEDTP_TELEPORT_OTHER).replaceAll("%player%", args[0]));
 						}
 					} else {
-						Messages.sendMessage(sndr, Message.BEDTP_ERROR);
+						USPMessages.sendMessage(sndr, USPMessage.BEDTP_ERROR);
 					}
 				} else {
-					sndr.sendMessage(Messages.getMessage(Message.NO_PERMS).replaceAll("%perm%", Config.getString(Setting.BEDTP_OTHER_PERM)));
+					sndr.sendMessage(USPMessages.getMessage(USPMessage.NO_PERMS).replaceAll("%perm%", USPConfig.getString(USPSetting.BEDTP_OTHER_PERM)));
 				}
 			} else {
-				Messages.sendMessage(sndr, Message.BEDTP_USAGE);
+				USPMessages.sendMessage(sndr, USPMessage.BEDTP_USAGE);
 			}
 		} else {
-			Messages.sendMessage(sndr, Message.NO_CONSOLE);
+			USPMessages.sendMessage(sndr, USPMessage.NO_CONSOLE);
 		}
 		return true;
 	}

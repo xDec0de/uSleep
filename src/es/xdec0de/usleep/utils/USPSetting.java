@@ -1,6 +1,6 @@
 package es.xdec0de.usleep.utils;
 
-public enum Setting {
+public enum USPSetting {
 	
 	TITLES_ENABLD("Visuals.Titles"),
 	ACTIONBAR_ENABLED("Visuals.UseActionBar"),
@@ -33,7 +33,7 @@ public enum Setting {
 	
 	private String path;
 	
-	Setting(String string) {
+	USPSetting(String string) {
 		this.path = string;
 	}
 	

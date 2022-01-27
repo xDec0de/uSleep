@@ -6,11 +6,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import com.earth2me.essentials.Essentials;
-import es.xdec0de.usleep.utils.Message;
-import es.xdec0de.usleep.utils.Setting;
+import es.xdec0de.usleep.utils.USPMessage;
+import es.xdec0de.usleep.utils.USPSetting;
 import es.xdec0de.usleep.utils.SuperVanish;
-import es.xdec0de.usleep.utils.files.Config;
-import es.xdec0de.usleep.utils.files.Messages;
+import es.xdec0de.usleep.utils.files.USPConfig;
+import es.xdec0de.usleep.utils.files.USPMessages;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -20,7 +20,7 @@ public class SleepAPI {
 	
 	public int getPlayerCount() {
 		List<Player> list = new ArrayList<Player>();
-		if(Config.getBoolean(Setting.ESSENTIALS_IGNORE_AFK) && Bukkit.getPluginManager().getPlugin("Essentials") != null) {
+		if(USPConfig.getBoolean(USPSetting.ESSENTIALS_IGNORE_AFK) && Bukkit.getPluginManager().getPlugin("Essentials") != null) {
 			Essentials ess = (Essentials)Bukkit.getServer().getPluginManager().getPlugin("Essentials");
 			for(Player p : Bukkit.getOnlinePlayers()) {
 				if(!list.contains(p)) {
@@ -30,7 +30,7 @@ public class SleepAPI {
 				}
 	        }
 		}
-		if(Config.getBoolean(Setting.IGNORE_VANISHED)) {
+		if(USPConfig.getBoolean(USPSetting.IGNORE_VANISHED)) {
 			if(Bukkit.getPluginManager().getPlugin("Essentials") != null) {
 				Essentials ess = (Essentials)Bukkit.getServer().getPluginManager().getPlugin("Essentials");
 				for(Player p : Bukkit.getOnlinePlayers()) {
@@ -55,49 +55,49 @@ public class SleepAPI {
 	}
 	
 	public void broadcastInstantNextDay(Player p) {
-		Bukkit.broadcastMessage(Messages.getMessage(Message.INSTANT_OK).replaceAll("%player%", p.getName()));
-		if(Config.getBoolean(Setting.PERCENT_SLEEP_SOUNDS_ENABLED)) {
+		Bukkit.broadcastMessage(USPMessages.getMessage(USPMessage.INSTANT_OK).replaceAll("%player%", p.getName()));
+		if(USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_SOUNDS_ENABLED)) {
 			for (Player on : Bukkit.getOnlinePlayers()) {
-                on.playSound(on.getLocation(), Sound.valueOf(Config.getString(Setting.PERCENT_SLEEP_NEXT_DAY_SOUND)), 1.0F, 1.0F); 
+                on.playSound(on.getLocation(), Sound.valueOf(USPConfig.getString(USPSetting.PERCENT_SLEEP_NEXT_DAY_SOUND)), 1.0F, 1.0F); 
 			}
 		}
 	}
 	
 	public void broadcastPercentNextDay() {
-		Bukkit.broadcastMessage(Messages.getMessage(Message.PERCENT_NEXT_DAY));
-		if(Config.getBoolean(Setting.PERCENT_SLEEP_SOUNDS_ENABLED)) {
+		Bukkit.broadcastMessage(USPMessages.getMessage(USPMessage.PERCENT_NEXT_DAY));
+		if(USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_SOUNDS_ENABLED)) {
 			for (Player on : Bukkit.getOnlinePlayers()) {
-                on.playSound(on.getLocation(), Sound.valueOf(Config.getString(Setting.PERCENT_SLEEP_NEXT_DAY_SOUND)), 1.0F, 1.0F); 
+                on.playSound(on.getLocation(), Sound.valueOf(USPConfig.getString(USPSetting.PERCENT_SLEEP_NEXT_DAY_SOUND)), 1.0F, 1.0F); 
 			}
 		}
 	}
 	
 	public void broadcastSleep() {
-		if(Config.getBoolean(Setting.ACTIONBAR_ENABLED)) {
+		if(USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED)) {
 			for(Player p : Bukkit.getOnlinePlayers()) {
-				p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(Messages.getMessage(Message.PERCENT_OK).replaceAll("%required%", Integer.toString(Math.round(getPlayerCount() * Config.get().getInt("Events.PercentSleep.Percentage") / 100.0F))).replaceAll("%current%", Integer.toString(NumSleep))));
+				p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(USPMessages.getMessage(USPMessage.PERCENT_OK).replaceAll("%required%", Integer.toString(Math.round(getPlayerCount() * USPConfig.get().getInt("Events.PercentSleep.Percentage") / 100.0F))).replaceAll("%current%", Integer.toString(NumSleep))));
 			}
 		} else {
-			Bukkit.broadcastMessage(Messages.getMessage(Message.PERCENT_OK).replaceAll("%required%", Integer.toString(Math.round(getPlayerCount() * Config.get().getInt("Events.PercentSleep.Percentage") / 100.0F))).replaceAll("%current%", Integer.toString(NumSleep)));
+			Bukkit.broadcastMessage(USPMessages.getMessage(USPMessage.PERCENT_OK).replaceAll("%required%", Integer.toString(Math.round(getPlayerCount() * USPConfig.get().getInt("Events.PercentSleep.Percentage") / 100.0F))).replaceAll("%current%", Integer.toString(NumSleep)));
 		}
-		if(Config.getBoolean(Setting.PERCENT_SLEEP_SOUNDS_ENABLED)) {
+		if(USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_SOUNDS_ENABLED)) {
 			for(Player p : Bukkit.getOnlinePlayers()) {
-				p.playSound(p.getLocation(), Sound.valueOf(Config.getString(Setting.PERCENT_SLEEP_SOUND)), 1.0F, 1.0F); 
+				p.playSound(p.getLocation(), Sound.valueOf(USPConfig.getString(USPSetting.PERCENT_SLEEP_SOUND)), 1.0F, 1.0F); 
 			}
 		}
 	}
 	
 	public void broadcastWakeUp() {
-		if(Config.getBoolean(Setting.ACTIONBAR_ENABLED)) {
+		if(USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED)) {
 			for(Player p : Bukkit.getOnlinePlayers()) {
-				p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(Messages.getMessage(Message.PERCENT_OK).replaceAll("%required%", Integer.toString(Math.round(getPlayerCount() * Config.get().getInt("Events.PercentSleep.Percentage") / 100.0F))).replaceAll("%current%", Integer.toString(NumSleep))));
+				p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(USPMessages.getMessage(USPMessage.PERCENT_OK).replaceAll("%required%", Integer.toString(Math.round(getPlayerCount() * USPConfig.get().getInt("Events.PercentSleep.Percentage") / 100.0F))).replaceAll("%current%", Integer.toString(NumSleep))));
 			}
 		} else {
-			Bukkit.broadcastMessage(Messages.getMessage(Message.PERCENT_OK).replaceAll("%required%", Integer.toString(Math.round(getPlayerCount() * Config.get().getInt("Events.PercentSleep.Percentage") / 100.0F))).replaceAll("%current%", Integer.toString(NumSleep)));
+			Bukkit.broadcastMessage(USPMessages.getMessage(USPMessage.PERCENT_OK).replaceAll("%required%", Integer.toString(Math.round(getPlayerCount() * USPConfig.get().getInt("Events.PercentSleep.Percentage") / 100.0F))).replaceAll("%current%", Integer.toString(NumSleep)));
 		}
-		if(Config.getBoolean(Setting.PERCENT_SLEEP_SOUNDS_ENABLED)) {
+		if(USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_SOUNDS_ENABLED)) {
 			for(Player p : Bukkit.getOnlinePlayers()) {
-				p.playSound(p.getLocation(), Sound.valueOf(Config.getString(Setting.PERCENT_SLEEP_LEAVE_SOUND)), 1.0F, 1.0F); 
+				p.playSound(p.getLocation(), Sound.valueOf(USPConfig.getString(USPSetting.PERCENT_SLEEP_LEAVE_SOUND)), 1.0F, 1.0F); 
 			}
 		}
 	}

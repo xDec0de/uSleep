@@ -10,9 +10,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import es.xdec0de.usleep.USPMain;
-import es.xdec0de.usleep.utils.files.Config;
-import es.xdec0de.usleep.utils.files.Messages;
+import es.xdec0de.usleep.USleep;
+import es.xdec0de.usleep.utils.files.USPConfig;
+import es.xdec0de.usleep.utils.files.USPMessages;
 import net.md_5.bungee.api.ChatColor;
 
 public class UpdateChecker implements Listener {
@@ -20,7 +20,7 @@ public class UpdateChecker implements Listener {
 	private final static int resourceId = 72205;
 
 	public static void getLatestVersion(Consumer<String> consumer) {
-		Bukkit.getScheduler().runTaskAsynchronously(USPMain.instance, () -> {
+		Bukkit.getScheduler().runTaskAsynchronously(USleep.instance, () -> {
 			try (InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + resourceId).openStream(); Scanner scanner = new Scanner(inputStream)) {
 				if (scanner.hasNext())
 					consumer.accept(scanner.next());
@@ -32,11 +32,11 @@ public class UpdateChecker implements Listener {
 
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
-		if(Config.getBoolean(Setting.UPDATER_ENABLED) && Config.getBoolean(Setting.UPDATER_MESSAGE_PLAYER)) {
-			if(e.getPlayer().hasPermission(Config.getString(Setting.UPDATER_MESSAGE_PERMISSION))) {
+		if(USPConfig.getBoolean(USPSetting.UPDATER_ENABLED) && USPConfig.getBoolean(USPSetting.UPDATER_MESSAGE_PLAYER)) {
+			if(e.getPlayer().hasPermission(USPConfig.getString(USPSetting.UPDATER_MESSAGE_PERMISSION))) {
 				getLatestVersion(version -> {
-					if(!USPMain.plugin.getDescription().getVersion().equalsIgnoreCase(version)) {
-						e.getPlayer().sendMessage(Messages.getMessage(Message.UPDATE_AVAILABLE_PLAYER).replaceAll("%current%", USPMain.plugin.getDescription().getVersion()).replaceAll("%ver%", version));
+					if(!USleep.plugin.getDescription().getVersion().equalsIgnoreCase(version)) {
+						e.getPlayer().sendMessage(USPMessages.getMessage(USPMessage.UPDATE_AVAILABLE_PLAYER).replaceAll("%current%", USleep.plugin.getDescription().getVersion()).replaceAll("%ver%", version));
 					}
 				});
 			}

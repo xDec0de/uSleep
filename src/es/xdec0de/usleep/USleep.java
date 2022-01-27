@@ -10,14 +10,14 @@ import es.xdec0de.usleep.bedinteract.Sleep;
 import es.xdec0de.usleep.bedinteract.WakeUp;
 import es.xdec0de.usleep.cmds.BedTP;
 import es.xdec0de.usleep.cmds.USleepCMD;
-import es.xdec0de.usleep.utils.Setting;
+import es.xdec0de.usleep.utils.USPSetting;
 import es.xdec0de.usleep.utils.UpdateChecker;
-import es.xdec0de.usleep.utils.files.Config;
-import es.xdec0de.usleep.utils.files.Messages;
+import es.xdec0de.usleep.utils.files.USPConfig;
+import es.xdec0de.usleep.utils.files.USPMessages;
 
-public class USPMain  extends JavaPlugin {
+public class USleep  extends JavaPlugin {
 	
-	public static USPMain plugin;
+	public static USleep plugin;
 	public static Plugin instance;
 	  
 	public void onEnable() {
@@ -56,12 +56,12 @@ public class USPMain  extends JavaPlugin {
 	}
 	
 	private void setupFiles() {
-		Config.setup();
-		Config.save();
-		Config.update();
-	    Messages.setup();
-	    Messages.save();
-	    Messages.update();
+		USPConfig.setup();
+		USPConfig.save();
+		USPConfig.update();
+	    USPMessages.setup();
+	    USPMessages.save();
+	    USPMessages.update();
 	}
 	
 	private void registerCommands() {
@@ -82,10 +82,10 @@ public class USPMain  extends JavaPlugin {
 	    } else {
 	    	Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "  &e- &eEssentials &cnot detected, disabling &6AFK &cand &6Vanish &ccheck. &8(&bEssentials only&8)"));
 		    Bukkit.getConsoleSender().sendMessage(" ");
-		    Config.get().set("Essentials.IgnoreAFK", Boolean.valueOf(false));
-		    Config.get().set("Essentials.IgnoreVanished", Boolean.valueOf(false));
-		    Config.save();
-		    Config.reload();
+		    USPConfig.get().set("Essentials.IgnoreAFK", Boolean.valueOf(false));
+		    USPConfig.get().set("Essentials.IgnoreVanished", Boolean.valueOf(false));
+		    USPConfig.save();
+		    USPConfig.reload();
 	    } 
 	    if(Bukkit.getPluginManager().getPlugin("SuperVanish") != null || Bukkit.getPluginManager().getPlugin("PremiumVanish") != null) {
 	    	if (Bukkit.getPluginManager().getPlugin("SuperVanish") != null) {
@@ -97,14 +97,14 @@ public class USPMain  extends JavaPlugin {
 	    } else {
 	    	Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "  &e- &eSuperVanish &cor &ePremiumVanish &cnot detected, disabling &6Vanish &ccheck. &8(&bSuperVanish only&8)"));
 		    Bukkit.getConsoleSender().sendMessage(" ");
-		    Config.get().set("SuperVanish.IgnoreVanished", Boolean.valueOf(false));
-		    Config.save();
-		    Config.reload();
+		    USPConfig.get().set("SuperVanish.IgnoreVanished", Boolean.valueOf(false));
+		    USPConfig.save();
+		    USPConfig.reload();
 	    }
 	}
 	
 	private void checkUpdates() {
-		if(Config.getBoolean(Setting.UPDATER_ENABLED) && Config.getBoolean(Setting.UPDATER_MESSAGE_CONSOLE)) {
+		if(USPConfig.getBoolean(USPSetting.UPDATER_ENABLED) && USPConfig.getBoolean(USPSetting.UPDATER_MESSAGE_CONSOLE)) {
 			UpdateChecker.getLatestVersion(version -> {
 				Bukkit.getConsoleSender().sendMessage(" ");
 	            if(isLatest(version)) {

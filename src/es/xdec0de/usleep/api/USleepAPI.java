@@ -21,7 +21,7 @@ import es.xdec0de.usleep.utils.USPSetting;
 import es.xdec0de.usleep.utils.files.USPConfig;
 import es.xdec0de.usleep.utils.files.USPMessages;
 
-public class SleepAPI {
+public class USleepAPI {
 
 	private static int numSleep = 0;
 	private static List<UUID> onDelay = new ArrayList<UUID>();
@@ -59,7 +59,7 @@ public class SleepAPI {
 	}
 
 	private static void resetDay(World world, Player player) {
-		SleepAPI.numSleep = 0;
+		USleepAPI.numSleep = 0;
 		world.setTime(0L);
 		world.setThundering(false);
 		world.setStorm(false);

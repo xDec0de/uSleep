@@ -72,7 +72,7 @@ public class USPMain  extends JavaPlugin {
 	private void registerEvents() {
 		this.getServer().getPluginManager().registerEvents(new Sleep(), this);
 		this.getServer().getPluginManager().registerEvents(new WakeUp(), this);
-		this.getServer().getPluginManager().registerEvents(new UpdateChecker(plugin, 72205), this);
+		this.getServer().getPluginManager().registerEvents(new UpdateChecker(), this);
 	}
 	
 	private void checkDependencies() {
@@ -105,7 +105,7 @@ public class USPMain  extends JavaPlugin {
 	
 	private void checkUpdates() {
 		if(Config.getBoolean(Setting.UPDATER_ENABLED) && Config.getBoolean(Setting.UPDATER_MESSAGE_CONSOLE)) {
-			new UpdateChecker(this, 72205).getLatestVersion(version -> {
+			UpdateChecker.getLatestVersion(version -> {
 				Bukkit.getConsoleSender().sendMessage(" ");
 	            if(isLatest(version)) {
 	            	Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&8|------------------------------------------>"));

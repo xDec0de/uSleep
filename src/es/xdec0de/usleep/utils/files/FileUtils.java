@@ -36,7 +36,7 @@ class FileUtils {
 			if(plugin.getResource(path) != null)
 				updated.load(copyInputStreamToFile(plugin.getDataFolder()+ "/"+path, plugin.getResource(path)));
 			else {
-				//MessageUtils.logColRep("%prefix% Could not update &6"+path);
+				USPMessages.logColRep("%prefix% Could not update &6"+path);
 				return false;
 			}
 			Set<String> oldKeys = old.getKeys(true);
@@ -53,15 +53,15 @@ class FileUtils {
 				}
 			old.save(plugin.getDataFolder() + "/"+path);
 			if(changes != 0) {
-				/*if(reload)
-					MessageUtils.logColRep("%prefix% &6"+path+" &7has been reloaded with &b"+changes+" &7changes.");
+				if(reload)
+					USPMessages.logColRep("%prefix% &6"+path+" &7has been reloaded with &b"+changes+" &7changes.");
 				else
-					MessageUtils.logColRep("%prefix% &6"+path+" &7has been updated to &ev"+BLP.getInstance().getDescription().getVersion()+"&7 with &b"+changes+" &7changes.");
-				return true;*/
+					USPMessages.logColRep("%prefix% &6"+path+" &7has been updated to &ev"+USleep.getInstance().getDescription().getVersion()+"&7 with &b"+changes+" &7changes.");
+				return true;
 			}
 			return false;
 		} catch(InvalidConfigurationException | IOException ex) {
-			//MessageUtils.logColRep("%prefix% Could not update &6"+path);
+			USPMessages.logColRep("%prefix% Could not update &6"+path);
 			return false;
 		}
 	}

@@ -1,13 +1,14 @@
 package es.xdec0de.usleep.utils.files;
 import java.io.File;
 import java.io.IOException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+
 import es.xdec0de.usleep.USleep;
 import es.xdec0de.usleep.utils.USPMessage;
 
@@ -30,7 +31,7 @@ public class USPMessages {
 	    cfg = YamlConfiguration.loadConfiguration(file);
 	}
 	
-	public static void update() {
+	/*public static void update() {
 		try {
 			if(new File(plugin.getDataFolder() + "/"+path).exists()) {
 				boolean changesMade = false;
@@ -53,12 +54,12 @@ public class USPMessages {
 		} catch (IOException | InvalidConfigurationException e) {
 			Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&b&lu&9&lSleep: &8[&cWarning&8] &eCould not update "+path+" file!"));
 	    }
-    }
-	  
+    }*/
+
 	public static FileConfiguration get() {
 	    return cfg;
 	}
-	  
+
 	public static void save() {
 	    try {
 	      cfg.save(file);

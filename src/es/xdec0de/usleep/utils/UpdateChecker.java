@@ -20,7 +20,7 @@ public class UpdateChecker implements Listener {
 	private final static int resourceId = 72205;
 
 	public static void getLatestVersion(Consumer<String> consumer) {
-		Bukkit.getScheduler().runTaskAsynchronously(USleep.instance, () -> {
+		Bukkit.getScheduler().runTaskAsynchronously(USleep.getInstance(), () -> {
 			try (InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + resourceId).openStream(); Scanner scanner = new Scanner(inputStream)) {
 				if (scanner.hasNext())
 					consumer.accept(scanner.next());
@@ -34,9 +34,10 @@ public class UpdateChecker implements Listener {
 	public void onJoin(PlayerJoinEvent e) {
 		if(USPConfig.getBoolean(USPSetting.UPDATER_ENABLED) && USPConfig.getBoolean(USPSetting.UPDATER_MESSAGE_PLAYER)) {
 			if(e.getPlayer().hasPermission(USPConfig.getString(USPSetting.UPDATER_MESSAGE_PERMISSION))) {
+				String current = USleep.getInstance().getDescription().getVersion();
 				getLatestVersion(version -> {
-					if(!USleep.plugin.getDescription().getVersion().equalsIgnoreCase(version)) {
-						e.getPlayer().sendMessage(USPMessages.getMessage(USPMessage.UPDATE_AVAILABLE_PLAYER).replaceAll("%current%", USleep.plugin.getDescription().getVersion()).replaceAll("%ver%", version));
+					if(!current.equalsIgnoreCase(version)) { // TODO Yeah... Totally using the method to check if an update is the latest, what was I thinking back on 2020?
+						e.getPlayer().sendMessage(USPMessages.getMessage(USPMessage.UPDATE_AVAILABLE_PLAYER).replaceAll("%current%", current).replaceAll("%ver%", version));
 					}
 				});
 			}

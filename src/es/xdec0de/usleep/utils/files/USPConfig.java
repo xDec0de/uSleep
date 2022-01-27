@@ -4,11 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+
 import es.xdec0de.usleep.USleep;
 import es.xdec0de.usleep.utils.USPSetting;
 
@@ -31,7 +32,7 @@ public class USPConfig {
 	    cfg = YamlConfiguration.loadConfiguration(file);
 	}
 	
-	public static void update() {
+	/*public static void update() {
 		try {
 			if(new File(plugin.getDataFolder() + "/"+path).exists()) {
 				boolean changesMade = false;
@@ -54,7 +55,7 @@ public class USPConfig {
 		} catch (IOException | InvalidConfigurationException e) {
 			Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&b&lu&9&lSleep: &8[&cWarning&8] &eCould not update "+path+" file!"));
 	    }
-    }
+    }*/
 	  
 	public static FileConfiguration get() {
 	    return cfg;

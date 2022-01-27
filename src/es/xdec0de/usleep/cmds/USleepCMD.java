@@ -9,7 +9,7 @@ import es.xdec0de.usleep.utils.files.USPConfig;
 import es.xdec0de.usleep.utils.files.USPMessages;
 
 public class USleepCMD implements CommandExecutor {
-	
+
 	public boolean onCommand(CommandSender sndr, Command cmd, String label, String[] args) {
 		if (args.length == 0) {
 			USPMessages.sendMessage(sndr, USPMessage.USLEEP_USAGE);
@@ -17,9 +17,7 @@ public class USleepCMD implements CommandExecutor {
 			switch(args[0].toLowerCase()) {
 			case "reload": case "rl":
 				if(sndr.hasPermission(USPConfig.getString(USPSetting.RELOAD_PERM))) {
-					USPConfig.update();
 					USPConfig.reload();
-					USPMessages.update();
 		            USPMessages.reload();
 		            USPMessages.sendMessage(sndr, USPMessage.RELOAD);
 		        } else {

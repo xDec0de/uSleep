@@ -26,6 +26,8 @@ public class Sleep implements Listener {
 	
 	public static List<String> onDelay = new ArrayList<>();
 	
+	// TODO OMG WHAT IS THIS?!
+	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBedEnter(PlayerBedEnterEvent e) {
 		if(e.getBed().getLocation().getWorld().getEnvironment().equals(Environment.NORMAL)) {
@@ -50,7 +52,7 @@ public class Sleep implements Listener {
 					        p.getWorld().setStorm(false);
 					        uSleepAPI.broadcastPercentNextDay();
 						}
-						Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(USleep.plugin, new Runnable() {
+						Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(USleep.getInstance(), new Runnable() {
 							public void run() {
 								onDelay.remove(p.getName());
 			                }
@@ -87,7 +89,7 @@ public class Sleep implements Listener {
 	}
 	
 	private void sendActionBar(Player p, String msg) {
-		Bukkit.getScheduler().scheduleSyncDelayedTask(USleep.plugin, new Runnable() {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(USleep.getInstance(), new Runnable() {
 		    @Override
 		    public void run() {
 		    	p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg));

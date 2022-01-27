@@ -13,6 +13,8 @@ import org.bukkit.entity.Player;
 import es.xdec0de.usleep.USleep;
 import es.xdec0de.usleep.utils.Replacer;
 import es.xdec0de.usleep.utils.USPMessage;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class USPMessages {
 
@@ -153,6 +155,38 @@ public class USPMessages {
 		String str = getMessage(msg, replacements);
 		Bukkit.getOnlinePlayers().forEach(on -> on.sendMessage(str));
 		Bukkit.getConsoleSender().sendMessage(str);
+	}
+
+	/**
+	 * Broadcasts a message to all players online, uses {@link #getMessage(USPMessage)}
+	 * 
+	 * @param msg The message to be broadcasted.
+	 */
+	public static void broadcastActionbar(USPMessage msg) {
+		String str = getMessage(msg);
+		Bukkit.getOnlinePlayers().forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
+	}
+
+	/**
+	 * Broadcasts a message to all players online, uses {@link #getMessage(USPMessage, Replacer)}
+	 * 
+	 * @param msg The message to be broadcasted.
+	 * @param replacer The replacer to apply.
+	 */
+	public static void broadcastActionbar(USPMessage msg, Replacer replacer) {
+		String str = getMessage(msg, replacer);
+		Bukkit.getOnlinePlayers().forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
+	}
+
+	/**
+	 * Broadcasts a message as an actionbar to all players online, uses {@link #getMessage(USPMessage, String...)}
+	 * 
+	 * @param msg The message to be broadcasted.
+	 * @param replacements The replacements to apply.
+	 */
+	public static void broadcastActionbar(USPMessage msg, String... replacements) {
+		String str = getMessage(msg, replacements);
+		Bukkit.getOnlinePlayers().forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
 	}
 
 	// Message getters //

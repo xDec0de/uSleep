@@ -1,7 +1,5 @@
 package es.xdec0de.usleep;
 
-import java.util.regex.Pattern;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -128,22 +126,9 @@ public class USleep  extends JavaPlugin {
 	}
 
 	private boolean isLatest(String update) {
-		int cmp = normalisedVersion(getDescription().getVersion()).compareTo(normalisedVersion(update));
-		return cmp >= 0;
+		return getDescription().getVersion().compareTo(update) >= 0;
 	}
 
-	private String normalisedVersion(String version) {
-		return normalisedVersion(version, ".", 4);
-	}
-
-	private String normalisedVersion(String version, String sep, int maxWidth) {
-		String[] split = Pattern.compile(sep, Pattern.LITERAL).split(version);
-		StringBuilder sb = new StringBuilder();
-		for(String s : split)
-			sb.append(String.format("%" + maxWidth + 's', s));
-		return sb.toString();
-	}
-	
 	public static USleep getInstance() {
 		return instance;
 	}

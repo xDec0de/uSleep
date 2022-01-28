@@ -7,7 +7,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -15,6 +14,7 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 
 import es.xdec0de.usleep.USleep;
+import es.xdec0de.usleep.utils.NotificationHandler;
 import es.xdec0de.usleep.utils.SuperVanish;
 import es.xdec0de.usleep.utils.USPMessage;
 import es.xdec0de.usleep.utils.USPSetting;
@@ -27,18 +27,20 @@ public class USleepAPI {
 	private static List<UUID> onDelay = new ArrayList<UUID>();
 
 	public static boolean handleSleep(Player player) {
-		if(USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_PREVENT_SPAM)) { 
+		int cooldown = USPConfig.getInt(USPSetting.PERCENT_SLEEP_COOLDOWN);
+		if(cooldown > 0) { 
 			UUID uuid = player.getUniqueId();
 			onDelay.add(uuid);
-			Bukkit.getScheduler().runTaskTimerAsynchronously(USleep.getInstance(), () -> onDelay.remove(uuid), 0L, USPConfig.getInt(USPSetting.PERCENT_SLEEP_PREVENT_SPAM_COOLDOWN) * 20L);
+			Bukkit.getScheduler().runTaskTimerAsynchronously(USleep.getInstance(), () -> onDelay.remove(uuid), 0L, cooldown * 20L);
 		}
-		if(USPConfig.getBoolean(USPSetting.INSTANT_SLEEP_ENABLED) && player.hasPermission(USPConfig.getString(USPSetting.INSTANT_SLEEP_PERM))) // instant
+		if(USPConfig.getBoolean(USPSetting.INSTANT_SLEEP_ENABLED) && player.hasPermission(USPConfig.getString(USPSetting.PERM_INSTANT_SLEEP))) // instant
 			resetDay(player.getWorld(), player);
-		else if(USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_ENABLED) && player.hasPermission(USPConfig.getString(USPSetting.PERCENT_SLEEP_ENABLED))) { // percent
+		else if(USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_ENABLED) && player.hasPermission(USPConfig.getString(USPSetting.PERM_PERCENT_SLEEP))) { // percent
 			numSleep++;
-			if(getRequiredPlayers() <= numSleep)
-				broadcastSleep(false);
-			else
+			if(getRequiredPlayers() <= numSleep) {
+				NotificationHandler.broadcastActionbarSleepMessage(USPMessage.PERCENT_OK, "%required%", Integer.toString(getRequiredPlayers()), "%current%", Integer.toString(numSleep));
+				NotificationHandler.broadcastSound(USPSetting.SOUND_SLEEP_OK);
+			} else
 				resetDay(player.getWorld(), null);
 		} else
 			return false;
@@ -52,7 +54,8 @@ public class USleepAPI {
 	public static void handleWakeUp() {
 		if(numSleep > 0) {
 			numSleep--;
-			broadcastSleep(true);
+			NotificationHandler.broadcastActionbarSleepMessage(USPMessage.PERCENT_OK, "%required%", Integer.toString(getRequiredPlayers()), "%current%", Integer.toString(numSleep));
+			NotificationHandler.broadcastSound(USPSetting.SOUND_SLEEP_LEAVE);
 		}
 	}
 
@@ -61,10 +64,13 @@ public class USleepAPI {
 		world.setTime(0L);
 		world.setThundering(false);
 		world.setStorm(false);
-		if(player != null)
-			broadcastInstantNextDay(player);
-		else
-			broadcastPercentNextDay();
+		if(player != null) {
+			USPMessages.broadcast(USPMessage.INSTANT_OK, "%player%", player.getName());
+			NotificationHandler.broadcastSound(USPSetting.SOUND_NEXTDAY_PERCENT);
+		} else {
+			USPMessages.broadcast(USPMessage.PERCENT_NEXT_DAY);
+			NotificationHandler.broadcastSound(USPSetting.SOUND_NEXTDAY_PERCENT);
+		}
 	}
 
 	public static int getRequiredPlayers() {
@@ -73,8 +79,8 @@ public class USleepAPI {
 
 	public static int getActivePlayers() {
 		List<Player> list = new LinkedList<Player>();
-		boolean ignoreAFK = USPConfig.getBoolean(USPSetting.ESSENTIALS_IGNORE_AFK);
-		boolean ignoreVanished = USPConfig.getBoolean(USPSetting.IGNORE_VANISHED);
+		boolean ignoreAFK = USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_IGNORE_AFK);
+		boolean ignoreVanished = USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_IGNORE_VANISHED);
 		if(ignoreAFK || ignoreVanished) {
 			if(Bukkit.getPluginManager().getPlugin("Essentials") != null) {
 				Essentials ess = (Essentials)Bukkit.getServer().getPluginManager().getPlugin("Essentials");
@@ -91,30 +97,5 @@ public class USleepAPI {
 							list.add(p);
 		}
 		return Bukkit.getOnlinePlayers().size() - list.size();
-	}
-
-	private static void broadcastInstantNextDay(Player p) {
-		USPMessages.broadcast(USPMessage.INSTANT_OK, "%player%", p.getName());
-		if(USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_SOUNDS_ENABLED))
-			Bukkit.getOnlinePlayers().forEach(on -> on.playSound(on.getLocation(), Sound.valueOf(USPConfig.getString(USPSetting.PERCENT_SLEEP_NEXT_DAY_SOUND)), 1.0F, 1.0F));
-	}
-	
-	private static void broadcastPercentNextDay() {
-		USPMessages.broadcast(USPMessage.PERCENT_NEXT_DAY);
-		if(USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_SOUNDS_ENABLED))
-			Bukkit.getOnlinePlayers().forEach(on -> on.playSound(on.getLocation(), Sound.valueOf(USPConfig.getString(USPSetting.PERCENT_SLEEP_NEXT_DAY_SOUND)), 1.0F, 1.0F));
-	}
-	
-	private static void broadcastSleep(boolean leaving) {
-		String required = Integer.toString(getRequiredPlayers());
-		String current = Integer.toString(numSleep);
-		if(USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED))
-			USPMessages.broadcastActionbar(USPMessage.PERCENT_OK, "%required%", required, "%current%", current);
-		else
-			USPMessages.broadcast(USPMessage.PERCENT_OK, "%required%", required, "%current%", current);
-		if(USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_SOUNDS_ENABLED)) {
-			Sound sound = leaving ? Sound.valueOf(USPConfig.getString(USPSetting.PERCENT_SLEEP_LEAVE_SOUND)) : Sound.valueOf(USPConfig.getString(USPSetting.PERCENT_SLEEP_SOUND));
-			Bukkit.getOnlinePlayers().forEach(on -> on.playSound(on.getLocation(), sound, 1.0F, 1.0F));
-		}
 	}
 }

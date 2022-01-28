@@ -12,8 +12,6 @@ import es.xdec0de.usleep.utils.files.USPMessages;
 
 public class USleep  extends JavaPlugin {
 
-	private static USleep instance;
-
 	public void onEnable() {
 		executeEnable();
 		USPMessages.log(" ");
@@ -46,7 +44,6 @@ public class USleep  extends JavaPlugin {
 	}
 
 	private void executeEnable() {
-		instance = this;
 		USPConfig.setup();
 		USPConfig.save(); // TODO What?
 		USPMessages.setup();
@@ -111,9 +108,5 @@ public class USleep  extends JavaPlugin {
 
 	private boolean isLatest(String update) {
 		return getDescription().getVersion().compareTo(update) >= 0;
-	}
-
-	public static USleep getInstance() {
-		return instance;
 	}
 }

@@ -21,7 +21,7 @@ public class UpdateChecker implements Listener {
 	private final static int resourceId = 72205;
 
 	public static void getLatestVersion(Consumer<String> consumer) {
-		Bukkit.getScheduler().runTaskAsynchronously(USleep.getInstance(), () -> {
+		Bukkit.getScheduler().runTaskAsynchronously(USleep.getPlugin(USleep.class), () -> {
 			try (InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + resourceId).openStream(); Scanner scanner = new Scanner(inputStream)) {
 				if (scanner.hasNext())
 					consumer.accept(scanner.next());
@@ -35,7 +35,7 @@ public class UpdateChecker implements Listener {
 	public void onJoin(PlayerJoinEvent e) {
 		Player target = e.getPlayer();
 		if(USPConfig.getBoolean(USPSetting.UPDATER_NOTIFY_PLAYERS) && target.hasPermission(USPConfig.getString(USPSetting.PERM_UPDATER_NOTIFY))) {
-			String current = USleep.getInstance().getDescription().getVersion();
+			String current = USleep.getPlugin(USleep.class).getDescription().getVersion();
 			getLatestVersion(version -> {
 				if(!current.equalsIgnoreCase(version)) { // TODO Yeah... Totally using the method to check if an update is the latest, what was I thinking back on 2020?
 					e.getPlayer().sendMessage(USPMessages.getMessage(USPMessage.UPDATE_AVAILABLE_PLAYER).replaceAll("%current%", current).replaceAll("%ver%", version));

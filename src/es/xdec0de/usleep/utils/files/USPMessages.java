@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import es.xdec0de.usleep.USleep;
 import es.xdec0de.usleep.utils.Replacer;
@@ -17,8 +18,6 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
 public class USPMessages {
-
-	private static USleep plugin = USleep.getInstance();
 
 	private static FileConfiguration cfg;
 	private static File file;
@@ -30,6 +29,7 @@ public class USPMessages {
 	static String errorPrefix = "&8&l[&4&l!&8&l]&c";
 
 	public static void setup() {
+		JavaPlugin plugin = USleep.getPlugin(USleep.class);
 		if(!plugin.getDataFolder().exists())
 			plugin.getDataFolder().mkdir();
 		if(!(file = new File(plugin.getDataFolder(), path)).exists())

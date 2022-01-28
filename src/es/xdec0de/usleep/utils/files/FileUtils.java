@@ -32,7 +32,7 @@ class FileUtils {
 			int changes = 0;
 			FileConfiguration old = Utf8YamlConfiguration.loadConfiguration(file);
 			Utf8YamlConfiguration updated = new Utf8YamlConfiguration();
-			JavaPlugin plugin = USleep.getInstance();
+			JavaPlugin plugin = USleep.getPlugin(USleep.class);
 			if(plugin.getResource(path) != null)
 				updated.load(copyInputStreamToFile(plugin.getDataFolder()+ "/"+path, plugin.getResource(path)));
 			else {
@@ -56,7 +56,7 @@ class FileUtils {
 				if(reload)
 					USPMessages.logColRep("%prefix% &6"+path+" &7has been reloaded with &b"+changes+" &7changes.");
 				else
-					USPMessages.logColRep("%prefix% &6"+path+" &7has been updated to &ev"+USleep.getInstance().getDescription().getVersion()+"&7 with &b"+changes+" &7changes.");
+					USPMessages.logColRep("%prefix% &6"+path+" &7has been updated to &ev"+USleep.getPlugin(USleep.class).getDescription().getVersion()+"&7 with &b"+changes+" &7changes.");
 				return true;
 			}
 			return false;

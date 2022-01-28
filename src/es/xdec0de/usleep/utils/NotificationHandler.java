@@ -49,7 +49,7 @@ public class NotificationHandler {
 	 */
 	public static void sendSleepMessage(Player player, USPMessage msg) {
 		if(USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED)) {
-			Bukkit.getScheduler().scheduleSyncDelayedTask(USleep.getInstance(), new Runnable() {
+			Bukkit.getScheduler().scheduleSyncDelayedTask(USleep.getPlugin(USleep.class), new Runnable() {
 				@Override
 				public void run() {
 					USPMessages.sendActionbar(player, msg);
@@ -73,7 +73,7 @@ public class NotificationHandler {
 	 */
 	public static void sendSleepMessage(Player player, USPMessage msg, Replacer replacer) {
 		if(USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED)) {
-			Bukkit.getScheduler().scheduleSyncDelayedTask(USleep.getInstance(), new Runnable() {
+			Bukkit.getScheduler().scheduleSyncDelayedTask(USleep.getPlugin(USleep.class), new Runnable() {
 				@Override
 				public void run() {
 					USPMessages.sendActionbar(player, msg, replacer);
@@ -97,7 +97,7 @@ public class NotificationHandler {
 	 */
 	public static void sendSleepMessage(Player player, USPMessage msg, String... replacements) {
 		if(USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED)) {
-			Bukkit.getScheduler().scheduleSyncDelayedTask(USleep.getInstance(), new Runnable() {
+			Bukkit.getScheduler().scheduleSyncDelayedTask(USleep.getPlugin(USleep.class), new Runnable() {
 				@Override
 				public void run() {
 					USPMessages.sendActionbar(player, msg, replacements);

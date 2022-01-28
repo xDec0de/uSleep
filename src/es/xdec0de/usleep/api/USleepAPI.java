@@ -9,13 +9,13 @@ import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.MetadataValue;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 
 import es.xdec0de.usleep.USleep;
 import es.xdec0de.usleep.utils.NotificationHandler;
-import es.xdec0de.usleep.utils.SuperVanish;
 import es.xdec0de.usleep.utils.USPMessage;
 import es.xdec0de.usleep.utils.USPSetting;
 import es.xdec0de.usleep.utils.files.USPConfig;
@@ -31,7 +31,7 @@ public class USleepAPI {
 		if(cooldown > 0) { 
 			UUID uuid = player.getUniqueId();
 			onDelay.add(uuid);
-			Bukkit.getScheduler().runTaskTimerAsynchronously(USleep.getInstance(), () -> onDelay.remove(uuid), 0L, cooldown * 20L);
+			Bukkit.getScheduler().runTaskTimerAsynchronously(USleep.getPlugin(USleep.class), () -> onDelay.remove(uuid), 0L, cooldown * 20L);
 		}
 		if(USPConfig.getBoolean(USPSetting.INSTANT_SLEEP_ENABLED) && player.hasPermission(USPConfig.getString(USPSetting.PERM_INSTANT_SLEEP))) // instant
 			resetDay(player.getWorld(), player);
@@ -93,9 +93,16 @@ public class USleepAPI {
 			if(ignoreVanished)
 				if(Bukkit.getPluginManager().getPlugin("SuperVanish") != null || Bukkit.getPluginManager().getPlugin("PremiumVanish") != null)
 					for(Player p : Bukkit.getOnlinePlayers().stream().filter(on -> !list.contains(on)).collect(Collectors.toList()))
-						if(SuperVanish.isVanished(p))
+						if(isVanished(p))
 							list.add(p);
 		}
 		return Bukkit.getOnlinePlayers().size() - list.size();
+	}
+
+	public static boolean isVanished(Player player) {
+		for(MetadataValue meta : player.getMetadata("vanished"))
+			if(meta.asBoolean())
+				return true;
+		return false;
 	}
 }

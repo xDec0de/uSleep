@@ -45,9 +45,8 @@ public class USleep  extends JavaPlugin {
 	}
 
 	private void executeEnable() {
-		USPConfig.setup();
-		USPConfig.save(); // TODO What?
-		USPMessages.setup();
+		USPConfig.setup(false);
+		USPMessages.setup(false);
 		getCommand("usleep").setExecutor(new USleepCMD());
 		getCommand("bedtp").setExecutor(new BedTP());
 		getServer().getPluginManager().registerEvents(new SleepHandler(), this);

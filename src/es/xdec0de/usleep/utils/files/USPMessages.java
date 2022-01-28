@@ -9,7 +9,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import es.xdec0de.usleep.USleep;
 import es.xdec0de.usleep.utils.Replacer;
@@ -19,30 +18,30 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class USPMessages {
 
+	private static USleep plugin = USleep.getPlugin(USleep.class);
+
 	private static FileConfiguration cfg;
 	private static File file;
-	private final static String path = "messages.yml";
 
 	private final static Pattern HEX_PATTERN = Pattern.compile("#([A-Fa-f0-9]{6})");
 
 	static String prefix = "&7&l<&b&lu&9&lSleep&7&l>&7";
 	static String errorPrefix = "&8&l[&4&l!&8&l]&c";
 
-	public static void setup() {
-		JavaPlugin plugin = USleep.getPlugin(USleep.class);
-		if(!plugin.getDataFolder().exists())
-			plugin.getDataFolder().mkdir();
-		if(!(file = new File(plugin.getDataFolder(), path)).exists())
-			plugin.saveResource(path, false);
-		cfg = YamlConfiguration.loadConfiguration(file);
+	public static void setup(boolean isByReload) {
+		if (!plugin.getDataFolder().exists())
+			plugin.getDataFolder().mkdir(); 
+		if (!(file = new File(plugin.getDataFolder(), "messages.yml")).exists())
+			plugin.saveResource("messages.yml", false); 
+		reload(true, isByReload);
 	}
 
-	public static FileConfiguration get() {
-		return cfg;
-	}
-
-	public static void reload() {
-		cfg = YamlConfiguration.loadConfiguration(file);
+	private static void reload(boolean update, boolean isByReload) {
+		cfg = (FileConfiguration)YamlConfiguration.loadConfiguration(file);
+		if(update && FileUtils.updateFile(file, "messages.yml", isByReload))
+			reload(false, isByReload);
+		prefix = cfg.getString(USPMessage.PREFIX.getPath());
+		errorPrefix = cfg.getString(USPMessage.ERROR_PREFIX.getPath());
 	}
 
 	/**
@@ -199,7 +198,7 @@ public class USPMessages {
 	 * @return The message as a string, with colors and the default replacer applied to it.
 	 */
 	public static String getMessage(USPMessage msg) {
-		return applyColor(new Replacer("%prefix%", prefix, "%error%", errorPrefix).replaceAt(USPMessages.get().getString(msg.getPath())));
+		return applyColor(new Replacer("%prefix%", prefix, "%error%", errorPrefix).replaceAt(cfg.getString(msg.getPath())));
 	}
 
 	/**
@@ -211,7 +210,7 @@ public class USPMessages {
 	 * @return The message as a string, with colors and replacer applied to it.
 	 */
 	public static String getMessage(USPMessage msg, Replacer replacer) {
-		return applyColor(new Replacer("%prefix%", prefix, "%error%", errorPrefix).add(replacer).replaceAt(USPMessages.get().getString(msg.getPath())));
+		return applyColor(new Replacer("%prefix%", prefix, "%error%", errorPrefix).add(replacer).replaceAt(cfg.getString(msg.getPath())));
 	}
 
 	/**
@@ -224,7 +223,7 @@ public class USPMessages {
 	 * @return The message as a string, with colors and replacer applied to it.
 	 */
 	public static String getMessage(USPMessage msg, String... replacements) {
-		return applyColor(new Replacer("%prefix%", prefix, "%error%", errorPrefix).add(replacements).replaceAt(USPMessages.get().getString(msg.getPath())));
+		return applyColor(new Replacer("%prefix%", prefix, "%error%", errorPrefix).add(replacements).replaceAt(cfg.getString(msg.getPath())));
 	}
 
 	// Message senders //

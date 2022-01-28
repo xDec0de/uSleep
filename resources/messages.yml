@@ -37,4 +37,25 @@ Events:
     Title: "&7&lPlayers sleeping"
     SubTitle: "&b&l%current%&7&l/&9&l%required%"
   Updater:
-    Join: "%prefix% &7A new version &8(&6v%ver%&8) &7is available, using&8: &cv%current%&7."
+    Available:
+      Player: "%prefix% &7A new version &8(&6v%ver%&8) &7is available, using&8: &cv%current%&7."
+      Console: |
+        &8|------------------------------------------>
+        &7 
+        &e          uSleep &7update checker
+        &7 
+        &b- &7A new version is available&8: &ev%new%
+        &7 
+        &b- &7Currently using&8: &cv%current%
+        &7 
+        &8|------------------------------------------>
+    Latest:
+      Player: "%prefix% &7A new version &8(&6v%ver%&8) &7is available, using&8: &cv%current%&7."
+      Console: |
+        &8|------------------------------------------>
+        &7 
+        &e          uSleep &7update checker
+        &7 
+        &b- &7You are running the latest version.
+        &7
+        &8|------------------------------------------>

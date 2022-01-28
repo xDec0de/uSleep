@@ -6,6 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import es.xdec0de.usleep.cmds.BedTP;
 import es.xdec0de.usleep.cmds.USleepCMD;
+import es.xdec0de.usleep.utils.USPMessage;
 import es.xdec0de.usleep.utils.USPSetting;
 import es.xdec0de.usleep.utils.UpdateChecker;
 import es.xdec0de.usleep.utils.files.USPConfig;
@@ -77,25 +78,10 @@ public class USleep  extends JavaPlugin {
 		if(USPConfig.getBoolean(USPSetting.UPDATER_NOTIFY_CONSOLE)) {
 			UpdateChecker.getLatestVersion(version -> {
 				USPMessages.log(" ");
-				if(isLatest(version)) {
-					USPMessages.logCol("&8|------------------------------------------>");
-					USPMessages.log(" ");
-					USPMessages.logCol("&e          uSleep &7update checker");
-					USPMessages.log(" ");
-					USPMessages.logCol("&b- &7You are running the latest version.");
-					USPMessages.log(" ");
-					USPMessages.logCol("&8|------------------------------------------>");
-				} else {
-					USPMessages.logCol("&8|------------------------------------------>");
-					USPMessages.log(" ");
-					USPMessages.logCol("&e          uSleep &7update checker");
-					USPMessages.log(" ");
-					USPMessages.logCol("&b- &7A new version is available&8: &6v"+ version);
-					USPMessages.log(" ");
-					USPMessages.logCol("&b- &7Currently using&8: &cv"+getDescription().getVersion());
-					USPMessages.log(" ");
-					USPMessages.logCol("&8|------------------------------------------>");
-				}
+				if(isLatest(version))
+					USPMessages.sendMessage(Bukkit.getConsoleSender(), USPMessage.UPDATE_LATEST_CONSOLE);
+				else
+					USPMessages.sendMessage(Bukkit.getConsoleSender(), USPMessage.UPDATE_LATEST_CONSOLE, "%new%", version, "%current%", getDescription().getVersion());
 				USPMessages.log(" ");
 				if(!fileSuccess) {
 					USPMessages.logCol("&8&l[&4&l!&8&l] &4uSleep &chas configuration errors, please check them above &8&l[&4&l!&8&l]");

@@ -2,7 +2,10 @@ package es.xdec0de.usleep.utils;
 
 public enum USPMessage {
 	
-	UPDATE_AVAILABLE_PLAYER("Events.Updater.Join"),
+	UPDATE_AVAILABLE_PLAYER("Events.Updater.Available.Player"),
+	UPDATE_AVAILABLE_CONSOLE("Events.Updater.Available.Console"),
+	UPDATE_LATEST_PLAYER("Events.Updater.Latest.Player"),
+	UPDATE_LATEST_CONSOLE("Events.Updater.Latest.Console"),
 	
 	PERCENT_NEXT_DAY("Events.PercentSleep.NextDay"),
 	PERCENT_TOO_FAST("Events.PercentSleep.TooFast"),

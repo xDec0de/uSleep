@@ -37,9 +37,10 @@ public class UpdateChecker implements Listener {
 		if(USPConfig.getBoolean(USPSetting.UPDATER_NOTIFY_PLAYERS) && target.hasPermission(USPConfig.getString(USPSetting.PERM_UPDATER_NOTIFY))) {
 			String current = USleep.getPlugin(USleep.class).getDescription().getVersion();
 			getLatestVersion(version -> {
-				if(!current.equalsIgnoreCase(version)) { // TODO Yeah... Totally using the method to check if an update is the latest, what was I thinking back on 2020?
-					e.getPlayer().sendMessage(USPMessages.getMessage(USPMessage.UPDATE_AVAILABLE_PLAYER).replaceAll("%current%", current).replaceAll("%ver%", version));
-				}
+				if(USleep.getPlugin(USleep.class).isLatest(version))
+					USPMessages.sendMessage(Bukkit.getConsoleSender(), USPMessage.UPDATE_LATEST_PLAYER);
+				else
+					USPMessages.sendMessage(Bukkit.getConsoleSender(), USPMessage.UPDATE_LATEST_PLAYER, "%new%", version, "%current%", current);
 			});
 		}
 	}

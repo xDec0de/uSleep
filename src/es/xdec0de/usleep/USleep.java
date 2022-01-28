@@ -97,7 +97,7 @@ public class USleep  extends JavaPlugin {
 		}
 	}
 
-	private boolean isLatest(String update) {
+	public boolean isLatest(String update) {
 		return getDescription().getVersion().compareTo(update) >= 0;
 	}
 }

@@ -14,7 +14,7 @@ import es.xdec0de.usleep.utils.files.USPMessages;
 public class USleep  extends JavaPlugin {
 
 	public void onEnable() {
-		executeEnable();
+		boolean fileSuccess = executeEnable();
 		USPMessages.log(" ");
 		USPMessages.logCol("&8|------------------------------------------>");
 		USPMessages.log(" ");
@@ -27,7 +27,7 @@ public class USleep  extends JavaPlugin {
 		USPMessages.logCol("&8|------------------------------------------>");
 		USPMessages.log(" ");
 		checkDependencies();
-		checkUpdates();
+		checkUpdates(fileSuccess);
 	}
 
 	public void onDisable() {
@@ -44,13 +44,14 @@ public class USleep  extends JavaPlugin {
 		USPMessages.log(" ");
 	}
 
-	private void executeEnable() {
-		USPConfig.setup(false);
+	private boolean executeEnable() {
+		boolean fileSuccess = USPConfig.setup(false);
 		USPMessages.setup(false);
 		getCommand("usleep").setExecutor(new USleepCMD());
 		getCommand("bedtp").setExecutor(new BedTP());
 		getServer().getPluginManager().registerEvents(new SleepHandler(), this);
 		getServer().getPluginManager().registerEvents(new UpdateChecker(), this);
+		return fileSuccess;
 	}
 
 	private void checkDependencies() {
@@ -72,7 +73,7 @@ public class USleep  extends JavaPlugin {
 		USPMessages.log(" ");
 	}
 
-	private void checkUpdates() {
+	private void checkUpdates(boolean fileSuccess) {
 		if(USPConfig.getBoolean(USPSetting.UPDATER_NOTIFY_CONSOLE)) {
 			UpdateChecker.getLatestVersion(version -> {
 				USPMessages.log(" ");
@@ -96,7 +97,17 @@ public class USleep  extends JavaPlugin {
 					USPMessages.logCol("&8|------------------------------------------>");
 				}
 				USPMessages.log(" ");
+				if(!fileSuccess) {
+					USPMessages.logCol("&8&l[&4&l!&8&l] &4uSleep &chas configuration errors, please check them above &8&l[&4&l!&8&l]");
+					USPMessages.log(" "); // Notification is sent after update checking as it runs asynchronously, so it's executed after the server finishes loading.
+				}
 			});
+		} else if(!fileSuccess) {
+			Bukkit.getScheduler().runTaskLater(this, () -> {
+				USPMessages.log(" ");
+				USPMessages.logCol("&8&l[&4&l!&8&l] &4uSleep &chas configuration errors, please check them above &8&l[&4&l!&8&l]");
+				USPMessages.log(" ");
+			}, 1L); // Same as the asynchronous method but as we aren't checking for updates there is no need to create another thread just for three messages.
 		}
 	}
 

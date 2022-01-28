@@ -53,6 +53,7 @@ class FileUtils {
 				}
 			old.save(plugin.getDataFolder() + "/"+path);
 			if(changes != 0) {
+				USPMessages.log(" ");
 				if(reload)
 					USPMessages.logColRep("%prefix% &6"+path+" &7has been reloaded with &b"+changes+" &7changes.");
 				else

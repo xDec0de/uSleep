@@ -1,6 +1,7 @@
 package es.xdec0de.usleep.utils.files;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -16,18 +17,41 @@ public class USPConfig {
 	public static FileConfiguration cfg;
 	public static File file;
 
-	public static void setup(boolean isByReload) {
+	public static boolean setup(boolean isByReload) {
 		if (!plugin.getDataFolder().exists())
 			plugin.getDataFolder().mkdir(); 
 		if (!(file = new File(plugin.getDataFolder(), "config.yml")).exists())
 			plugin.saveResource("config.yml", false); 
 		reload(true, isByReload);
+		return checkStatus();
 	}
 
 	private static void reload(boolean update, boolean isByReload) {
 		cfg = (FileConfiguration)YamlConfiguration.loadConfiguration(file);
 		if(update && FileUtils.updateFile(file, "config.yml", isByReload))
 			reload(false, isByReload);
+	}
+
+	public static void save() {
+		try {
+			cfg.save(file);
+		} catch (IOException e) {
+			USPMessages.logColRep("%prefix% &8[&cWarning&8] &cCould not save &econfig.yml&c.");
+		}
+	} 
+
+	private static boolean checkStatus() {
+		int percent = getInt(USPSetting.PERCENT_SLEEP_PERCENT);
+		if(percent > 100 || percent < 1 ) {
+			USPMessages.log(" ");
+			USPMessages.logCol("&cConfiguration errors detected at &4config.yml&8:");
+			USPMessages.logCol("  &4- &cPercent value is invalid, using default &8(&e50&8)");
+			cfg.set(USPSetting.PERCENT_SLEEP_PERCENT.getPath(), 50);
+			save();
+			reload(false, false);
+			return false;
+		}
+		return true;
 	}
 
 	public static String getString(USPSetting setting) {

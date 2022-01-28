@@ -1,6 +1,7 @@
 package es.xdec0de.usleep;
 
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import es.xdec0de.usleep.cmds.BedTP;
@@ -54,27 +55,21 @@ public class USleep  extends JavaPlugin {
 	}
 
 	private void checkDependencies() {
-		if(Bukkit.getPluginManager().getPlugin("Essentials") != null)
-			USPMessages.logCol("  &e- &bEssentials &7detected (&av" + Bukkit.getPluginManager().getPlugin("Essentials").getDescription().getVersion() + "&7)");
-		else {
-			USPMessages.logCol("  &e- &eEssentials &cnot detected, disabling &6AFK &cand &6Vanish &ccheck. &8(&bEssentials only&8)");
-			USPConfig.get().set("Essentials.IgnoreAFK", false);
-			USPConfig.get().set("Essentials.IgnoreVanished", false);
-			USPConfig.save();
-			USPConfig.reload();
-		}
+		Plugin ess = Bukkit.getPluginManager().getPlugin("Essentials");
+		Plugin vanish = Bukkit.getPluginManager().getPlugin("SuperVanish");
+		if(vanish == null)
+			vanish = Bukkit.getPluginManager().getPlugin("PremiumVanish");
+		if(ess != null) {
+			USPMessages.logCol("  &e- &bEssentials &7detected &8(&av" + ess.getDescription().getVersion() + "&8) &8[&dVanish &7and &dAFK&8]");
+			if(vanish == null)
+				vanish = ess;
+		} else
+			USPMessages.logCol("  &6- &cNo &eAFK &cplugin detected &8- &cAFK support disabled");
 		USPMessages.log(" ");
-		if(Bukkit.getPluginManager().getPlugin("SuperVanish") != null || Bukkit.getPluginManager().getPlugin("PremiumVanish") != null) {
-			if (Bukkit.getPluginManager().getPlugin("SuperVanish") != null)
-				USPMessages.logCol("  &e- &bSuperVanish &7detected (&av" + Bukkit.getPluginManager().getPlugin("SuperVanish").getDescription().getVersion() + "&7)");
-			else
-				USPMessages.logCol("  &e- &bPremiumVanish &7detected (&av" + Bukkit.getPluginManager().getPlugin("PremiumVanish").getDescription().getVersion() + "&7)");
-		} else {
-			USPMessages.logCol("  &e- &eSuperVanish &cor &ePremiumVanish &cnot detected, disabling &6Vanish &ccheck. &8(&bSuperVanish only&8)");
-			USPConfig.get().set("SuperVanish.IgnoreVanished", false);
-			USPConfig.save();
-			USPConfig.reload();
-		}
+		if(vanish != null)
+			USPMessages.logCol("  &e- &b"+vanish.getName()+" &7detected &8(&av"+vanish.getDescription().getVersion()+"&8) &8[&dVanish&8]");
+		else
+			USPMessages.logCol("  &6- &cNo &evanish &cplugin detected &8- &cVanish support disabled");
 		USPMessages.log(" ");
 	}
 

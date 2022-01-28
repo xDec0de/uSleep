@@ -18,16 +18,16 @@ public class BedTP implements CommandExecutor {
 		if(sndr instanceof Player) {
 			Player p = (Player)sndr;
 			if(args.length == 0) {
-				if(p.hasPermission(USPConfig.getString(USPSetting.BEDTP_PERM))) {
+				if(p.hasPermission(USPConfig.getString(USPSetting.PERM_BEDTP_SELF))) {
 					Location bed = p.getBedSpawnLocation();
 					if(bed != null)
 						p.teleport(bed);
 					else
 						USPMessages.sendMessage(sndr, USPMessage.BEDTP_ERROR);
 				} else
-					USPMessages.sendMessage(sndr, USPMessage.NO_PERMS, "%perm%", USPConfig.getString(USPSetting.BEDTP_PERM));
+					USPMessages.sendMessage(sndr, USPMessage.NO_PERMS, "%perm%", USPConfig.getString(USPSetting.PERM_BEDTP_SELF));
 			} else if(args.length == 1) {
-				if(sndr.hasPermission(USPConfig.getString(USPSetting.BEDTP_OTHER_PERM))) {
+				if(sndr.hasPermission(USPConfig.getString(USPSetting.PERM_BEDTP_OTHER))) {
 					Location bed = getBedLocation(args[0]);
 					if(bed != null) {
 						p.teleport(bed);
@@ -35,7 +35,7 @@ public class BedTP implements CommandExecutor {
 					} else
 						USPMessages.sendMessage(sndr, USPMessage.BEDTP_ERROR);
 				} else
-					USPMessages.getMessage(USPMessage.NO_PERMS, "%perm%", USPConfig.getString(USPSetting.BEDTP_OTHER_PERM));
+					USPMessages.getMessage(USPMessage.NO_PERMS, "%perm%", USPConfig.getString(USPSetting.PERM_BEDTP_SELF));
 			} else
 				USPMessages.sendMessage(sndr, USPMessage.BEDTP_USAGE);
 		} else

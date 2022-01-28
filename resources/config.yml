@@ -1,42 +1,41 @@
 # |------------------------------------------------------------------------| #
 # | #                                                                    # | #
-# | #                    --------------------------                      # | #
-# | #                    | uSleep v1.3 by Dec0de_ |                      # | #
-# | #                    --------------------------                      # | #
+# | #                   -----------------------------                    # | #
+# | #                   | uSleep v2.0.0 by xDec0de_ |                    # | #
+# | #                   -----------------------------                    # | #
 # | #                                                                    # | #
 # |------------------------------------------------------------------------| #
 
-Updater:
-  Enabled: true
-  Message:
-    Permission: "us.updater.notify"
+Features:
+  Updater:
     Console: true
     Players: true
-Essentials:
-  IgnoreAFK: true
-IgnoreVanished: true
-Commands:
-  usleep:
-    ReloadPerm: "us.reload"
-  Bed:
-    UseSelfPerm: "us.bed"
-    UseOtherPerm: "us.bed.other"
-Events:
   InstantSleep:
     Enabled: true
-    Permission: "us.instant"
   PercentSleep:
     Enabled: true
-    PreventSpam: true
-    PreventSpamCooldown: 5
     Percentage: 50
-    Permission: "us.percent"
-    Sounds: 
-      Enabled: true
-      Sleep: "BLOCK_NOTE_BLOCK_PLING"
-      Error: "BLOCK_NOTE_BLOCK_BASS"
-      Leave: "BLOCK_NOTE_BLOCK_BASS"
-      NextDay: "ENTITY_PLAYER_LEVELUP"
-Visuals:
-  Titles: true
-  UseActionBar: true
+    Ignored:
+      AFK: true
+      Vanished: true
+    Cooldown: 5
+  Actionbar: true
+Permissions:
+  Reload: "usp.reload"
+  Updater:
+    Notify: "usp.updater.notify"
+    Check: "usp.updater.check"
+  BedTP:
+    Self: "usp.bed"
+    Other: "usp.bed.other"
+  Sleep:
+    Instant: "usp.sleep.instant"
+    Percent: "usp.sleep.percent"
+Sounds: 
+  Sleep:
+    Ok: "BLOCK_NOTE_BLOCK_PLING"
+    Error: "BLOCK_NOTE_BLOCK_BASS"
+    Leave: "BLOCK_NOTE_BLOCK_BASS"
+  NextDay:
+    Percent: "ENTITY_PLAYER_LEVELUP"
+    Instant: "ENTITY_PLAYER_LEVELUP"

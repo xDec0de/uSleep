@@ -1,6 +1,5 @@
 package es.xdec0de.usleep;
 
-import org.bukkit.Sound;
 import org.bukkit.World.Environment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,10 +10,10 @@ import org.bukkit.event.player.PlayerBedEnterEvent.BedEnterResult;
 import org.bukkit.event.player.PlayerBedLeaveEvent;
 
 import es.xdec0de.usleep.api.USleepAPI;
+import es.xdec0de.usleep.utils.NotificationHandler;
 import es.xdec0de.usleep.utils.USPMessage;
 import es.xdec0de.usleep.utils.USPSetting;
 import es.xdec0de.usleep.utils.files.USPConfig;
-import es.xdec0de.usleep.utils.files.USPMessages;
 
 public class SleepHandler implements Listener {
 
@@ -26,15 +25,14 @@ public class SleepHandler implements Listener {
 				if(!USleepAPI.hasSleepCooldown(p)) {
 					if(!USleepAPI.handleSleep(p)) {
 						e.setCancelled(true);
-						USPMessages.sendSleepMessage(p, USPMessage.NO_PERMS, "%perm%", USPConfig.getString(USPSetting.PERCENT_SLEEP_PERM));
+						NotificationHandler.sendSleepMessage(p, USPMessage.NO_PERMS, "%perm%", USPConfig.getString(USPSetting.PERM_PERCENT_SLEEP));
 					}
 				} else
-					USPMessages.sendSleepMessage(p, USPMessage.PERCENT_TOO_FAST);
+					NotificationHandler.sendSleepMessage(p, USPMessage.PERCENT_TOO_FAST);
 			} else {
 				e.setCancelled(true);
-				USPMessages.sendSleepMessage(p, USPMessage.valueOf(e.getBedEnterResult().name()));
-				if(USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_SOUNDS_ENABLED))
-					p.playSound(p.getLocation(), Sound.valueOf(USPConfig.getString(USPSetting.PERCENT_SLEEP_ERROR_SOUND)), 1.0F, 1.0F); 
+				NotificationHandler.sendSleepMessage(p, USPMessage.valueOf(e.getBedEnterResult().name()));
+				NotificationHandler.playSound(p, USPSetting.SOUND_SLEEP_ERROR);
 			}
 		}
 	}

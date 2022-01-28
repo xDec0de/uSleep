@@ -6,6 +6,7 @@ import java.util.Scanner;
 import java.util.function.Consumer;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -32,15 +33,14 @@ public class UpdateChecker implements Listener {
 
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
-		if(USPConfig.getBoolean(USPSetting.UPDATER_ENABLED) && USPConfig.getBoolean(USPSetting.UPDATER_MESSAGE_PLAYER)) {
-			if(e.getPlayer().hasPermission(USPConfig.getString(USPSetting.UPDATER_MESSAGE_PERMISSION))) {
-				String current = USleep.getInstance().getDescription().getVersion();
-				getLatestVersion(version -> {
-					if(!current.equalsIgnoreCase(version)) { // TODO Yeah... Totally using the method to check if an update is the latest, what was I thinking back on 2020?
-						e.getPlayer().sendMessage(USPMessages.getMessage(USPMessage.UPDATE_AVAILABLE_PLAYER).replaceAll("%current%", current).replaceAll("%ver%", version));
-					}
-				});
-			}
+		Player target = e.getPlayer();
+		if(USPConfig.getBoolean(USPSetting.UPDATER_NOTIFY_PLAYERS) && target.hasPermission(USPConfig.getString(USPSetting.PERM_UPDATER_NOTIFY))) {
+			String current = USleep.getInstance().getDescription().getVersion();
+			getLatestVersion(version -> {
+				if(!current.equalsIgnoreCase(version)) { // TODO Yeah... Totally using the method to check if an update is the latest, what was I thinking back on 2020?
+					e.getPlayer().sendMessage(USPMessages.getMessage(USPMessage.UPDATE_AVAILABLE_PLAYER).replaceAll("%current%", current).replaceAll("%ver%", version));
+				}
+			});
 		}
 	}
 }

@@ -13,7 +13,6 @@ import org.bukkit.entity.Player;
 import es.xdec0de.usleep.USleep;
 import es.xdec0de.usleep.utils.Replacer;
 import es.xdec0de.usleep.utils.USPMessage;
-import es.xdec0de.usleep.utils.USPSetting;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -368,75 +367,5 @@ public class USPMessages {
 		String send = getMessage(msg, replacements);
 		if(!send.isEmpty())
 			player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(send));
-	}
-
-	/**
-	 * Sends an sleep message with colors {@link #applyColor(String)} and the default {@link Replacer}, empty messages will be ignored and the message wont be sent. 
-	 * Sleep messages will be sent on actionbar if the setting is enabled on config.yml.
-	 * 
-	 * @param player The player that will receive the message.
-	 * @param msg The message to get.
-	 * 
-	 * @see #getMessage(USPMessage)
-	 */
-	public static void sendSleepMessage(Player player, USPMessage msg) {
-		if(USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED)) {
-			Bukkit.getScheduler().scheduleSyncDelayedTask(USleep.getInstance(), new Runnable() {
-				@Override
-				public void run() {
-					sendActionbar(player, msg);
-				}
-			}, 1L);
-		}
-		else
-			sendMessage(player, msg);
-	}
-
-	/**
-	 * Sends an sleep message with colors {@link #applyColor(String)} and the default {@link Replacer}, also, 
-	 * the specified replacer is added to the default replacer, empty messages will be ignored and the message wont be sent. 
-	 * Sleep messages will be sent on actionbar if the setting is enabled on config.yml.
-	 * 
-	 * @param player The player that will receive the message.
-	 * @param msg The message to get.
-	 * @param replacer The replacer to apply.
-	 * 
-	 * @see #getMessage(USPMessage, Replacer)
-	 */
-	public static void sendSleepMessage(Player player, USPMessage msg, Replacer replacer) {
-		if(USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED)) {
-			Bukkit.getScheduler().scheduleSyncDelayedTask(USleep.getInstance(), new Runnable() {
-				@Override
-				public void run() {
-					sendActionbar(player, msg, replacer);
-				}
-			}, 1L);
-		}
-		else
-			sendMessage(player, msg, replacer);
-	}
-
-	/**
-	 * Sends an sleep message with colors {@link #applyColor(String)} and the default {@link Replacer}, also, a new replacer made with 
-	 * the specified strings is added to the default replacer, empty messages will be ignored and the message wont be sent. 
-	 * Sleep messages will be sent on actionbar if the setting is enabled on config.yml.
-	 * 
-	 * @param player The player that will receive the message.
-	 * @param msg The message to get.
-	 * @param replacements The replacements to apply.
-	 * 
-	 * @see #getMessage(USPMessage, String...)
-	 */
-	public static void sendSleepMessage(Player player, USPMessage msg, String... replacements) {
-		if(USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED)) {
-			Bukkit.getScheduler().scheduleSyncDelayedTask(USleep.getInstance(), new Runnable() {
-				@Override
-				public void run() {
-					sendActionbar(player, msg, replacements);
-				}
-			}, 1L);
-		}
-		else
-			sendMessage(player, msg, replacements);
 	}
 }

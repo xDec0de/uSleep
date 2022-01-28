@@ -14,12 +14,12 @@ public class USleepCMD implements CommandExecutor {
 		if (args.length == 1) {
 			switch(args[0].toLowerCase()) {
 			case "reload": case "rl":
-				if(sndr.hasPermission(USPConfig.getString(USPSetting.RELOAD_PERM))) {
+				if(sndr.hasPermission(USPConfig.getString(USPSetting.PERM_RELOAD))) {
 					USPConfig.reload();
 					USPMessages.reload();
 					USPMessages.sendMessage(sndr, USPMessage.RELOAD);
 				} else
-					USPMessages.sendMessage(sndr, USPMessage.NO_PERMS, "%perm%", USPConfig.getString(USPSetting.RELOAD_PERM));
+					USPMessages.sendMessage(sndr, USPMessage.NO_PERMS, "%perm%", USPConfig.getString(USPSetting.PERM_RELOAD));
 				break;
 			default:
 				USPMessages.sendMessage(sndr, USPMessage.USLEEP_USAGE);

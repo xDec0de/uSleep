@@ -10,7 +10,7 @@ public enum USPSetting {
 	INSTANT_SLEEP_ENABLED("Features.InstantSleep.Enabled"),
 
 	PERCENT_SLEEP_ENABLED("Features.PercentSleep.Enabled"),
-	PERCENT_SLEEP_PERCENT("Features.PercentSleep.Percent"),
+	PERCENT_SLEEP_PERCENT("Features.PercentSleep.Percentage"),
 	PERCENT_SLEEP_IGNORE_AFK("Features.PercentSleep.Ignored.AFK"),
 	PERCENT_SLEEP_IGNORE_VANISHED("Features.PercentSleep.Ignored.Vanished"),
 	PERCENT_SLEEP_COOLDOWN("Features.PercentSleep.Cooldown"),

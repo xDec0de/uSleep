@@ -1,6 +1,7 @@
 package es.xdec0de.usleep;
 
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -99,5 +100,12 @@ public class USleep  extends JavaPlugin {
 
 	public boolean isLatest(String update) {
 		return getDescription().getVersion().compareTo(update) >= 0;
+	}
+
+	public void doNightSkipEffect(World world) {
+		double increase = 50;
+		int stop = (int) (Math.round(increase) + 1);
+		while(world.getTime() <= stop)
+			world.setTime(world.getTime() + (int) increase);
 	}
 }

@@ -17,6 +17,9 @@ public enum USPSetting {
 
 	ACTIONBAR_ENABLED("Features.Actionbar"),
 
+	NIGHT_SKIP_EFFECT_ENABLED("Features.NightSkipEffect.Enabled"),
+	NIGHT_SKIP_EFFECT_INCREMENT("Features.NightSkipEffect.Increment"),
+
 	// Permissions
 
 	PERM_RELOAD("Permissions.Reload"),

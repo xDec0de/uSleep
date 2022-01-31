@@ -20,6 +20,9 @@ Features:
       Vanished: true
     Cooldown: 5
   Actionbar: true
+  NightSkipEffect:
+    Enabled: true
+    Increment: 50
 Permissions:
   Reload: "usp.reload"
   Updater:

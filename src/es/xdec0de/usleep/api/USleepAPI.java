@@ -61,9 +61,13 @@ public class USleepAPI {
 
 	private static void resetDay(World world, Player player) {
 		numSleep = 0;
-		world.setTime(0L);
-		world.setThundering(false);
-		world.setStorm(false);
+		if(USPConfig.getBoolean(USPSetting.NIGHT_SKIP_EFFECT_ENABLED)) {
+			doNightSkipEffect(world);
+		} else {
+			world.setTime(0L);
+			world.setThundering(false);
+			world.setStorm(false);
+		}
 		if(player != null) {
 			USPMessages.broadcast(USPMessage.INSTANT_OK, "%player%", player.getName());
 			NotificationHandler.broadcastSound(USPSetting.SOUND_NEXTDAY_PERCENT);
@@ -106,8 +110,8 @@ public class USleepAPI {
 		return false;
 	}
 
-	public void doNightSkipEffect(World world) {
-		double increase = 50;
+	public static void doNightSkipEffect(World world) {
+		double increase = USPConfig.getInt(USPSetting.NIGHT_SKIP_EFFECT_INCREMENT);
 		int stop = (int) (Math.round(increase) + 1);
 		while(world.getTime() <= stop)
 			world.setTime(world.getTime() + (int) increase);

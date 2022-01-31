@@ -105,4 +105,11 @@ public class USleepAPI {
 				return true;
 		return false;
 	}
+
+	public void doNightSkipEffect(World world) {
+		double increase = 50;
+		int stop = (int) (Math.round(increase) + 1);
+		while(world.getTime() <= stop)
+			world.setTime(world.getTime() + (int) increase);
+	}
 }

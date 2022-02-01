@@ -38,7 +38,7 @@ public class USleepAPI {
 			resetDay(player.getWorld(), player);
 		else if(USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_ENABLED) && player.hasPermission(USPConfig.getString(USPSetting.PERM_PERCENT_SLEEP))) { // percent
 			numSleep++;
-			if(getRequiredPlayers() <= numSleep) {
+			if(getRequiredPlayers() < numSleep) {
 				NotificationHandler.broadcastActionbarSleepMessage(USPMessage.PERCENT_OK, "%required%", Integer.toString(getRequiredPlayers()), "%current%", Integer.toString(numSleep));
 				NotificationHandler.broadcastSound(USPSetting.SOUND_SLEEP_OK);
 			} else

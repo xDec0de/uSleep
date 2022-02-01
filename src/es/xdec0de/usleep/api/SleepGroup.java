@@ -59,8 +59,9 @@ public class SleepGroup {
 			resetTime(player);
 		else if(USPSetting.PERCENT_SLEEP_ENABLED.asBoolean() && player.hasPermission(USPSetting.PERM_PERCENT_SLEEP.asString())) { // percent
 			sleeping++;
-			if(getRequiredPlayers() < sleeping) {
-				USPMessage.PERCENT_OK.broadcast(players, "%required%", Integer.toString(getRequiredPlayers()), "%current%", Integer.toString(sleeping));
+			int required = getRequiredPlayers();
+			if(required > sleeping) {
+				USPMessage.PERCENT_OK.broadcast(players, "%required%", Integer.toString(required), "%current%", Integer.toString(sleeping));
 				SoundHandler.broadcastSound(players, USPSetting.SOUND_SLEEP_OK);
 			} else
 				resetTime(null);
@@ -106,7 +107,7 @@ public class SleepGroup {
 	}
 
 	public int getRequiredPlayers() {
-		return Math.round(getPlayers().size() - getInactivePlayers().size() * percent / 100.0F);
+		return Math.round((getPlayers().size() - getInactivePlayers().size()) * percent / 100.0F);
 	}
 
 	public List<Player> getInactivePlayers() {

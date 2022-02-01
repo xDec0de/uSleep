@@ -1,8 +1,6 @@
 package es.xdec0de.usleep.utils.files;
 
-import java.util.List;
-
-public enum USPSetting {
+public enum USPSetting implements USleepSetting {
 
 	// Features //
 
@@ -50,68 +48,7 @@ public enum USPSetting {
 		this.path = string;
 	}
 
-	/**
-	 * Gets the corresponding <b>config.yml</b>'s path of the setting.
-	 * 
-	 * @return The path to the setting.
-	 */
 	public String getPath() {
 		return path;
-	}
-
-	/**
-	 * Gets the setting as a string.
-	 * 
-	 * @return The setting as a string or an empty string if {@link #getPath()} is invalid or the setting is not a String.
-	 */
-	public String asString() {
-		return USPConfig.get().getString(path, "");
-	}
-
-	/**
-	 * Gets the setting as a string list.
-	 * 
-	 * @return The setting as a string list or an empty string list if {@link #getPath()} is invalid.
-	 */
-	public List<String> asStringList() {
-		return USPConfig.get().getStringList(path);
-	}
-
-	/**
-	 * Gets the setting as an integer.
-	 * 
-	 * @return The setting as an integer or 0 if {@link #getPath()} is invalid or the setting is not a number.
-	 */
-	public int asInt() {
-		return USPConfig.get().getInt(path, 0); // Yeah, I know default is already 0.
-	}
-
-	/**
-	 * Gets the setting as a boolean.
-	 * 
-	 * @return The setting as a boolean or <b>false</b> if {@link #getPath()} is invalid or the setting is not a boolean.
-	 */
-	public boolean asBoolean() {
-		return USPConfig.get().getBoolean(path, false); // Same
-	}
-
-	/**
-	 * Sets {@link #getPath()} to the specified value, without saving, if value is null, the entry will be removed.
-	 * 
-	 * @param value New value to set the path to.
-	 */
-	public void set(Object value) {
-		USPConfig.get().set(path, value);
-	}
-
-	/**
-	 * Sets {@link #getPath()} to the specified value, then, saves and reloads <b>config.yml</b>, if value is null, the entry will be removed.
-	 * 
-	 * @param value New value to set the path to.
-	 */
-	public void setReload(Object value) {
-		USPConfig.get().set(path, value);
-		USPConfig.save();
-		USPConfig.reload(false, false);
 	}
 }

@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 
@@ -61,9 +62,9 @@ public class USleepAPI {
 
 	private static void resetDay(World world, Player player) {
 		numSleep = 0;
-		if(USPConfig.getBoolean(USPSetting.NIGHT_SKIP_EFFECT_ENABLED)) {
+		if(USPConfig.getBoolean(USPSetting.NIGHT_SKIP_EFFECT_ENABLED))
 			doNightSkipEffect(world);
-		} else {
+		else {
 			world.setTime(0L);
 			world.setThundering(false);
 			world.setStorm(false);
@@ -111,9 +112,11 @@ public class USleepAPI {
 	}
 
 	public static void doNightSkipEffect(World world) {
-		double increase = USPConfig.getInt(USPSetting.NIGHT_SKIP_EFFECT_INCREMENT);
-		int stop = (int) (Math.round(increase) + 1);
-		while(world.getTime() <= stop)
-			world.setTime(world.getTime() + (int) increase);
+		Environment env = world.getEnvironment();
+		if(env.equals(Environment.NORMAL) || env.equals(Environment.CUSTOM)) {
+			double increase = USPConfig.getInt(USPSetting.NIGHT_SKIP_EFFECT_INCREMENT);
+			while(world.getTime() >= increase)
+				world.setTime(world.getTime() + (int) increase);
+		}
 	}
 }

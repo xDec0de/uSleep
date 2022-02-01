@@ -14,7 +14,7 @@ import es.xdec0de.usleep.utils.files.USPMessages;
 import es.xdec0de.usleep.utils.files.USPSetting;
 import es.xdec0de.usleep.utils.files.USPWorlds;
 
-public class USleep  extends JavaPlugin {
+public class USleep extends JavaPlugin {
 
 	private USleepAPI api;
 

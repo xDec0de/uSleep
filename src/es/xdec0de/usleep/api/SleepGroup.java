@@ -13,9 +13,15 @@ public class SleepGroup {
 
 	List<World> worlds = new ArrayList<World>();
 	private final String id;
+	private int sleeping = 0;
 
 	SleepGroup(String id) {
 		this.id = id;
+	}
+
+	SleepGroup(List<World> worlds) {
+		this("__usleep_def_sleep_group__");
+		this.worlds = worlds;
 	}
 
 	List<String> build() {
@@ -36,5 +42,13 @@ public class SleepGroup {
 
 	public List<World> getWorlds() {
 		return worlds;
+	}
+
+	public boolean contains(World world) {
+		return worlds.contains(world);
+	}
+
+	public int getPlayersSleeping() {
+		return sleeping;
 	}
 }

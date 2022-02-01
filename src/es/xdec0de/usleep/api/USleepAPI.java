@@ -34,13 +34,17 @@ public class USleepAPI {
 
 	boolean setup() {
 		HashMap<String, List<String>> errors = new HashMap<String, List<String>>();
+		List<World> worlds = new ArrayList<World>(Bukkit.getWorlds());
 		for(String id : USPWorlds.getGroupIdentifiers()) {
 			SleepGroup group = new SleepGroup(id);
 			List<String> groupErrors = group.build();
 			if(!groupErrors.isEmpty())
 				errors.put(id, groupErrors);
+			group.worlds.forEach(world -> worlds.remove(world));
 			sleepGroups.add(group);
 		}
+		if(!worlds.isEmpty())
+			sleepGroups.add(new SleepGroup(worlds));
 		if(!errors.isEmpty()) {
 			USPMessages.log(" ");
 			USPMessages.logCol("&cSleep group errors detected at &4worlds.yml&8:");
@@ -144,5 +148,18 @@ public class USleepAPI {
 		Environment env = world.getEnvironment();
 		if(env.equals(Environment.NORMAL) || env.equals(Environment.CUSTOM))
 			new NightSkipEffectTask(world, USPSetting.NIGHT_SKIP_EFFECT_INCREMENT.asInt()).runTaskTimer(USleep.getPlugin(USleep.class), 0, 1);
+	}
+
+	/**
+	 * 
+	 * Sleep groups
+	 * 
+	 */
+
+	public SleepGroup getSleepGroup(World world) {
+		for(SleepGroup group : sleepGroups)
+			if(group.contains(world))
+				return group;
+		return null;
 	}
 }

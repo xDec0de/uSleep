@@ -62,7 +62,8 @@ public class USleepAPI {
 	}
 
 	private static void resetDay(World world, Player player) {
-		NightSkipEvent nse = new NightSkipEvent(world);
+		SleepMode mode = player != null ? SleepMode.INSTANT : SleepMode.PERCENT;
+		NightSkipEvent nse = new NightSkipEvent(world, mode);
 		Bukkit.getPluginManager().callEvent(nse);
 		if(!nse.isCancelled()) {
 			numSleep = 0;
@@ -73,7 +74,7 @@ public class USleepAPI {
 				world.setThundering(false);
 				world.setStorm(false);
 			}
-			if(player != null) {
+			if(mode.equals(SleepMode.INSTANT)) {
 				USPMessages.broadcast(USPMessage.INSTANT_OK, "%player%", player.getName());
 				NotificationHandler.broadcastSound(USPSetting.SOUND_NEXTDAY_PERCENT);
 			} else {

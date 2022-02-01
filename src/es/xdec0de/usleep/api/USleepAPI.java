@@ -113,10 +113,7 @@ public class USleepAPI {
 
 	public static void doNightSkipEffect(World world) {
 		Environment env = world.getEnvironment();
-		if(env.equals(Environment.NORMAL) || env.equals(Environment.CUSTOM)) {
-			double increase = USPConfig.getInt(USPSetting.NIGHT_SKIP_EFFECT_INCREMENT);
-			while(world.getTime() >= increase)
-				world.setTime(world.getTime() + (int) increase);
-		}
+		if(env.equals(Environment.NORMAL) || env.equals(Environment.CUSTOM))
+			new NightSkipEffectTask(world, USPConfig.getInt(USPSetting.NIGHT_SKIP_EFFECT_INCREMENT)).runTaskTimer(USleep.getPlugin(USleep.class), 0, 1);
 	}
 }

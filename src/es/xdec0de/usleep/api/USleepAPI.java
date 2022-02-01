@@ -40,7 +40,7 @@ public class USleepAPI {
 		else if(USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_ENABLED) && player.hasPermission(USPConfig.getString(USPSetting.PERM_PERCENT_SLEEP))) { // percent
 			numSleep++;
 			if(getRequiredPlayers() < numSleep) {
-				NotificationHandler.broadcastActionbarSleepMessage(USPMessage.PERCENT_OK, "%required%", Integer.toString(getRequiredPlayers()), "%current%", Integer.toString(numSleep));
+				NotificationHandler.broadcastSleepMessage(USPMessage.PERCENT_OK, "%required%", Integer.toString(getRequiredPlayers()), "%current%", Integer.toString(numSleep));
 				NotificationHandler.broadcastSound(USPSetting.SOUND_SLEEP_OK);
 			} else
 				resetDay(player.getWorld(), null);
@@ -56,7 +56,7 @@ public class USleepAPI {
 	public static void handleWakeUp() {
 		if(numSleep > 0) {
 			numSleep--;
-			NotificationHandler.broadcastActionbarSleepMessage(USPMessage.PERCENT_OK, "%required%", Integer.toString(getRequiredPlayers()), "%current%", Integer.toString(numSleep));
+			NotificationHandler.broadcastSleepMessage(USPMessage.PERCENT_OK, "%required%", Integer.toString(getRequiredPlayers()), "%current%", Integer.toString(numSleep));
 			NotificationHandler.broadcastSound(USPSetting.SOUND_SLEEP_LEAVE);
 		}
 	}

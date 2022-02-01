@@ -11,4 +11,8 @@ public class EnumUtils {
 			return null;
 		}
 	}
+
+	public static <E extends Enum<E>> Enum<?> ofOther(Class<E> enumTo, Enum<?> enumFrom) {
+		return getEnum(enumTo, enumFrom.name());
+	}
 }

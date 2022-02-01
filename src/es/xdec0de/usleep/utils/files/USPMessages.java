@@ -288,6 +288,19 @@ public class USPMessages {
 	}
 
 	/**
+	 * Sends a message with colors {@link #applyColor(String)} and the default {@link Replacer}, empty messages will be ignored and the message wont be sent.
+	 * 
+	 * @param player The player that will receive the message.
+	 * @param msg The message to send.
+	 * 
+	 * @see #getMessage(USPMessage)
+	 */
+	public static void sendMessage(Player player, String msg) {;
+		if(msg != null && !msg.isEmpty())
+			player.sendMessage(msg);
+	}
+
+	/**
 	 * Sends a message with colors {@link #applyColor(String)} and the default {@link Replacer}, also, 
 	 * the specified replacer is added to the default replacer, empty messages will be ignored and the message wont be sent.
 	 * 
@@ -333,6 +346,19 @@ public class USPMessages {
 		String send = getMessage(msg);
 		if(!send.isEmpty())
 			player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(send));
+	}
+
+	/**
+	 * Sends an actionbar with colors {@link #applyColor(String)} and the default {@link Replacer}, empty messages will be ignored and the message wont be sent.
+	 * 
+	 * @param player The player that will receive the message.
+	 * @param msg The message to send.
+	 * 
+	 * @see #getMessage(USPMessage)
+	 */
+	public static void sendActionbar(Player player, String msg) {
+		if(msg != null && !msg.isEmpty())
+			player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg));
 	}
 
 	/**

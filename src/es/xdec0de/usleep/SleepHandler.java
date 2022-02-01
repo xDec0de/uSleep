@@ -35,10 +35,8 @@ public class SleepHandler implements Listener {
 				e.setCancelled(true);
 				SleepErrorEvent see = new SleepErrorEvent(p, e.getBedEnterResult());
 				Bukkit.getPluginManager().callEvent(see);
-				if(see.sendsMessage())
-					NotificationHandler.sendSleepMessage(p, USPMessage.valueOf(e.getBedEnterResult().name()));
-				if(see.playsSound())
-					NotificationHandler.playSound(p, USPSetting.SOUND_SLEEP_ERROR);
+				NotificationHandler.sendSleepMessage(p, see.getMessage());
+				NotificationHandler.playSound(p, see.getSound());
 			}
 		}
 	}

@@ -12,13 +12,9 @@ import es.xdec0de.usleep.utils.files.USPSetting;
 
 public class NotificationHandler {
 
-	public static void playSound(Player player, USPSetting setting) {
-		String soundStr = USPConfig.getString(setting);
-		if(soundStr != null && !soundStr.isEmpty()) {
-			Sound sound = (Sound)EnumUtils.getEnum(Sound.class, soundStr);
-			if(sound != null)
-				player.playSound(player.getLocation(), sound, 1.0F, 1.0F);
-		}
+	public static void playSound(Player player, Sound sound) {
+		if(sound != null)
+			player.playSound(player.getLocation(), sound, 1.0F, 1.0F);
 	}
 
 	public static void broadcastSound(USPSetting setting) {
@@ -40,14 +36,8 @@ public class NotificationHandler {
 	 * @see #getMessage(USPMessage)
 	 */
 	public static void sendSleepMessage(Player player, USPMessage msg) {
-		if(USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED)) {
-			Bukkit.getScheduler().scheduleSyncDelayedTask(USleep.getPlugin(USleep.class), new Runnable() {
-				@Override
-				public void run() {
-					USPMessages.sendActionbar(player, msg);
-				}
-			}, 1L);
-		}
+		if(USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED))
+			Bukkit.getScheduler().runTaskLater(USleep.getPlugin(USleep.class), () -> USPMessages.sendActionbar(player, msg) , 1L);
 		else
 			USPMessages.sendMessage(player, msg);
 	}
@@ -64,14 +54,8 @@ public class NotificationHandler {
 	 * @see #getMessage(USPMessage, Replacer)
 	 */
 	public static void sendSleepMessage(Player player, USPMessage msg, Replacer replacer) {
-		if(USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED)) {
-			Bukkit.getScheduler().scheduleSyncDelayedTask(USleep.getPlugin(USleep.class), new Runnable() {
-				@Override
-				public void run() {
-					USPMessages.sendActionbar(player, msg, replacer);
-				}
-			}, 1L);
-		}
+		if(USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED))
+			Bukkit.getScheduler().runTaskLater(USleep.getPlugin(USleep.class), () -> USPMessages.sendActionbar(player, msg, replacer) , 1L);
 		else
 			USPMessages.sendMessage(player, msg, replacer);
 	}
@@ -88,33 +72,43 @@ public class NotificationHandler {
 	 * @see #getMessage(USPMessage, String...)
 	 */
 	public static void sendSleepMessage(Player player, USPMessage msg, String... replacements) {
-		if(USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED)) {
-			Bukkit.getScheduler().scheduleSyncDelayedTask(USleep.getPlugin(USleep.class), new Runnable() {
-				@Override
-				public void run() {
-					USPMessages.sendActionbar(player, msg, replacements);
-				}
-			}, 1L);
-		}
+		if(USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED))
+			Bukkit.getScheduler().runTaskLater(USleep.getPlugin(USleep.class), () -> USPMessages.sendActionbar(player, msg, replacements) , 1L);
 		else
 			USPMessages.sendMessage(player, msg, replacements);
 	}
 
-	public static void broadcastActionbarSleepMessage(USPMessage msg) {
+	/**
+	 * Sends an sleep message with colors {@link #applyColor(String)} and the default {@link Replacer}, empty messages will be ignored and the message wont be sent. 
+	 * Sleep messages will be sent on actionbar if the setting is enabled on config.yml.
+	 * 
+	 * @param player The player that will receive the message.
+	 * @param msg The message to send.
+	 * 
+	 * @see #getMessage(USPMessage)
+	 */
+	public static void sendSleepMessage(Player player, String msg) {
+		if(USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED))
+			Bukkit.getScheduler().runTaskLater(USleep.getPlugin(USleep.class), () -> USPMessages.sendActionbar(player, msg) , 1L);
+		else
+			USPMessages.sendMessage(player, msg);
+	}
+
+	public static void broadcastSleepMessage(USPMessage msg) {
 		if(USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED))
 			USPMessages.broadcastActionbar(msg);
 		else
 			USPMessages.broadcast(msg);
 	}
 
-	public static void broadcastActionbarSleepMessage(USPMessage msg, Replacer replacer) {
+	public static void broadcastSleepMessage(USPMessage msg, Replacer replacer) {
 		if(USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED))
 			USPMessages.broadcastActionbar(msg, replacer);
 		else
 			USPMessages.broadcast(msg, replacer);
 	}
 
-	public static void broadcastActionbarSleepMessage(USPMessage msg, String... replacers) {
+	public static void broadcastSleepMessage(USPMessage msg, String... replacers) {
 		if(USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED))
 			USPMessages.broadcastActionbar(msg, replacers);
 		else

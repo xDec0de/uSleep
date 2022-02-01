@@ -1,27 +1,30 @@
 package es.xdec0de.usleep.api.events;
 
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerBedEnterEvent.BedEnterResult;
 
-import es.xdec0de.usleep.utils.USPSetting;
+import es.xdec0de.usleep.utils.EnumUtils;
 import es.xdec0de.usleep.utils.files.USPConfig;
+import es.xdec0de.usleep.utils.files.USPMessage;
+import es.xdec0de.usleep.utils.files.USPMessages;
+import es.xdec0de.usleep.utils.files.USPSetting;
 
 public class SleepErrorEvent extends Event {
-	
+
 	private final Player player;
 	private final BedEnterResult result;
-	private boolean sendMessage = true;
-	private boolean playSound;
+	private String message;
+	private Sound sound = (Sound) EnumUtils.getEnum(Sound.class, USPConfig.getString(USPSetting.SOUND_SLEEP_ERROR));
 
 	private static final HandlerList HANDLERS = new HandlerList();
 
 	public SleepErrorEvent(Player player, BedEnterResult result) {
 		this.player = player;
 		this.result = result;
-		String soundStr = USPConfig.getString(USPSetting.SOUND_SLEEP_ERROR);
-		this.playSound = soundStr != null && !soundStr.isEmpty();
+		this.message = USPMessages.getMessage((USPMessage) EnumUtils.ofOther(USPMessage.class, result));
 	}
 
 	public Player getPlayer() {
@@ -32,20 +35,20 @@ public class SleepErrorEvent extends Event {
 		return result;
 	}
 
-	public boolean sendsMessage() {
-		return sendMessage;
+	public String getMessage() {
+		return message;
 	}
 
-	public void setSendsMessage(boolean sendMessage) {
-		this.sendMessage = sendMessage;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
-	public void setPlaysSound(boolean playSound) {
-		this.playSound = playSound;
+	public void setSound(Sound sound) {
+		this.sound = sound;
 	}
 
-	public boolean playsSound() {
-		return playSound;
+	public Sound getSound() {
+		return sound;
 	}
 
 	public HandlerList getHandlers() {

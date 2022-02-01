@@ -1,6 +1,9 @@
 package es.xdec0de.usleep.utils.files;
 
+import java.util.List;
+
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import es.xdec0de.usleep.api.USleep;
 import es.xdec0de.usleep.utils.Replacer;
@@ -130,6 +133,54 @@ public enum USPMessage implements USleepMessage {
 					Bukkit.getScheduler().runTaskLater(USleep.getPlugin(USleep.class), () -> Bukkit.getOnlinePlayers().forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str))), actionDelay);
 			} else
 				Bukkit.getOnlinePlayers().forEach(on -> on.sendMessage(str));
+			if(broadcastsConsole)
+				Bukkit.getConsoleSender().sendMessage(str);
+		}
+	}
+
+	@Override
+	public void broadcast(List<Player> players) {
+		String str = getString();
+		if(str != null && !str.isEmpty()) {
+			if(actionDelay >= 0 && USPSetting.ACTIONBAR_ENABLED.asBoolean()) {
+				if(isActionBarCompatible())
+					players.forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
+				else
+					Bukkit.getScheduler().runTaskLater(USleep.getPlugin(USleep.class), () -> players.forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str))), actionDelay);
+			} else
+				players.forEach(on -> on.sendMessage(str));
+			if(broadcastsConsole)
+				Bukkit.getConsoleSender().sendMessage(str);
+		}
+	}
+
+	@Override
+	public void broadcast(List<Player> players, Replacer replacer) {
+		String str = getString(replacer);
+		if(str != null && !str.isEmpty()) {
+			if(actionDelay >= 0 && USPSetting.ACTIONBAR_ENABLED.asBoolean()) {
+				if(isActionBarCompatible())
+					players.forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
+				else
+					Bukkit.getScheduler().runTaskLater(USleep.getPlugin(USleep.class), () -> players.forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str))), actionDelay);
+			} else
+				players.forEach(on -> on.sendMessage(str));
+			if(broadcastsConsole)
+				Bukkit.getConsoleSender().sendMessage(str);
+		}
+	}
+
+	@Override
+	public void broadcast(List<Player> players, String... replacements) {
+		String str = getString();
+		if(str != null && !str.isEmpty()) {
+			if(actionDelay >= 0 && USPSetting.ACTIONBAR_ENABLED.asBoolean()) {
+				if(isActionBarCompatible())
+					players.forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
+				else
+					Bukkit.getScheduler().runTaskLater(USleep.getPlugin(USleep.class), () -> players.forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str))), actionDelay);
+			} else
+				players.forEach(on -> on.sendMessage(str));
 			if(broadcastsConsole)
 				Bukkit.getConsoleSender().sendMessage(str);
 		}

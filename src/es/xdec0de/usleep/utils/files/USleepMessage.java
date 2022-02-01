@@ -1,5 +1,7 @@
 package es.xdec0de.usleep.utils.files;
 
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -202,6 +204,65 @@ public interface USleepMessage {
 				Bukkit.getOnlinePlayers().forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
 			else
 				Bukkit.getOnlinePlayers().forEach(on -> on.sendMessage(str));
+			if(broadcastsToConsole())
+				Bukkit.getConsoleSender().sendMessage(str);
+		}
+	}
+
+	/**
+	 * Broadcasts {@link #getString()} to the specified players and to the console if {@link #broadcastsToConsole()} returns true.
+	 * 
+	 * @param players The players that will receive the message.
+	 * 
+	 * @since uSleep v2.0.0
+	 */
+	default public void broadcast(List<Player> players) {
+		String str = getString();
+		if(str != null && !str.isEmpty()) {
+			if(isActionBarCompatible() && USPSetting.ACTIONBAR_ENABLED.asBoolean())
+				players.forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
+			else
+				players.forEach(on -> on.sendMessage(str));
+			if(broadcastsToConsole())
+				Bukkit.getConsoleSender().sendMessage(str);
+		}
+	}
+
+	/**
+	 * Broadcasts {@link #getString()} to the specified players and to the console if {@link #broadcastsToConsole()} returns true.
+	 * 
+	 * @param players The players that will receive the message.
+	 * @param replacer The replacer to apply.
+	 * 
+	 * @since uSleep v2.0.0
+	 */
+	default public void broadcast(List<Player> players, Replacer replacer) {
+		String str = getString(replacer);
+		if(str != null && !str.isEmpty()) {
+			if(isActionBarCompatible() && USPSetting.ACTIONBAR_ENABLED.asBoolean())
+				players.forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
+			else
+				players.forEach(on -> on.sendMessage(str));
+			if(broadcastsToConsole())
+				Bukkit.getConsoleSender().sendMessage(str);
+		}
+	}
+
+	/**
+	 * Broadcasts {@link #getString()} to the specified players and to the console if {@link #broadcastsToConsole()} returns true.
+	 * 
+	 * @param players The players that will receive the message.
+	 * @param replacements The replacements to apply.
+	 * 
+	 * @since uSleep v2.0.0
+	 */
+	default public void broadcast(List<Player> players, String... replacements) {
+		String str = getString();
+		if(str != null && !str.isEmpty()) {
+			if(isActionBarCompatible() && USPSetting.ACTIONBAR_ENABLED.asBoolean())
+				players.forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
+			else
+				players.forEach(on -> on.sendMessage(str));
 			if(broadcastsToConsole())
 				Bukkit.getConsoleSender().sendMessage(str);
 		}

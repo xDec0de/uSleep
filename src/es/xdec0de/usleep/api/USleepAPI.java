@@ -16,6 +16,7 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 
 import es.xdec0de.usleep.USleep;
+import es.xdec0de.usleep.api.events.NightSkipEvent;
 import es.xdec0de.usleep.utils.NotificationHandler;
 import es.xdec0de.usleep.utils.USPMessage;
 import es.xdec0de.usleep.utils.USPSetting;
@@ -61,20 +62,24 @@ public class USleepAPI {
 	}
 
 	private static void resetDay(World world, Player player) {
-		numSleep = 0;
-		if(USPConfig.getBoolean(USPSetting.NIGHT_SKIP_EFFECT_ENABLED))
-			doNightSkipEffect(world);
-		else {
-			world.setTime(0L);
-			world.setThundering(false);
-			world.setStorm(false);
-		}
-		if(player != null) {
-			USPMessages.broadcast(USPMessage.INSTANT_OK, "%player%", player.getName());
-			NotificationHandler.broadcastSound(USPSetting.SOUND_NEXTDAY_PERCENT);
-		} else {
-			USPMessages.broadcast(USPMessage.PERCENT_NEXT_DAY);
-			NotificationHandler.broadcastSound(USPSetting.SOUND_NEXTDAY_INSTANT);
+		NightSkipEvent nse = new NightSkipEvent(world);
+		Bukkit.getPluginManager().callEvent(nse);
+		if(!nse.isCancelled()) {
+			numSleep = 0;
+			if(USPConfig.getBoolean(USPSetting.NIGHT_SKIP_EFFECT_ENABLED))
+				doNightSkipEffect(world);
+			else {
+				world.setTime(0L);
+				world.setThundering(false);
+				world.setStorm(false);
+			}
+			if(player != null) {
+				USPMessages.broadcast(USPMessage.INSTANT_OK, "%player%", player.getName());
+				NotificationHandler.broadcastSound(USPSetting.SOUND_NEXTDAY_PERCENT);
+			} else {
+				USPMessages.broadcast(USPMessage.PERCENT_NEXT_DAY);
+				NotificationHandler.broadcastSound(USPSetting.SOUND_NEXTDAY_INSTANT);
+			}
 		}
 	}
 

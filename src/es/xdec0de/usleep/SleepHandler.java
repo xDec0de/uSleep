@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerBedLeaveEvent;
 import es.xdec0de.usleep.api.USleep;
 import es.xdec0de.usleep.api.USleepAPI;
 import es.xdec0de.usleep.api.events.SleepErrorEvent;
-import es.xdec0de.usleep.utils.NotificationHandler;
+import es.xdec0de.usleep.utils.SoundHandler;
 import es.xdec0de.usleep.utils.files.USPMessage;
 import es.xdec0de.usleep.utils.files.USPMessages;
 import es.xdec0de.usleep.utils.files.USPSetting;
@@ -46,13 +46,13 @@ public class SleepHandler implements Listener {
 					USPMessages.sendActionBar(p, see.getMessage());
 				else
 					USPMessages.sendMessage(p, see.getMessage());
-				NotificationHandler.playSound(p, see.getSound());
+				SoundHandler.playSound(p, see.getSound());
 			}
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBedLeave(PlayerBedLeaveEvent e) {
-		api.handleWakeUp();
+		api.handleWakeUp(e.getPlayer());
 	}
 }

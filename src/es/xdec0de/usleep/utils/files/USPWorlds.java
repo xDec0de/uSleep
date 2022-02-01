@@ -46,7 +46,11 @@ public class USPWorlds {
 		return cfg.getConfigurationSection("Groups").getKeys(false);
 	}
 	
-	public static List<String> getWorldsInGroup(String group) {
-		return cfg.getStringList("Groups."+group);
+	public static List<String> getWorldsInGroup(String groupID) {
+		return cfg.getStringList("Groups."+groupID+".Worlds");
+	}
+
+	public static int getPercentRequired(String groupID) {
+		return cfg.getInt("Groups."+groupID+".Percent");
 	}
 }

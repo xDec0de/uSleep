@@ -8,4 +8,6 @@
 
 Groups:
   Example:
+    Worlds:
     - "world"
+    Percent: 50

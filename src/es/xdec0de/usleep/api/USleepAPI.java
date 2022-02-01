@@ -16,17 +16,13 @@ import org.bukkit.metadata.MetadataValue;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 
-import es.xdec0de.usleep.api.events.NightSkipEvent;
 import es.xdec0de.usleep.utils.ListUtils;
-import es.xdec0de.usleep.utils.NotificationHandler;
-import es.xdec0de.usleep.utils.files.USPMessage;
 import es.xdec0de.usleep.utils.files.USPMessages;
 import es.xdec0de.usleep.utils.files.USPSetting;
 import es.xdec0de.usleep.utils.files.USPWorlds;
 
 public class USleepAPI {
 
-	private int numSleep = 0;
 	private List<UUID> onDelay = new ArrayList<UUID>();
 	private List<SleepGroup> sleepGroups = new ArrayList<SleepGroup>();
 
@@ -56,63 +52,24 @@ public class USleepAPI {
 	}
 
 	public boolean handleSleep(Player player) {
-		int cooldown = USPSetting.PERCENT_SLEEP_COOLDOWN.asInt();
-		if(cooldown > 0) { 
-			UUID uuid = player.getUniqueId();
-			onDelay.add(uuid);
-			Bukkit.getScheduler().runTaskTimerAsynchronously(USleep.getPlugin(USleep.class), () -> onDelay.remove(uuid), 0L, cooldown * 20L);
-		}
-		if(USPSetting.INSTANT_SLEEP_ENABLED.asBoolean() && player.hasPermission(USPSetting.PERM_INSTANT_SLEEP.asString())) // instant
-			resetDay(player.getWorld(), player);
-		else if(USPSetting.PERCENT_SLEEP_ENABLED.asBoolean() && player.hasPermission(USPSetting.PERM_PERCENT_SLEEP.asString())) { // percent
-			numSleep++;
-			if(getRequiredPlayers() < numSleep) {
-				USPMessage.PERCENT_OK.broadcast("%required%", Integer.toString(getRequiredPlayers()), "%current%", Integer.toString(numSleep));
-				NotificationHandler.broadcastSound(USPSetting.SOUND_SLEEP_OK);
-			} else
-				resetDay(player.getWorld(), null);
-		} else
-			return false;
-		return true;
+		return getSleepGroup(player.getWorld()).handleSleep(player);
 	}
 
 	public boolean hasSleepCooldown(Player player) {
 		return onDelay.contains(player.getUniqueId());
 	}
 
-	public void handleWakeUp() {
-		if(numSleep > 0) {
-			numSleep--;
-			USPMessage.PERCENT_OK.broadcast("%required%", Integer.toString(getRequiredPlayers()), "%current%", Integer.toString(numSleep));
-			NotificationHandler.broadcastSound(USPSetting.SOUND_SLEEP_LEAVE);
+	public boolean addToSleepCooldown(UUID player, int seconds) {
+		if(seconds > 0 && !onDelay.contains(player)) {
+			onDelay.add(player);
+			Bukkit.getScheduler().runTaskTimerAsynchronously(USleep.getPlugin(USleep.class), () -> onDelay.remove(player), 0L, seconds * 20L);
+			return true;
 		}
+		return false;
 	}
 
-	private void resetDay(World world, Player player) {
-		SleepMode mode = player != null ? SleepMode.INSTANT : SleepMode.PERCENT;
-		NightSkipEvent nse = new NightSkipEvent(world, mode);
-		Bukkit.getPluginManager().callEvent(nse);
-		if(!nse.isCancelled()) {
-			numSleep = 0;
-			if(USPSetting.NIGHT_SKIP_EFFECT_ENABLED.asBoolean())
-				doNightSkipEffect(world);
-			else {
-				world.setTime(0L);
-				world.setThundering(false);
-				world.setStorm(false);
-			}
-			if(mode.equals(SleepMode.INSTANT)) {
-				USPMessage.INSTANT_OK.broadcast("%player%", player.getName());
-				NotificationHandler.broadcastSound(USPSetting.SOUND_NEXTDAY_PERCENT);
-			} else {
-				USPMessage.PERCENT_NEXT_DAY.broadcast();
-				NotificationHandler.broadcastSound(USPSetting.SOUND_NEXTDAY_INSTANT);
-			}
-		}
-	}
-
-	public int getRequiredPlayers() {
-		return Math.round(getActivePlayers() * USPSetting.PERCENT_SLEEP_PERCENT.asInt() / 100.0F);
+	public void handleWakeUp(Player player) {
+		getSleepGroup(player.getWorld()).handleWakeUp();
 	}
 
 	public int getActivePlayers() {

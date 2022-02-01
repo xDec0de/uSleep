@@ -74,7 +74,7 @@ public class USleepAPI {
 			NotificationHandler.broadcastSound(USPSetting.SOUND_NEXTDAY_PERCENT);
 		} else {
 			USPMessages.broadcast(USPMessage.PERCENT_NEXT_DAY);
-			NotificationHandler.broadcastSound(USPSetting.SOUND_NEXTDAY_PERCENT);
+			NotificationHandler.broadcastSound(USPSetting.SOUND_NEXTDAY_INSTANT);
 		}
 	}
 

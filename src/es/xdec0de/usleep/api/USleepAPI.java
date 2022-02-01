@@ -20,7 +20,6 @@ import es.xdec0de.usleep.api.events.NightSkipEvent;
 import es.xdec0de.usleep.utils.NotificationHandler;
 import es.xdec0de.usleep.utils.files.USPConfig;
 import es.xdec0de.usleep.utils.files.USPMessage;
-import es.xdec0de.usleep.utils.files.USPMessages;
 import es.xdec0de.usleep.utils.files.USPSetting;
 
 public class USleepAPI {
@@ -40,7 +39,7 @@ public class USleepAPI {
 		else if(USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_ENABLED) && player.hasPermission(USPConfig.getString(USPSetting.PERM_PERCENT_SLEEP))) { // percent
 			numSleep++;
 			if(getRequiredPlayers() < numSleep) {
-				NotificationHandler.broadcastSleepMessage(USPMessage.PERCENT_OK, "%required%", Integer.toString(getRequiredPlayers()), "%current%", Integer.toString(numSleep));
+				USPMessage.PERCENT_OK.broadcast("%required%", Integer.toString(getRequiredPlayers()), "%current%", Integer.toString(numSleep));
 				NotificationHandler.broadcastSound(USPSetting.SOUND_SLEEP_OK);
 			} else
 				resetDay(player.getWorld(), null);
@@ -56,7 +55,7 @@ public class USleepAPI {
 	public static void handleWakeUp() {
 		if(numSleep > 0) {
 			numSleep--;
-			NotificationHandler.broadcastSleepMessage(USPMessage.PERCENT_OK, "%required%", Integer.toString(getRequiredPlayers()), "%current%", Integer.toString(numSleep));
+			USPMessage.PERCENT_OK.broadcast("%required%", Integer.toString(getRequiredPlayers()), "%current%", Integer.toString(numSleep));
 			NotificationHandler.broadcastSound(USPSetting.SOUND_SLEEP_LEAVE);
 		}
 	}
@@ -75,10 +74,10 @@ public class USleepAPI {
 				world.setStorm(false);
 			}
 			if(mode.equals(SleepMode.INSTANT)) {
-				USPMessages.broadcast(USPMessage.INSTANT_OK, "%player%", player.getName());
+				USPMessage.INSTANT_OK.broadcast("%player%", player.getName());
 				NotificationHandler.broadcastSound(USPSetting.SOUND_NEXTDAY_PERCENT);
 			} else {
-				USPMessages.broadcast(USPMessage.PERCENT_NEXT_DAY);
+				USPMessage.PERCENT_NEXT_DAY.broadcast();
 				NotificationHandler.broadcastSound(USPSetting.SOUND_NEXTDAY_INSTANT);
 			}
 		}

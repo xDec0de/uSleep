@@ -18,15 +18,15 @@ public class USleepCMD implements CommandExecutor {
 				if(sndr.hasPermission(USPConfig.getString(USPSetting.PERM_RELOAD))) {
 					USPConfig.setup(true);
 					USPMessages.setup(true);
-					USPMessages.sendMessage(sndr, USPMessage.RELOAD);
+					USPMessage.RELOAD.send(sndr);
 				} else
-					USPMessages.sendMessage(sndr, USPMessage.NO_PERMS, "%perm%", USPConfig.getString(USPSetting.PERM_RELOAD));
+					USPMessage.NO_PERMS.send(sndr, "%perm%", USPConfig.getString(USPSetting.PERM_RELOAD));
 				break;
 			default:
-				USPMessages.sendMessage(sndr, USPMessage.USLEEP_USAGE);
+				USPMessage.USLEEP_USAGE.send(sndr);
 			}
 		} else
-			USPMessages.sendMessage(sndr, USPMessage.USLEEP_USAGE);
+			USPMessage.USLEEP_USAGE.send(sndr);
 		return true;
 	}
 }

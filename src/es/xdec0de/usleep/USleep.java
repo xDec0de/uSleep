@@ -79,9 +79,9 @@ public class USleep  extends JavaPlugin {
 			UpdateChecker.getLatestVersion(version -> {
 				USPMessages.log(" ");
 				if(isLatest(version))
-					USPMessages.sendMessage(Bukkit.getConsoleSender(), USPMessage.UPDATE_LATEST_CONSOLE);
+					USPMessage.UPDATE_LATEST_CONSOLE.send(Bukkit.getConsoleSender());
 				else
-					USPMessages.sendMessage(Bukkit.getConsoleSender(), USPMessage.UPDATE_LATEST_CONSOLE, "%new%", version, "%current%", getDescription().getVersion());
+					USPMessage.UPDATE_LATEST_CONSOLE.send(Bukkit.getConsoleSender(), "%new%", version, "%current%", getDescription().getVersion());
 				USPMessages.log(" ");
 				if(!fileSuccess) {
 					USPMessages.logCol("&8&l[&4&l!&8&l] &4uSleep &chas configuration errors, please check them above &8&l[&4&l!&8&l]");

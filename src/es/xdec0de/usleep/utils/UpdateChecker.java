@@ -14,7 +14,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import es.xdec0de.usleep.USleep;
 import es.xdec0de.usleep.utils.files.USPConfig;
 import es.xdec0de.usleep.utils.files.USPMessage;
-import es.xdec0de.usleep.utils.files.USPMessages;
 import es.xdec0de.usleep.utils.files.USPSetting;
 import net.md_5.bungee.api.ChatColor;
 
@@ -40,9 +39,9 @@ public class UpdateChecker implements Listener {
 			String current = USleep.getPlugin(USleep.class).getDescription().getVersion();
 			getLatestVersion(version -> {
 				if(USleep.getPlugin(USleep.class).isLatest(version))
-					USPMessages.sendMessage(Bukkit.getConsoleSender(), USPMessage.UPDATE_LATEST_PLAYER);
+					USPMessage.UPDATE_LATEST_PLAYER.send(e.getPlayer());
 				else
-					USPMessages.sendMessage(Bukkit.getConsoleSender(), USPMessage.UPDATE_LATEST_PLAYER, "%new%", version, "%current%", current);
+					USPMessage.UPDATE_AVAILABLE_PLAYER.send(e.getPlayer(), "%new%", version, "%current%", current);
 			});
 		}
 	}

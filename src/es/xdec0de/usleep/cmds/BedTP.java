@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 
 import es.xdec0de.usleep.utils.files.USPConfig;
 import es.xdec0de.usleep.utils.files.USPMessage;
-import es.xdec0de.usleep.utils.files.USPMessages;
 import es.xdec0de.usleep.utils.files.USPSetting;
 
 public class BedTP implements CommandExecutor {
@@ -23,23 +22,23 @@ public class BedTP implements CommandExecutor {
 					if(bed != null)
 						p.teleport(bed);
 					else
-						USPMessages.sendMessage(sndr, USPMessage.BEDTP_ERROR);
+						USPMessage.BEDTP_ERROR.send(p);
 				} else
-					USPMessages.sendMessage(sndr, USPMessage.NO_PERMS, "%perm%", USPConfig.getString(USPSetting.PERM_BEDTP_SELF));
+					USPMessage.NO_PERMS.send(p, "%perm%", USPConfig.getString(USPSetting.PERM_BEDTP_SELF));
 			} else if(args.length == 1) {
 				if(sndr.hasPermission(USPConfig.getString(USPSetting.PERM_BEDTP_OTHER))) {
 					Location bed = getBedLocation(args[0]);
 					if(bed != null) {
 						p.teleport(bed);
-						USPMessages.sendMessage(sndr, USPMessage.BEDTP_TELEPORT_OTHER, "%player%", args[0]);
+						USPMessage.BEDTP_TELEPORT_OTHER.send(p, "%player%", args[0]);
 					} else
-						USPMessages.sendMessage(sndr, USPMessage.BEDTP_ERROR);
+						USPMessage.BEDTP_ERROR.send(p);
 				} else
-					USPMessages.getMessage(USPMessage.NO_PERMS, "%perm%", USPConfig.getString(USPSetting.PERM_BEDTP_SELF));
+					USPMessage.NO_PERMS.send(p, "%perm%", USPConfig.getString(USPSetting.PERM_BEDTP_SELF));
 			} else
-				USPMessages.sendMessage(sndr, USPMessage.BEDTP_USAGE);
+				USPMessage.BEDTP_USAGE.send(p);
 		} else
-			USPMessages.sendMessage(sndr, USPMessage.NO_CONSOLE);
+			USPMessage.NO_CONSOLE.send(sndr);
 		return true;
 	}
 

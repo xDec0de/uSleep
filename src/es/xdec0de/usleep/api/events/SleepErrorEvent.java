@@ -9,7 +9,6 @@ import org.bukkit.event.player.PlayerBedEnterEvent.BedEnterResult;
 import es.xdec0de.usleep.utils.EnumUtils;
 import es.xdec0de.usleep.utils.files.USPConfig;
 import es.xdec0de.usleep.utils.files.USPMessage;
-import es.xdec0de.usleep.utils.files.USPMessages;
 import es.xdec0de.usleep.utils.files.USPSetting;
 
 public class SleepErrorEvent extends Event {
@@ -24,7 +23,8 @@ public class SleepErrorEvent extends Event {
 	public SleepErrorEvent(Player player, BedEnterResult result) {
 		this.player = player;
 		this.result = result;
-		this.message = USPMessages.getMessage((USPMessage) EnumUtils.ofOther(USPMessage.class, result));
+		USPMessage msg = ((USPMessage) EnumUtils.ofOther(USPMessage.class, result));
+		this.message = msg != null ? msg.getString() : null;
 	}
 
 	public Player getPlayer() {

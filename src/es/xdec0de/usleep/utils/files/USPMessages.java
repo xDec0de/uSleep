@@ -5,7 +5,6 @@ import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -43,6 +42,10 @@ public class USPMessages {
 		errorPrefix = cfg.getString(USPMessage.ERROR_PREFIX.getPath());
 	}
 
+	public static Replacer getDefaultReplacer() {
+		return new Replacer("%prefix%", prefix, "%error%", errorPrefix);
+	}
+
 	/**
 	 * Applies color to the specified string, with hexadecimal color codes support.
 	 * 
@@ -64,6 +67,10 @@ public class USPMessages {
 					+ COLOR_CHAR + group.charAt(4) + COLOR_CHAR + group.charAt(5));
 		}
 		return ChatColor.translateAlternateColorCodes('&', matcher.appendTail(buffer).toString());
+	}
+
+	static FileConfiguration getFile() {
+		return cfg;
 	}
 
 	// Loggers //
@@ -101,7 +108,7 @@ public class USPMessages {
 	 */
 	public static void logColRep(String str) {
 		if(!str.isEmpty())
-			Bukkit.getConsoleSender().sendMessage(applyColor(new Replacer("%prefix%", prefix, "%error%", errorPrefix).replaceAt(str)));
+			Bukkit.getConsoleSender().sendMessage(applyColor(getDefaultReplacer().replaceAt(str)));
 		// It's not necessary to null check as applyColor does it.
 	}
 
@@ -114,282 +121,31 @@ public class USPMessages {
 	 */
 	public static void logCol(String str, String... replacements) {
 		if(!str.isEmpty())
-			Bukkit.getConsoleSender().sendMessage(applyColor(new Replacer("%prefix%", prefix, "%error%", errorPrefix).add(replacements).replaceAt(str)));
+			Bukkit.getConsoleSender().sendMessage(applyColor(getDefaultReplacer().add(replacements).replaceAt(str)));
 		// It's not necessary to null check as applyColor does it.
 	}
 
-	// Broadcast //
-
 	/**
-	 * Broadcasts a message to all players online and the console, uses {@link #getMessage(USPMessage)}
-	 * 
-	 * @param msg The message to be broadcasted.
-	 */
-	public static void broadcast(USPMessage msg) {
-		String str = getMessage(msg);
-		Bukkit.getOnlinePlayers().forEach(on -> on.sendMessage(str));
-		Bukkit.getConsoleSender().sendMessage(str);
-	}
-
-	/**
-	 * Broadcasts a message to all players online and the console, uses {@link #getMessage(USPMessage, Replacer)}
-	 * 
-	 * @param msg The message to be broadcasted.
-	 * @param replacer The replacer to apply.
-	 */
-	public static void broadcast(USPMessage msg, Replacer replacer) {
-		String str = getMessage(msg, replacer);
-		Bukkit.getOnlinePlayers().forEach(on -> on.sendMessage(str));
-		Bukkit.getConsoleSender().sendMessage(str);
-	}
-
-	/**
-	 * Broadcasts a message to all players online and the console, uses {@link #getMessage(USPMessage, String...)}
-	 * 
-	 * @param msg The message to be broadcasted.
-	 * @param replacements The replacements to apply.
-	 */
-	public static void broadcast(USPMessage msg, String... replacements) {
-		String str = getMessage(msg, replacements);
-		Bukkit.getOnlinePlayers().forEach(on -> on.sendMessage(str));
-		Bukkit.getConsoleSender().sendMessage(str);
-	}
-
-	/**
-	 * Broadcasts a message to all players online, uses {@link #getMessage(USPMessage)}
-	 * 
-	 * @param msg The message to be broadcasted.
-	 */
-	public static void broadcastActionbar(USPMessage msg) {
-		String str = getMessage(msg);
-		Bukkit.getOnlinePlayers().forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
-	}
-
-	/**
-	 * Broadcasts a message to all players online, uses {@link #getMessage(USPMessage, Replacer)}
-	 * 
-	 * @param msg The message to be broadcasted.
-	 * @param replacer The replacer to apply.
-	 */
-	public static void broadcastActionbar(USPMessage msg, Replacer replacer) {
-		String str = getMessage(msg, replacer);
-		Bukkit.getOnlinePlayers().forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
-	}
-
-	/**
-	 * Broadcasts a message as an actionbar to all players online, uses {@link #getMessage(USPMessage, String...)}
-	 * 
-	 * @param msg The message to be broadcasted.
-	 * @param replacements The replacements to apply.
-	 */
-	public static void broadcastActionbar(USPMessage msg, String... replacements) {
-		String str = getMessage(msg, replacements);
-		Bukkit.getOnlinePlayers().forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
-	}
-
-	// Message getters //
-
-	/**
-	 * Gets a message with colors {@link #applyColor(String)} and the default {@link Replacer}.
-	 * 
-	 * @param msg The message to get.
-	 * 
-	 * @return The message as a string, with colors and the default replacer applied to it.
-	 */
-	public static String getMessage(USPMessage msg) {
-		return applyColor(new Replacer("%prefix%", prefix, "%error%", errorPrefix).replaceAt(cfg.getString(msg.getPath())));
-	}
-
-	/**
-	 * Gets a message with colors {@link #applyColor(String)} and the default {@link Replacer}, also, the specified replacer is added to the default replacer.
-	 * 
-	 * @param msg The message to get.
-	 * @param replacer The replacer to apply.
-	 * 
-	 * @return The message as a string, with colors and replacer applied to it.
-	 */
-	public static String getMessage(USPMessage msg, Replacer replacer) {
-		return applyColor(new Replacer("%prefix%", prefix, "%error%", errorPrefix).add(replacer).replaceAt(cfg.getString(msg.getPath())));
-	}
-
-	/**
-	 * Gets a message with colors {@link #applyColor(String)} and the default {@link Replacer}, also, a new replacer made with the 
-	 * specified strings is added to the default replacer.
-	 * 
-	 * @param msg The message to get.
-	 * @param replacements The replacements to apply.
-	 * 
-	 * @return The message as a string, with colors and replacer applied to it.
-	 */
-	public static String getMessage(USPMessage msg, String... replacements) {
-		return applyColor(new Replacer("%prefix%", prefix, "%error%", errorPrefix).add(replacements).replaceAt(cfg.getString(msg.getPath())));
-	}
-
-	// Message senders //
-
-	/**
-	 * Sends a message with colors {@link #applyColor(String)} and the default {@link Replacer}, empty messages will be ignored and the message wont be sent.
-	 * 
-	 * @param sender The sender that will receive the message.
-	 * @param msg The message to get.
-	 * 
-	 * @see #getMessage(USPMessage)
-	 */
-	public static void sendMessage(CommandSender sender, USPMessage msg) {
-		String send = getMessage(msg);
-		if(!send.isEmpty())
-			sender.sendMessage(send);
-	}
-
-	/**
-	 * Sends a message with colors {@link #applyColor(String)} and the default {@link Replacer}, also, 
-	 * the specified replacer is added to the default replacer, empty messages will be ignored and the message wont be sent.
-	 * 
-	 * @param sender The sender that will receive the message.
-	 * @param msg The message to get.
-	 * @param replacer The replacer to apply.
-	 * 
-	 * @see #getMessage(USPMessage, Replacer)
-	 */
-	public static void sendMessage(CommandSender sender, USPMessage msg, Replacer replacer) {
-		String send = getMessage(msg, replacer);
-		if(!send.isEmpty())
-			sender.sendMessage(send);
-	}
-
-	/**
-	 * Sends a message with colors {@link #applyColor(String)} and the default {@link Replacer}, also, a new replacer made with 
-	 * the specified strings is added to the default replacer, empty messages will be ignored and the message wont be sent.
-	 * 
-	 * @param sender The sender that will receive the message.
-	 * @param msg The message to get.
-	 * @param replacements The replacements to apply.
-	 * 
-	 * @see #getMessage(USPMessage, String...)
-	 */
-	public static void sendMessage(CommandSender sender, USPMessage msg, String... replacements) {
-		String send = getMessage(msg, replacements);
-		if(!send.isEmpty())
-			sender.sendMessage(send);
-	}
-
-	/**
-	 * Sends a message with colors {@link #applyColor(String)} and the default {@link Replacer}, empty messages will be ignored and the message wont be sent.
+	 * Applies color ({@link #applyColor(String)}) and {@link #getDefaultReplacer()} to the specified string and then sends it a player, 
+	 * if the string is null or empty, nothing will be done.
 	 * 
 	 * @param player The player that will receive the message.
-	 * @param msg The message to get.
-	 * 
-	 * @see #getMessage(USPMessage)
+	 * @param str The string to send.
 	 */
-	public static void sendMessage(Player player, USPMessage msg) {
-		String send = getMessage(msg);
-		if(!send.isEmpty())
-			player.sendMessage(send);
+	public static void sendMessage(Player player, String str) {
+		if(str != null && !str.isEmpty())
+			player.sendMessage(applyColor(getDefaultReplacer().replaceAt(str)));
 	}
 
 	/**
-	 * Sends a message with colors {@link #applyColor(String)} and the default {@link Replacer}, empty messages will be ignored and the message wont be sent.
+	 * Applies color ({@link #applyColor(String)}) and {@link #getDefaultReplacer()} to the specified string and then sends it a player 
+	 * as an action bar, if the string is null or empty, nothing will be done.
 	 * 
 	 * @param player The player that will receive the message.
-	 * @param msg The message to send.
-	 * 
-	 * @see #getMessage(USPMessage)
+	 * @param str The string to send.
 	 */
-	public static void sendMessage(Player player, String msg) {;
-		if(msg != null && !msg.isEmpty())
-			player.sendMessage(msg);
-	}
-
-	/**
-	 * Sends a message with colors {@link #applyColor(String)} and the default {@link Replacer}, also, 
-	 * the specified replacer is added to the default replacer, empty messages will be ignored and the message wont be sent.
-	 * 
-	 * @param player The player that will receive the message.
-	 * @param msg The message to get.
-	 * @param replacer The replacer to apply.
-	 * 
-	 * @see #getMessage(USPMessage, Replacer)
-	 */
-	public static void sendMessage(Player player, USPMessage msg, Replacer replacer) {
-		String send = getMessage(msg, replacer);
-		if(!send.isEmpty())
-			player.sendMessage(send);
-	}
-
-	/**
-	 * Sends a message with colors {@link #applyColor(String)} and the default {@link Replacer}, also, a new replacer made with 
-	 * the specified strings is added to the default replacer, empty messages will be ignored and the message wont be sent.
-	 * 
-	 * @param player The player that will receive the message.
-	 * @param msg The message to get.
-	 * @param replacements The replacements to apply.
-	 * 
-	 * @see #getMessage(USPMessage, String...)
-	 */
-	public static void sendMessage(Player player, USPMessage msg, String... replacements) {
-		String send = getMessage(msg, replacements);
-		if(!send.isEmpty())
-			player.sendMessage(send);
-	}
-
-	// Actionbar senders //
-
-	/**
-	 * Sends an actionbar with colors {@link #applyColor(String)} and the default {@link Replacer}, empty messages will be ignored and the message wont be sent.
-	 * 
-	 * @param player The player that will receive the message.
-	 * @param msg The message to get.
-	 * 
-	 * @see #getMessage(USPMessage)
-	 */
-	public static void sendActionbar(Player player, USPMessage msg) {
-		String send = getMessage(msg);
-		if(!send.isEmpty())
-			player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(send));
-	}
-
-	/**
-	 * Sends an actionbar with colors {@link #applyColor(String)} and the default {@link Replacer}, empty messages will be ignored and the message wont be sent.
-	 * 
-	 * @param player The player that will receive the message.
-	 * @param msg The message to send.
-	 * 
-	 * @see #getMessage(USPMessage)
-	 */
-	public static void sendActionbar(Player player, String msg) {
-		if(msg != null && !msg.isEmpty())
-			player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg));
-	}
-
-	/**
-	 * Sends an actionbar with colors {@link #applyColor(String)} and the default {@link Replacer}, also, 
-	 * the specified replacer is added to the default replacer, empty messages will be ignored and the message wont be sent.
-	 * 
-	 * @param player The player that will receive the message.
-	 * @param msg The message to get.
-	 * @param replacer The replacer to apply.
-	 * 
-	 * @see #getMessage(USPMessage, Replacer)
-	 */
-	public static void sendActionbar(Player player, USPMessage msg, Replacer replacer) {
-		String send = getMessage(msg, replacer);
-		if(!send.isEmpty())
-			player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(send));
-	}
-
-	/**
-	 * Sends an actionbar with colors {@link #applyColor(String)} and the default {@link Replacer}, also, a new replacer made with 
-	 * the specified strings is added to the default replacer, empty messages will be ignored and the message wont be sent.
-	 * 
-	 * @param player The player that will receive the message.
-	 * @param msg The message to get.
-	 * @param replacements The replacements to apply.
-	 * 
-	 * @see #getMessage(USPMessage, String...)
-	 */
-	public static void sendActionbar(Player player, USPMessage msg, String... replacements) {
-		String send = getMessage(msg, replacements);
-		if(!send.isEmpty())
-			player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(send));
+	public static void sendActionBar(Player player, String str) {
+		if(str != null && !str.isEmpty())
+			player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(applyColor(getDefaultReplacer().replaceAt(str))));
 	}
 }

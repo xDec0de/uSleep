@@ -61,7 +61,7 @@ public interface USleepMessage {
 	 */
 	default String getString() {
 		String str = getStringUncolored();
-		return (str != null && !str.isEmpty()) ? USPMessages.getDefaultReplacer().replaceAt(USPMessages.applyColor(str)) : null;
+		return (str != null && !str.isEmpty()) ? USPMessages.applyColor(USPMessages.getDefaultReplacer().replaceAt(str)) : null;
 	}
 
 	/**
@@ -75,7 +75,7 @@ public interface USleepMessage {
 	 */
 	default public String getString(Replacer replacer) {
 		String str = getStringUncolored();
-		return (str != null && !str.isEmpty()) ? USPMessages.getDefaultReplacer().add(replacer).replaceAt(USPMessages.applyColor(str)) : null;
+		return (str != null && !str.isEmpty()) ? USPMessages.applyColor(USPMessages.getDefaultReplacer().add(replacer).replaceAt(str)) : null;
 	}
 
 	/**
@@ -89,7 +89,7 @@ public interface USleepMessage {
 	 */
 	default public String getString(String... replacements) {
 		String str = getStringUncolored();
-		return (str != null && !str.isEmpty()) ? USPMessages.getDefaultReplacer().add(replacements).replaceAt(USPMessages.applyColor(str)) : null;
+		return (str != null && !str.isEmpty()) ? USPMessages.applyColor(USPMessages.getDefaultReplacer().add(replacements).replaceAt(str)) : null;
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package es.xdec0de.usleep.api;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -15,18 +16,42 @@ import org.bukkit.metadata.MetadataValue;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 
-import es.xdec0de.usleep.USleep;
 import es.xdec0de.usleep.api.events.NightSkipEvent;
+import es.xdec0de.usleep.utils.ListUtils;
 import es.xdec0de.usleep.utils.NotificationHandler;
 import es.xdec0de.usleep.utils.files.USPMessage;
+import es.xdec0de.usleep.utils.files.USPMessages;
 import es.xdec0de.usleep.utils.files.USPSetting;
+import es.xdec0de.usleep.utils.files.USPWorlds;
 
 public class USleepAPI {
 
-	private static int numSleep = 0;
-	private static List<UUID> onDelay = new ArrayList<UUID>();
+	private int numSleep = 0;
+	private List<UUID> onDelay = new ArrayList<UUID>();
+	private List<SleepGroup> sleepGroups = new ArrayList<SleepGroup>();
 
-	public static boolean handleSleep(Player player) {
+	USleepAPI() {} // Just to avoid instantiation by other plugins...
+
+	boolean setup() {
+		HashMap<String, List<String>> errors = new HashMap<String, List<String>>();
+		for(String id : USPWorlds.getGroupIdentifiers()) {
+			SleepGroup group = new SleepGroup(id);
+			List<String> groupErrors = group.build();
+			if(!groupErrors.isEmpty())
+				errors.put(id, groupErrors);
+			sleepGroups.add(group);
+		}
+		if(!errors.isEmpty()) {
+			USPMessages.log(" ");
+			USPMessages.logCol("&cSleep group errors detected at &4worlds.yml&8:");
+			for(String id : errors.keySet())
+				USPMessages.logCol("  &4- &6"+id+" &chas non-existing worlds&8: &e"+ListUtils.join(errors.get(id).toArray(), "&8, &e")+"&c.");
+			return false;
+		}
+		return true;
+	}
+
+	public boolean handleSleep(Player player) {
 		int cooldown = USPSetting.PERCENT_SLEEP_COOLDOWN.asInt();
 		if(cooldown > 0) { 
 			UUID uuid = player.getUniqueId();
@@ -47,11 +72,11 @@ public class USleepAPI {
 		return true;
 	}
 
-	public static boolean hasSleepCooldown(Player player) {
+	public boolean hasSleepCooldown(Player player) {
 		return onDelay.contains(player.getUniqueId());
 	}
 
-	public static void handleWakeUp() {
+	public void handleWakeUp() {
 		if(numSleep > 0) {
 			numSleep--;
 			USPMessage.PERCENT_OK.broadcast("%required%", Integer.toString(getRequiredPlayers()), "%current%", Integer.toString(numSleep));
@@ -59,7 +84,7 @@ public class USleepAPI {
 		}
 	}
 
-	private static void resetDay(World world, Player player) {
+	private void resetDay(World world, Player player) {
 		SleepMode mode = player != null ? SleepMode.INSTANT : SleepMode.PERCENT;
 		NightSkipEvent nse = new NightSkipEvent(world, mode);
 		Bukkit.getPluginManager().callEvent(nse);
@@ -82,11 +107,11 @@ public class USleepAPI {
 		}
 	}
 
-	public static int getRequiredPlayers() {
+	public int getRequiredPlayers() {
 		return Math.round(getActivePlayers() * USPSetting.PERCENT_SLEEP_PERCENT.asInt() / 100.0F);
 	}
 
-	public static int getActivePlayers() {
+	public int getActivePlayers() {
 		List<Player> list = new LinkedList<Player>();
 		boolean ignoreAFK = USPSetting.PERCENT_SLEEP_IGNORE_AFK.asBoolean();
 		boolean ignoreVanished = USPSetting.PERCENT_SLEEP_IGNORE_VANISHED.asBoolean();
@@ -108,14 +133,14 @@ public class USleepAPI {
 		return Bukkit.getOnlinePlayers().size() - list.size();
 	}
 
-	public static boolean isVanished(Player player) {
+	public boolean isVanished(Player player) {
 		for(MetadataValue meta : player.getMetadata("vanished"))
 			if(meta.asBoolean())
 				return true;
 		return false;
 	}
 
-	public static void doNightSkipEffect(World world) {
+	public void doNightSkipEffect(World world) {
 		Environment env = world.getEnvironment();
 		if(env.equals(Environment.NORMAL) || env.equals(Environment.CUSTOM))
 			new NightSkipEffectTask(world, USPSetting.NIGHT_SKIP_EFFECT_INCREMENT.asInt()).runTaskTimer(USleep.getPlugin(USleep.class), 0, 1);

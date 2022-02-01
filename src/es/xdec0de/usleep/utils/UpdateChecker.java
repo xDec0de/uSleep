@@ -11,7 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import es.xdec0de.usleep.USleep;
+import es.xdec0de.usleep.api.USleep;
 import es.xdec0de.usleep.utils.files.USPMessage;
 import es.xdec0de.usleep.utils.files.USPSetting;
 import net.md_5.bungee.api.ChatColor;

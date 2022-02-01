@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent.BedEnterResult;
 import org.bukkit.event.player.PlayerBedLeaveEvent;
 
+import es.xdec0de.usleep.api.USleep;
 import es.xdec0de.usleep.api.USleepAPI;
 import es.xdec0de.usleep.api.events.SleepErrorEvent;
 import es.xdec0de.usleep.utils.NotificationHandler;
@@ -19,13 +20,19 @@ import es.xdec0de.usleep.utils.files.USPSetting;
 
 public class SleepHandler implements Listener {
 
+	private USleepAPI api;
+
+	public SleepHandler() {
+		this.api = USleep.getPlugin(USleep.class).getAPI();
+	}
+
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBedEnter(PlayerBedEnterEvent e) {
 		Player p = e.getPlayer();
 		if(e.getBed().getLocation().getWorld().getEnvironment().equals(Environment.NORMAL)) {
 			if(e.getBedEnterResult().equals(BedEnterResult.OK)) {
-				if(!USleepAPI.hasSleepCooldown(p)) {
-					if(!USleepAPI.handleSleep(p)) {
+				if(!api.hasSleepCooldown(p)) {
+					if(!api.handleSleep(p)) {
 						e.setCancelled(true);
 						USPMessage.NO_PERMS.send(p, "%perm%", USPSetting.PERM_PERCENT_SLEEP.asString());
 					}
@@ -46,6 +53,6 @@ public class SleepHandler implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBedLeave(PlayerBedLeaveEvent e) {
-		USleepAPI.handleWakeUp();
+		api.handleWakeUp();
 	}
 }

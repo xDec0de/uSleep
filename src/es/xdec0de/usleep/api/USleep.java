@@ -1,9 +1,10 @@
-package es.xdec0de.usleep;
+package es.xdec0de.usleep.api;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import es.xdec0de.usleep.SleepHandler;
 import es.xdec0de.usleep.cmds.BedTP;
 import es.xdec0de.usleep.cmds.USleepCMD;
 import es.xdec0de.usleep.utils.UpdateChecker;
@@ -11,8 +12,11 @@ import es.xdec0de.usleep.utils.files.USPConfig;
 import es.xdec0de.usleep.utils.files.USPMessage;
 import es.xdec0de.usleep.utils.files.USPMessages;
 import es.xdec0de.usleep.utils.files.USPSetting;
+import es.xdec0de.usleep.utils.files.USPWorlds;
 
 public class USleep  extends JavaPlugin {
+
+	private USleepAPI api;
 
 	public void onEnable() {
 		boolean fileSuccess = executeEnable();
@@ -46,8 +50,7 @@ public class USleep  extends JavaPlugin {
 	}
 
 	private boolean executeEnable() {
-		boolean fileSuccess = USPConfig.setup(false);
-		USPMessages.setup(false);
+		boolean fileSuccess = (USPConfig.setup(false) && USPMessages.setup(false) && USPWorlds.setup() && (this.api = new USleepAPI()).setup());
 		getCommand("usleep").setExecutor(new USleepCMD());
 		getCommand("bedtp").setExecutor(new BedTP());
 		getServer().getPluginManager().registerEvents(new SleepHandler(), this);
@@ -99,5 +102,9 @@ public class USleep  extends JavaPlugin {
 
 	public boolean isLatest(String update) {
 		return getDescription().getVersion().compareTo(update) >= 0;
+	}
+
+	public USleepAPI getAPI() {
+		return api;
 	}
 }

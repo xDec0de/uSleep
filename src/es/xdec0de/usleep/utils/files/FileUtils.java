@@ -9,7 +9,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import es.xdec0de.usleep.USleep;
+import es.xdec0de.usleep.api.USleep;
 
 class FileUtils {
 

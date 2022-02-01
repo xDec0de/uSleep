@@ -9,7 +9,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import es.xdec0de.usleep.USleep;
+import es.xdec0de.usleep.api.USleep;
 import es.xdec0de.usleep.utils.Replacer;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -26,12 +26,13 @@ public class USPMessages {
 	static String prefix = "&7&l<&b&lu&9&lSleep&7&l>&7";
 	static String errorPrefix = "&8&l[&4&l!&8&l]&c";
 
-	public static void setup(boolean isByReload) {
+	public static boolean setup(boolean isByReload) {
 		if (!plugin.getDataFolder().exists())
 			plugin.getDataFolder().mkdir(); 
 		if (!(file = new File(plugin.getDataFolder(), "messages.yml")).exists())
 			plugin.saveResource("messages.yml", false); 
 		reload(true, isByReload);
+		return true;
 	}
 
 	private static void reload(boolean update, boolean isByReload) {

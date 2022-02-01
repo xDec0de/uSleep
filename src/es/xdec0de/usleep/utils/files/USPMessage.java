@@ -2,7 +2,7 @@ package es.xdec0de.usleep.utils.files;
 
 import org.bukkit.Bukkit;
 
-import es.xdec0de.usleep.USleep;
+import es.xdec0de.usleep.api.USleep;
 import es.xdec0de.usleep.utils.Replacer;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;

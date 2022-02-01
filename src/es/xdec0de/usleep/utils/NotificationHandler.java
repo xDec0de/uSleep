@@ -15,7 +15,7 @@ public class NotificationHandler {
 	public static void playSound(Player player, USPSetting setting) {
 		String soundStr = USPConfig.getString(setting);
 		if(soundStr != null && !soundStr.isEmpty()) {
-			Sound sound = (Sound)getEnum(Sound.class, soundStr);
+			Sound sound = (Sound)EnumUtils.getEnum(Sound.class, soundStr);
 			if(sound != null)
 				player.playSound(player.getLocation(), sound, 1.0F, 1.0F);
 		}
@@ -24,19 +24,9 @@ public class NotificationHandler {
 	public static void broadcastSound(USPSetting setting) {
 		String soundStr = USPConfig.getString(setting);
 		if(soundStr != null && !soundStr.isEmpty()) {
-			Sound sound = (Sound)getEnum(Sound.class, soundStr);
+			Sound sound = (Sound)EnumUtils.getEnum(Sound.class, soundStr);
 			if(sound != null)
 				Bukkit.getOnlinePlayers().forEach(on -> on.playSound(on.getLocation(), sound, 1.0F, 1.0F));
-		}
-	}
-
-	private static <E extends Enum<E>> Enum<E> getEnum(Class<E> enumClass, String str) {
-		if(str == null)
-			return null;
-		try {
-			return Enum.valueOf(enumClass, str);
-		} catch (IllegalArgumentException iae) {
-			return null;
 		}
 	}
 

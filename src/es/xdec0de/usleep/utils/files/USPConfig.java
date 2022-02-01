@@ -8,7 +8,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import es.xdec0de.usleep.USleep;
-import es.xdec0de.usleep.utils.USPSetting;
 
 public class USPConfig {
 

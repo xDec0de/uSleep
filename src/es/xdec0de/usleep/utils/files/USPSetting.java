@@ -1,4 +1,4 @@
-package es.xdec0de.usleep.utils;
+package es.xdec0de.usleep.utils.files;
 
 public enum USPSetting {
 

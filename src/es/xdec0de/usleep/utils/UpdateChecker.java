@@ -13,7 +13,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import es.xdec0de.usleep.USleep;
 import es.xdec0de.usleep.utils.files.USPConfig;
+import es.xdec0de.usleep.utils.files.USPMessage;
 import es.xdec0de.usleep.utils.files.USPMessages;
+import es.xdec0de.usleep.utils.files.USPSetting;
 import net.md_5.bungee.api.ChatColor;
 
 public class UpdateChecker implements Listener {

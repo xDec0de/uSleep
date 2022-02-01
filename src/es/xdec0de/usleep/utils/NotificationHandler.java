@@ -6,7 +6,9 @@ import org.bukkit.entity.Player;
 
 import es.xdec0de.usleep.USleep;
 import es.xdec0de.usleep.utils.files.USPConfig;
+import es.xdec0de.usleep.utils.files.USPMessage;
 import es.xdec0de.usleep.utils.files.USPMessages;
+import es.xdec0de.usleep.utils.files.USPSetting;
 
 public class NotificationHandler {
 

@@ -3,10 +3,11 @@ package es.xdec0de.usleep.cmds;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import es.xdec0de.usleep.utils.USPMessage;
-import es.xdec0de.usleep.utils.USPSetting;
+
 import es.xdec0de.usleep.utils.files.USPConfig;
+import es.xdec0de.usleep.utils.files.USPMessage;
 import es.xdec0de.usleep.utils.files.USPMessages;
+import es.xdec0de.usleep.utils.files.USPSetting;
 
 public class USleepCMD implements CommandExecutor {
 

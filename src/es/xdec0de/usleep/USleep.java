@@ -6,11 +6,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import es.xdec0de.usleep.cmds.BedTP;
 import es.xdec0de.usleep.cmds.USleepCMD;
-import es.xdec0de.usleep.utils.USPMessage;
-import es.xdec0de.usleep.utils.USPSetting;
 import es.xdec0de.usleep.utils.UpdateChecker;
 import es.xdec0de.usleep.utils.files.USPConfig;
+import es.xdec0de.usleep.utils.files.USPMessage;
 import es.xdec0de.usleep.utils.files.USPMessages;
+import es.xdec0de.usleep.utils.files.USPSetting;
 
 public class USleep  extends JavaPlugin {
 

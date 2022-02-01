@@ -13,9 +13,9 @@ import org.bukkit.event.player.PlayerBedLeaveEvent;
 import es.xdec0de.usleep.api.USleepAPI;
 import es.xdec0de.usleep.api.events.SleepErrorEvent;
 import es.xdec0de.usleep.utils.NotificationHandler;
-import es.xdec0de.usleep.utils.USPMessage;
-import es.xdec0de.usleep.utils.USPSetting;
 import es.xdec0de.usleep.utils.files.USPConfig;
+import es.xdec0de.usleep.utils.files.USPMessage;
+import es.xdec0de.usleep.utils.files.USPSetting;
 
 public class SleepHandler implements Listener {
 

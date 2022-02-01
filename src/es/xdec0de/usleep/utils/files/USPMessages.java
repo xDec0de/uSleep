@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 
 import es.xdec0de.usleep.USleep;
 import es.xdec0de.usleep.utils.Replacer;
-import es.xdec0de.usleep.utils.USPMessage;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 

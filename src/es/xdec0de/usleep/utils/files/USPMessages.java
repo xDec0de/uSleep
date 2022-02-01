@@ -95,9 +95,10 @@ public class USPMessages {
 	 * @param str The string to send
 	 */
 	public static void logCol(String str) {
+		if(str == null)
+			str = "null";
 		if(!str.isEmpty())
 			Bukkit.getConsoleSender().sendMessage(applyColor(str));
-		// It's not necessary to null check as applyColor does it.
 	}
 
 	/**
@@ -107,9 +108,10 @@ public class USPMessages {
 	 * @param str The string to send
 	 */
 	public static void logColRep(String str) {
+		if(str == null)
+			str = "null";
 		if(!str.isEmpty())
 			Bukkit.getConsoleSender().sendMessage(applyColor(getDefaultReplacer().replaceAt(str)));
-		// It's not necessary to null check as applyColor does it.
 	}
 
 	/**
@@ -120,9 +122,10 @@ public class USPMessages {
 	 * @replacements The replacements to apply to the string ({@link Replacer})
 	 */
 	public static void logCol(String str, String... replacements) {
+		if(str == null)
+			str = "null";
 		if(!str.isEmpty())
 			Bukkit.getConsoleSender().sendMessage(applyColor(getDefaultReplacer().add(replacements).replaceAt(str)));
-		// It's not necessary to null check as applyColor does it.
 	}
 
 	/**

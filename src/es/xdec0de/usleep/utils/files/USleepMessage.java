@@ -172,7 +172,7 @@ public interface USleepMessage {
 	}
 
 	/**
-	 * Broadcasts {@link #getString()} to all online players and to the console if {@link #broadcastsToConsole()} returns true.
+	 * Broadcasts {@link #getString(Replacer)} to all online players and to the console if {@link #broadcastsToConsole()} returns true.
 	 * 
 	 * @param replacer The replacer to apply.
 	 * 
@@ -191,14 +191,14 @@ public interface USleepMessage {
 	}
 
 	/**
-	 * Broadcasts {@link #getString()} to all online players and to the console if {@link #broadcastsToConsole()} returns true.
+	 * Broadcasts {@link #getString(String...)} to all online players and to the console if {@link #broadcastsToConsole()} returns true.
 	 * 
 	 * @param replacements The replacements to apply.
 	 * 
 	 * @since uSleep v2.0.0
 	 */
 	default public void broadcast(String... replacements) {
-		String str = getString();
+		String str = getString(replacements);
 		if(str != null && !str.isEmpty()) {
 			if(isActionBarCompatible() && USPSetting.ACTIONBAR_ENABLED.asBoolean())
 				Bukkit.getOnlinePlayers().forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
@@ -229,7 +229,7 @@ public interface USleepMessage {
 	}
 
 	/**
-	 * Broadcasts {@link #getString()} to the specified players and to the console if {@link #broadcastsToConsole()} returns true.
+	 * Broadcasts {@link #getString(Replacer)} to the specified players and to the console if {@link #broadcastsToConsole()} returns true.
 	 * 
 	 * @param players The players that will receive the message.
 	 * @param replacer The replacer to apply.
@@ -249,7 +249,7 @@ public interface USleepMessage {
 	}
 
 	/**
-	 * Broadcasts {@link #getString()} to the specified players and to the console if {@link #broadcastsToConsole()} returns true.
+	 * Broadcasts {@link #getString(String...)} to the specified players and to the console if {@link #broadcastsToConsole()} returns true.
 	 * 
 	 * @param players The players that will receive the message.
 	 * @param replacements The replacements to apply.
@@ -257,7 +257,7 @@ public interface USleepMessage {
 	 * @since uSleep v2.0.0
 	 */
 	default public void broadcast(List<Player> players, String... replacements) {
-		String str = getString();
+		String str = getString(replacements);
 		if(str != null && !str.isEmpty()) {
 			if(isActionBarCompatible() && USPSetting.ACTIONBAR_ENABLED.asBoolean())
 				players.forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));

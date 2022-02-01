@@ -124,7 +124,7 @@ public enum USPMessage implements USleepMessage {
 
 	@Override
 	public void broadcast(String... replacements) {
-		String str = getString();
+		String str = getString(replacements);
 		if(str != null && !str.isEmpty()) {
 			if(actionDelay >= 0 && USPSetting.ACTIONBAR_ENABLED.asBoolean()) {
 				if(isActionBarCompatible())
@@ -172,7 +172,7 @@ public enum USPMessage implements USleepMessage {
 
 	@Override
 	public void broadcast(List<Player> players, String... replacements) {
-		String str = getString();
+		String str = getString(replacements);
 		if(str != null && !str.isEmpty()) {
 			if(actionDelay >= 0 && USPSetting.ACTIONBAR_ENABLED.asBoolean()) {
 				if(isActionBarCompatible())

@@ -1,5 +1,6 @@
 package es.xdec0de.usleep;
 
+import org.bukkit.Bukkit;
 import org.bukkit.World.Environment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,6 +11,7 @@ import org.bukkit.event.player.PlayerBedEnterEvent.BedEnterResult;
 import org.bukkit.event.player.PlayerBedLeaveEvent;
 
 import es.xdec0de.usleep.api.USleepAPI;
+import es.xdec0de.usleep.api.events.SleepErrorEvent;
 import es.xdec0de.usleep.utils.NotificationHandler;
 import es.xdec0de.usleep.utils.USPMessage;
 import es.xdec0de.usleep.utils.USPSetting;
@@ -31,8 +33,12 @@ public class SleepHandler implements Listener {
 					NotificationHandler.sendSleepMessage(p, USPMessage.PERCENT_TOO_FAST);
 			} else {
 				e.setCancelled(true);
-				NotificationHandler.sendSleepMessage(p, USPMessage.valueOf(e.getBedEnterResult().name()));
-				NotificationHandler.playSound(p, USPSetting.SOUND_SLEEP_ERROR);
+				SleepErrorEvent see = new SleepErrorEvent(p, e.getBedEnterResult());
+				Bukkit.getPluginManager().callEvent(see);
+				if(see.sendsMessage())
+					NotificationHandler.sendSleepMessage(p, USPMessage.valueOf(e.getBedEnterResult().name()));
+				if(see.playsSound())
+					NotificationHandler.playSound(p, USPSetting.SOUND_SLEEP_ERROR);
 			}
 		}
 	}

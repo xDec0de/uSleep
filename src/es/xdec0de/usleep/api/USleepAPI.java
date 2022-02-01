@@ -18,7 +18,6 @@ import com.earth2me.essentials.User;
 import es.xdec0de.usleep.USleep;
 import es.xdec0de.usleep.api.events.NightSkipEvent;
 import es.xdec0de.usleep.utils.NotificationHandler;
-import es.xdec0de.usleep.utils.files.USPConfig;
 import es.xdec0de.usleep.utils.files.USPMessage;
 import es.xdec0de.usleep.utils.files.USPSetting;
 
@@ -28,15 +27,15 @@ public class USleepAPI {
 	private static List<UUID> onDelay = new ArrayList<UUID>();
 
 	public static boolean handleSleep(Player player) {
-		int cooldown = USPConfig.getInt(USPSetting.PERCENT_SLEEP_COOLDOWN);
+		int cooldown = USPSetting.PERCENT_SLEEP_COOLDOWN.asInt();
 		if(cooldown > 0) { 
 			UUID uuid = player.getUniqueId();
 			onDelay.add(uuid);
 			Bukkit.getScheduler().runTaskTimerAsynchronously(USleep.getPlugin(USleep.class), () -> onDelay.remove(uuid), 0L, cooldown * 20L);
 		}
-		if(USPConfig.getBoolean(USPSetting.INSTANT_SLEEP_ENABLED) && player.hasPermission(USPConfig.getString(USPSetting.PERM_INSTANT_SLEEP))) // instant
+		if(USPSetting.INSTANT_SLEEP_ENABLED.asBoolean() && player.hasPermission(USPSetting.PERM_INSTANT_SLEEP.asString())) // instant
 			resetDay(player.getWorld(), player);
-		else if(USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_ENABLED) && player.hasPermission(USPConfig.getString(USPSetting.PERM_PERCENT_SLEEP))) { // percent
+		else if(USPSetting.PERCENT_SLEEP_ENABLED.asBoolean() && player.hasPermission(USPSetting.PERM_PERCENT_SLEEP.asString())) { // percent
 			numSleep++;
 			if(getRequiredPlayers() < numSleep) {
 				USPMessage.PERCENT_OK.broadcast("%required%", Integer.toString(getRequiredPlayers()), "%current%", Integer.toString(numSleep));
@@ -66,7 +65,7 @@ public class USleepAPI {
 		Bukkit.getPluginManager().callEvent(nse);
 		if(!nse.isCancelled()) {
 			numSleep = 0;
-			if(USPConfig.getBoolean(USPSetting.NIGHT_SKIP_EFFECT_ENABLED))
+			if(USPSetting.NIGHT_SKIP_EFFECT_ENABLED.asBoolean())
 				doNightSkipEffect(world);
 			else {
 				world.setTime(0L);
@@ -84,13 +83,13 @@ public class USleepAPI {
 	}
 
 	public static int getRequiredPlayers() {
-		return Math.round(getActivePlayers() * USPConfig.getInt(USPSetting.PERCENT_SLEEP_PERCENT) / 100.0F);
+		return Math.round(getActivePlayers() * USPSetting.PERCENT_SLEEP_PERCENT.asInt() / 100.0F);
 	}
 
 	public static int getActivePlayers() {
 		List<Player> list = new LinkedList<Player>();
-		boolean ignoreAFK = USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_IGNORE_AFK);
-		boolean ignoreVanished = USPConfig.getBoolean(USPSetting.PERCENT_SLEEP_IGNORE_VANISHED);
+		boolean ignoreAFK = USPSetting.PERCENT_SLEEP_IGNORE_AFK.asBoolean();
+		boolean ignoreVanished = USPSetting.PERCENT_SLEEP_IGNORE_VANISHED.asBoolean();
 		if(ignoreAFK || ignoreVanished) {
 			if(Bukkit.getPluginManager().getPlugin("Essentials") != null) {
 				Essentials ess = (Essentials)Bukkit.getServer().getPluginManager().getPlugin("Essentials");
@@ -119,6 +118,6 @@ public class USleepAPI {
 	public static void doNightSkipEffect(World world) {
 		Environment env = world.getEnvironment();
 		if(env.equals(Environment.NORMAL) || env.equals(Environment.CUSTOM))
-			new NightSkipEffectTask(world, USPConfig.getInt(USPSetting.NIGHT_SKIP_EFFECT_INCREMENT)).runTaskTimer(USleep.getPlugin(USleep.class), 0, 1);
+			new NightSkipEffectTask(world, USPSetting.NIGHT_SKIP_EFFECT_INCREMENT.asInt()).runTaskTimer(USleep.getPlugin(USleep.class), 0, 1);
 	}
 }

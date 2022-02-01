@@ -75,7 +75,7 @@ public class USleep  extends JavaPlugin {
 	}
 
 	private void checkUpdates(boolean fileSuccess) {
-		if(USPConfig.getBoolean(USPSetting.UPDATER_NOTIFY_CONSOLE)) {
+		if(USPSetting.UPDATER_NOTIFY_CONSOLE.asBoolean()) {
 			UpdateChecker.getLatestVersion(version -> {
 				USPMessages.log(" ");
 				if(isLatest(version))

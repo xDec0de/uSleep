@@ -80,7 +80,7 @@ public enum USPMessage {
 	public void send(CommandSender sender) {
 		String str = getString();
 		if(str != null && !str.isEmpty()) {
-			if(sender instanceof Player && actionDelay >= 0 && USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED)) {
+			if(sender instanceof Player && actionDelay >= 0 && USPSetting.ACTIONBAR_ENABLED.asBoolean()) {
 				if(actionDelay == 0)
 					((Player)sender).spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str));
 				else
@@ -93,7 +93,7 @@ public enum USPMessage {
 	public void send(CommandSender sender, Replacer rep) {
 		String str = getString(rep);
 		if(str != null && !str.isEmpty()) {
-			if(sender instanceof Player && actionDelay >= 0 && USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED)) {
+			if(sender instanceof Player && actionDelay >= 0 && USPSetting.ACTIONBAR_ENABLED.asBoolean()) {
 				if(actionDelay == 0)
 					((Player)sender).spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str));
 				else
@@ -106,7 +106,7 @@ public enum USPMessage {
 	public void send(CommandSender sender, String... replacements) {
 		String str = getString(replacements);
 		if(str != null && !str.isEmpty()) {
-			if(sender instanceof Player && actionDelay >= 0 && USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED)) {
+			if(sender instanceof Player && actionDelay >= 0 && USPSetting.ACTIONBAR_ENABLED.asBoolean()) {
 				if(actionDelay == 0)
 					((Player)sender).spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str));
 				else
@@ -119,7 +119,7 @@ public enum USPMessage {
 	public void broadcast() {
 		String str = getString();
 		if(str != null && !str.isEmpty()) {
-			if(actionDelay >= 0 && USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED)) {
+			if(actionDelay >= 0 && USPSetting.ACTIONBAR_ENABLED.asBoolean()) {
 				if(actionDelay == 0)
 					Bukkit.getOnlinePlayers().forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
 				else
@@ -134,7 +134,7 @@ public enum USPMessage {
 	public void broadcast(Replacer rep) {
 		String str = getString(rep);
 		if(str != null && !str.isEmpty()) {
-			if(actionDelay >= 0 && USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED)) {
+			if(actionDelay >= 0 && USPSetting.ACTIONBAR_ENABLED.asBoolean()) {
 				if(actionDelay == 0)
 					Bukkit.getOnlinePlayers().forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
 				else
@@ -149,7 +149,7 @@ public enum USPMessage {
 	public void broadcast(String... replacements) {
 		String str = getString();
 		if(str != null && !str.isEmpty()) {
-			if(actionDelay >= 0 && USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED)) {
+			if(actionDelay >= 0 && USPSetting.ACTIONBAR_ENABLED.asBoolean()) {
 				if(actionDelay == 0)
 					Bukkit.getOnlinePlayers().forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
 				else

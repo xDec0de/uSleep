@@ -2,7 +2,6 @@ package es.xdec0de.usleep.utils.files;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -13,8 +12,8 @@ public class USPConfig {
 
 	private static USleep plugin = USleep.getPlugin(USleep.class);
 
-	public static FileConfiguration cfg;
-	public static File file;
+	private static FileConfiguration cfg;
+	private static File file;
 
 	public static boolean setup(boolean isByReload) {
 		if (!plugin.getDataFolder().exists())
@@ -25,47 +24,33 @@ public class USPConfig {
 		return checkStatus();
 	}
 
-	private static void reload(boolean update, boolean isByReload) {
+	static void reload(boolean update, boolean isByReload) {
 		cfg = (FileConfiguration)YamlConfiguration.loadConfiguration(file);
 		if(update && FileUtils.updateFile(file, "config.yml", isByReload))
 			reload(false, isByReload);
 	}
 
-	public static void save() {
+	static void save() {
 		try {
 			cfg.save(file);
 		} catch (IOException e) {
 			USPMessages.logColRep("%prefix% &8[&cWarning&8] &cCould not save &econfig.yml&c.");
 		}
-	} 
+	}
+
+	static FileConfiguration get() {
+		return cfg;
+	}
 
 	private static boolean checkStatus() {
-		int percent = getInt(USPSetting.PERCENT_SLEEP_PERCENT);
+		int percent = USPSetting.PERCENT_SLEEP_PERCENT.asInt();
 		if(percent > 100 || percent < 1 ) {
 			USPMessages.log(" ");
 			USPMessages.logCol("&cConfiguration errors detected at &4config.yml&8:");
 			USPMessages.logCol("  &4- &cPercent value is invalid, using default &8(&e50&8)");
-			cfg.set(USPSetting.PERCENT_SLEEP_PERCENT.getPath(), 50);
-			save();
-			reload(false, false);
+			USPSetting.PERCENT_SLEEP_PERCENT.setReload(50);
 			return false;
 		}
 		return true;
-	}
-
-	public static String getString(USPSetting setting) {
-		return cfg.getString(setting.getPath());
-	}
-
-	public static List<String> getStringList(USPSetting setting) {
-		return cfg.getStringList(setting.getPath());
-	}
-
-	public static int getInt(USPSetting setting) {
-		return cfg.getInt(setting.getPath());
-	}
-
-	public static boolean getBoolean(USPSetting setting) {
-		return cfg.getBoolean(setting.getPath());
 	}
 }

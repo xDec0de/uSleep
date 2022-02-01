@@ -13,7 +13,6 @@ import org.bukkit.event.player.PlayerBedLeaveEvent;
 import es.xdec0de.usleep.api.USleepAPI;
 import es.xdec0de.usleep.api.events.SleepErrorEvent;
 import es.xdec0de.usleep.utils.NotificationHandler;
-import es.xdec0de.usleep.utils.files.USPConfig;
 import es.xdec0de.usleep.utils.files.USPMessage;
 import es.xdec0de.usleep.utils.files.USPMessages;
 import es.xdec0de.usleep.utils.files.USPSetting;
@@ -28,7 +27,7 @@ public class SleepHandler implements Listener {
 				if(!USleepAPI.hasSleepCooldown(p)) {
 					if(!USleepAPI.handleSleep(p)) {
 						e.setCancelled(true);
-						USPMessage.NO_PERMS.send(p, "%perm%", USPConfig.getString(USPSetting.PERM_PERCENT_SLEEP));
+						USPMessage.NO_PERMS.send(p, "%perm%", USPSetting.PERM_PERCENT_SLEEP.asString());
 					}
 				} else
 					USPMessage.PERCENT_TOO_FAST.send(p);
@@ -36,7 +35,7 @@ public class SleepHandler implements Listener {
 				e.setCancelled(true);
 				SleepErrorEvent see = new SleepErrorEvent(p, e.getBedEnterResult());
 				Bukkit.getPluginManager().callEvent(see);
-				if(USPConfig.getBoolean(USPSetting.ACTIONBAR_ENABLED))
+				if(USPSetting.ACTIONBAR_ENABLED.asBoolean())
 					USPMessages.sendActionBar(p, see.getMessage());
 				else
 					USPMessages.sendMessage(p, see.getMessage());

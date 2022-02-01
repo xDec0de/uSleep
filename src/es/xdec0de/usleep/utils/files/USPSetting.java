@@ -1,5 +1,7 @@
 package es.xdec0de.usleep.utils.files;
 
+import java.util.List;
+
 public enum USPSetting {
 
 	// Features //
@@ -42,7 +44,7 @@ public enum USPSetting {
 	SOUND_NEXTDAY_PERCENT("Sounds.NextDay.Percent"),
 	SOUND_NEXTDAY_INSTANT("Sounds.NextDay.Instant");
 
-	private String path;
+	private final String path;
 
 	USPSetting(String string) {
 		this.path = string;
@@ -50,5 +52,31 @@ public enum USPSetting {
 
 	public String getPath() {
 		return path;
+	}
+
+	public String asString() {
+		return USPConfig.get().getString(path, "");
+	}
+
+	public List<String> asStringList() {
+		return USPConfig.get().getStringList(path);
+	}
+
+	public int asInt() {
+		return USPConfig.get().getInt(path, 0); // Yeah, I know default is already 0.
+	}
+
+	public boolean asBoolean() {
+		return USPConfig.get().getBoolean(path, false); // Same
+	}
+
+	public void set(Object value) {
+		USPConfig.get().set(path, value);
+	}
+
+	public void setReload(Object value) {
+		USPConfig.get().set(path, value);
+		USPConfig.save();
+		USPConfig.reload(false, false);
 	}
 }

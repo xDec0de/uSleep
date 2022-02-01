@@ -7,7 +7,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import es.xdec0de.usleep.utils.files.USPConfig;
 import es.xdec0de.usleep.utils.files.USPMessage;
 import es.xdec0de.usleep.utils.files.USPSetting;
 
@@ -17,16 +16,16 @@ public class BedTP implements CommandExecutor {
 		if(sndr instanceof Player) {
 			Player p = (Player)sndr;
 			if(args.length == 0) {
-				if(p.hasPermission(USPConfig.getString(USPSetting.PERM_BEDTP_SELF))) {
+				if(p.hasPermission(USPSetting.PERM_BEDTP_SELF.asString())) {
 					Location bed = p.getBedSpawnLocation();
 					if(bed != null)
 						p.teleport(bed);
 					else
 						USPMessage.BEDTP_ERROR.send(p);
 				} else
-					USPMessage.NO_PERMS.send(p, "%perm%", USPConfig.getString(USPSetting.PERM_BEDTP_SELF));
+					USPMessage.NO_PERMS.send(p, "%perm%", USPSetting.PERM_BEDTP_SELF.asString());
 			} else if(args.length == 1) {
-				if(sndr.hasPermission(USPConfig.getString(USPSetting.PERM_BEDTP_OTHER))) {
+				if(sndr.hasPermission(USPSetting.PERM_BEDTP_OTHER.asString())) {
 					Location bed = getBedLocation(args[0]);
 					if(bed != null) {
 						p.teleport(bed);
@@ -34,7 +33,7 @@ public class BedTP implements CommandExecutor {
 					} else
 						USPMessage.BEDTP_ERROR.send(p);
 				} else
-					USPMessage.NO_PERMS.send(p, "%perm%", USPConfig.getString(USPSetting.PERM_BEDTP_SELF));
+					USPMessage.NO_PERMS.send(p, "%perm%", USPSetting.PERM_BEDTP_SELF.asString());
 			} else
 				USPMessage.BEDTP_USAGE.send(p);
 		} else

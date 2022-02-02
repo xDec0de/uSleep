@@ -23,7 +23,7 @@ public class SleepGroup {
 	List<World> worlds = new ArrayList<World>();
 	private final String id;
 	private int sleeping = 0, percent;
-	private boolean isNightSkipping = false;
+	boolean isNightSkipping = false;
 
 	SleepGroup(String id) {
 		this.id = id;
@@ -83,7 +83,6 @@ public class SleepGroup {
 		NightSkipEvent nse = new NightSkipEvent(this, mode);
 		Bukkit.getPluginManager().callEvent(nse);
 		if(!nse.isCancelled()) {
-			this.isNightSkipping = true;
 			sleeping = 0;
 			boolean skipEffect = USPSetting.NIGHT_SKIP_EFFECT_ENABLED.asBoolean();
 			List<Player> players = getPlayers();
@@ -103,7 +102,6 @@ public class SleepGroup {
 				USPMessage.PERCENT_NEXT_DAY.broadcast(players);
 				SoundHandler.broadcastSound(players, USPSetting.SOUND_NEXTDAY_INSTANT);
 			}
-			this.isNightSkipping = false;
 		}
 	}
 

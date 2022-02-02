@@ -29,7 +29,8 @@ public class SleepHandler implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBedEnter(PlayerBedEnterEvent e) {
 		Player p = e.getPlayer();
-		if(e.getBed().getLocation().getWorld().getEnvironment().equals(Environment.NORMAL)) {
+		Environment env = e.getBed().getWorld().getEnvironment();
+		if(env.equals(Environment.NORMAL) || env.equals(Environment.CUSTOM)) {
 			if(e.getBedEnterResult().equals(BedEnterResult.OK)) {
 				if(!api.hasSleepCooldown(p)) {
 					if(!api.handleSleep(p)) {
@@ -37,7 +38,7 @@ public class SleepHandler implements Listener {
 						USPMessage.NO_PERMS.send(p, "%perm%", USPSetting.PERM_PERCENT_SLEEP.asString());
 					}
 				} else
-					USPMessage.PERCENT_TOO_FAST.send(p);
+					USPMessage.TOO_FAST.send(p);
 			} else {
 				e.setCancelled(true);
 				SleepErrorEvent see = new SleepErrorEvent(p, e.getBedEnterResult());

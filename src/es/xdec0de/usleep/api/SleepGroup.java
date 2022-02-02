@@ -81,27 +81,30 @@ public class SleepGroup {
 
 	private void resetTime(Player player) {
 		SleepMode mode = player != null ? SleepMode.INSTANT : SleepMode.PERCENT;
-		boolean skipEffect = USPSetting.NIGHT_SKIP_EFFECT_ENABLED.asBoolean();
 		NightSkipEvent nse = new NightSkipEvent(this, mode);
 		Bukkit.getPluginManager().callEvent(nse);
 		if(!nse.isCancelled()) {
+			boolean skipEffect = USPSetting.NIGHT_SKIP_EFFECT_ENABLED.asBoolean();
+			List<Player> players = getPlayers();
+			sleeping = 0;
 			for(World world : worlds) {
 				Environment env = world.getEnvironment();
-				sleeping = 0;
-				if(skipEffect && (env.equals(Environment.NORMAL) || env.equals(Environment.CUSTOM)))
-					USleep.getPlugin(USleep.class).getAPI().doNightSkipEffect(world);
-				else {
-					world.setTime(0L);
-					world.setThundering(false);
-					world.setStorm(false);
+				if(env.equals(Environment.NORMAL) || env.equals(Environment.CUSTOM)) {
+					if(skipEffect)
+						USleep.getPlugin(USleep.class).getAPI().doNightSkipEffect(world);
+					else {
+						world.setTime(0L);
+						world.setThundering(false);
+						world.setStorm(false);
+					}
 				}
-				if(mode.equals(SleepMode.INSTANT)) {
-					USPMessage.INSTANT_OK.broadcast("%player%", player.getName());
-					SoundHandler.broadcastSound(USPSetting.SOUND_NEXTDAY_PERCENT);
-				} else {
-					USPMessage.PERCENT_NEXT_DAY.broadcast();
-					SoundHandler.broadcastSound(USPSetting.SOUND_NEXTDAY_INSTANT);
-				}
+			}
+			if(mode.equals(SleepMode.INSTANT)) {
+				USPMessage.INSTANT_OK.broadcast(players, "%player%", player.getName());
+				SoundHandler.broadcastSound(players, USPSetting.SOUND_NEXTDAY_PERCENT);
+			} else {
+				USPMessage.PERCENT_NEXT_DAY.broadcast(players);
+				SoundHandler.broadcastSound(players, USPSetting.SOUND_NEXTDAY_INSTANT);
 			}
 		}
 	}

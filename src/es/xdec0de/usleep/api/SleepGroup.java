@@ -82,11 +82,11 @@ public class SleepGroup {
 	private void resetTime(Player player) {
 		SleepMode mode = player != null ? SleepMode.INSTANT : SleepMode.PERCENT;
 		boolean skipEffect = USPSetting.NIGHT_SKIP_EFFECT_ENABLED.asBoolean();
-		for(World world : worlds) {
-			Environment env = world.getEnvironment();
-			NightSkipEvent nse = new NightSkipEvent(world, mode);
-			Bukkit.getPluginManager().callEvent(nse);
-			if(!nse.isCancelled()) {
+		NightSkipEvent nse = new NightSkipEvent(this, mode);
+		Bukkit.getPluginManager().callEvent(nse);
+		if(!nse.isCancelled()) {
+			for(World world : worlds) {
+				Environment env = world.getEnvironment();
 				sleeping = 0;
 				if(skipEffect && (env.equals(Environment.NORMAL) || env.equals(Environment.CUSTOM)))
 					USleep.getPlugin(USleep.class).getAPI().doNightSkipEffect(world);

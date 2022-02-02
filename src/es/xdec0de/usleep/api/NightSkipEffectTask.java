@@ -1,5 +1,6 @@
 package es.xdec0de.usleep.api;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +37,15 @@ public class NightSkipEffectTask extends BukkitRunnable {
 			throw new IllegalArgumentException("Increment must be higher than zero.");
 		this.increase = increment;
 		this.worlds = group.getWorlds().stream().filter(w -> w.getEnvironment().equals(Environment.NORMAL) || w.getEnvironment().equals(Environment.CUSTOM)).collect(Collectors.toList());
+	}
+
+	NightSkipEffectTask(World world, int increment) {
+		Validate.notNull(world, "World cannot be null");
+		if(increment <= 0)
+			throw new IllegalArgumentException("Increment must be higher than zero.");
+		this.increase = increment;
+		this.worlds = new ArrayList<World>();
+		this.worlds.add(world);
 	}
 
 	@Override

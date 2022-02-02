@@ -23,17 +23,18 @@ Commands:
     Usage: "%error% &cUsage&8: /&ebedtp &8<&eplayer&8>&c."
 Events:
   Sleep:
-    NOT_POSSIBLE_HERE: "&cWhoops!"
-    NOT_POSSIBLE_NOW: "&cYou can sleep only at night and during thunderstorms."
-    NOT_SAFE: "&cYou may not rest now, there are monsters nearby"
-    OTHER_PROBLEM: "&cYou can't sleep right now."
-    TOO_FAR_AWAY: "&cYou may not rest now; the bed is too far away."
+    NotPossibleHere: "&cWhoops!"
+    NotPossibleNow: "&cYou can sleep only at night and during thunderstorms."
+    NotSafe: "&cYou may not rest now, there are monsters nearby"
+    Other: "&cYou can't sleep right now."
+    TooFarAway: "&cYou may not rest now; the bed is too far away."
+    TooFast: "%error% &cYou are sleeping too fast!"
+    AlreadySkipping: "%error% The night is already being skipped."
   InstantSleep:
     OK: "%prefix% &e%player% &bhas slept, we move on to the next day."
   PercentSleep:
     OK: "&7Players sleeping: &8[&b%current%&7/&9%required%&8]"
     NextDay: "%prefix% &bThere are enough players sleeping, we move on to the next day"
-    TooFast: "%error% &cYou are sleeping too fast!"
     Title: "&7&lPlayers sleeping"
     SubTitle: "&b&l%current%&7&l/&9&l%required%"
   Updater:

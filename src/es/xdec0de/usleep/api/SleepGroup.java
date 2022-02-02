@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.World.Environment;
 import org.bukkit.entity.Player;
 
 import com.earth2me.essentials.Essentials;
@@ -23,8 +22,8 @@ public class SleepGroup {
 
 	List<World> worlds = new ArrayList<World>();
 	private final String id;
-	private int sleeping = 0;
-	private int percent;
+	private int sleeping = 0, percent;
+	private boolean isNightSkipping = false;
 
 	SleepGroup(String id) {
 		this.id = id;
@@ -84,19 +83,17 @@ public class SleepGroup {
 		NightSkipEvent nse = new NightSkipEvent(this, mode);
 		Bukkit.getPluginManager().callEvent(nse);
 		if(!nse.isCancelled()) {
+			this.isNightSkipping = true;
+			sleeping = 0;
 			boolean skipEffect = USPSetting.NIGHT_SKIP_EFFECT_ENABLED.asBoolean();
 			List<Player> players = getPlayers();
-			sleeping = 0;
-			for(World world : worlds) {
-				Environment env = world.getEnvironment();
-				if(env.equals(Environment.NORMAL) || env.equals(Environment.CUSTOM)) {
-					if(skipEffect)
-						USleep.getPlugin(USleep.class).getAPI().doNightSkipEffect(world);
-					else {
-						world.setTime(0L);
-						world.setThundering(false);
-						world.setStorm(false);
-					}
+			if(skipEffect)
+				USleep.getPlugin(USleep.class).getAPI().doNightSkipEffect(this);
+			else {
+				for(World world : worlds) {
+					world.setTime(0L);
+					world.setThundering(false);
+					world.setStorm(false);
 				}
 			}
 			if(mode.equals(SleepMode.INSTANT)) {
@@ -106,6 +103,7 @@ public class SleepGroup {
 				USPMessage.PERCENT_NEXT_DAY.broadcast(players);
 				SoundHandler.broadcastSound(players, USPSetting.SOUND_NEXTDAY_INSTANT);
 			}
+			this.isNightSkipping = false;
 		}
 	}
 
@@ -158,5 +156,9 @@ public class SleepGroup {
 
 	public int getPlayersSleeping() {
 		return sleeping;
+	}
+
+	public boolean isNightSkipping() {
+		return isNightSkipping;
 	}
 }

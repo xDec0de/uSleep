@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent.BedEnterResult;
 import org.bukkit.event.player.PlayerBedLeaveEvent;
 
+import es.xdec0de.usleep.api.SleepGroup;
 import es.xdec0de.usleep.api.USleep;
 import es.xdec0de.usleep.api.USleepAPI;
 import es.xdec0de.usleep.api.events.SleepErrorEvent;
@@ -30,17 +31,19 @@ public class SleepHandler implements Listener {
 	public void onBedEnter(PlayerBedEnterEvent e) {
 		Player p = e.getPlayer();
 		Environment env = e.getBed().getWorld().getEnvironment();
+		boolean cancel = true;
 		if(env.equals(Environment.NORMAL) || env.equals(Environment.CUSTOM)) {
 			if(e.getBedEnterResult().equals(BedEnterResult.OK)) {
-				if(!api.hasSleepCooldown(p)) {
-					if(!api.handleSleep(p)) {
-						e.setCancelled(true);
-						USPMessage.NO_PERMS.send(p, "%perm%", USPSetting.PERM_PERCENT_SLEEP.asString());
-					}
+				SleepGroup group = api.getSleepGroup(e.getBed().getWorld());
+				if(!group.isNightSkipping()) {
+					if(!api.hasSleepCooldown(p)) {
+						if(cancel = !api.handleSleep(p))
+							USPMessage.NO_PERMS.send(p, "%perm%", USPSetting.PERM_PERCENT_SLEEP.asString());
+					} else
+						USPMessage.TOO_FAST.send(p);
 				} else
-					USPMessage.TOO_FAST.send(p);
+					USPMessage.ALREADY_SKIPPING.send(p);
 			} else {
-				e.setCancelled(true);
 				SleepErrorEvent see = new SleepErrorEvent(p, e.getBedEnterResult());
 				Bukkit.getPluginManager().callEvent(see);
 				if(USPSetting.ACTIONBAR_ENABLED.asBoolean())
@@ -49,7 +52,9 @@ public class SleepHandler implements Listener {
 					USPMessages.sendMessage(p, see.getMessage());
 				SoundHandler.playSound(p, see.getSound());
 			}
-		}
+		} else
+			cancel = false;
+		e.setCancelled(cancel);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)

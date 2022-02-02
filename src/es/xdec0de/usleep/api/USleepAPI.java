@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.World.Environment;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 
@@ -101,10 +100,8 @@ public class USleepAPI {
 		return false;
 	}
 
-	public void doNightSkipEffect(World world) {
-		Environment env = world.getEnvironment();
-		if(env.equals(Environment.NORMAL) || env.equals(Environment.CUSTOM))
-			new NightSkipEffectTask(world, USPSetting.NIGHT_SKIP_EFFECT_INCREMENT.asInt()).runTaskTimer(USleep.getPlugin(USleep.class), 0, 1);
+	public void doNightSkipEffect(SleepGroup group) {
+		new NightSkipEffectTask(group, USPSetting.NIGHT_SKIP_EFFECT_INCREMENT.asInt()).runTaskTimer(USleep.getPlugin(USleep.class), 0, 1);
 	}
 
 	/**

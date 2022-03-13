@@ -33,6 +33,13 @@ public class USleepAPI {
 			throw new SecurityException("Creating new instances of USleepAPI is not allowed! Please use USleepAPI#getInstance()");
 	}
 
+	/**
+	 * Gets the current instance of the API.
+	 * 
+	 * @return the instance of the API.
+	 * 
+	 * @since v2.0.0
+	 */
 	public static USleepAPI getInstance() {
 		return instance != null ? instance : (instance = new USleepAPI());
 	}
@@ -64,10 +71,32 @@ public class USleepAPI {
 		return getSleepGroup(player.getWorld()).handleSleep(player);
 	}
 
+	/**
+	 * Checks if <b>player</b> is on the sleep cooldown list.
+	 * 
+	 * @param player the player to check.
+	 * @return true if the player is on the list, false otherwise.
+	 * 
+	 * @since v2.0.0
+	 */
 	public boolean hasSleepCooldown(Player player) {
 		return onDelay.contains(player.getUniqueId());
 	}
 
+	/**
+	 * Adds <b>player</b> to the sleep cooldown list for
+	 * <b>seconds</b> amount of seconds, meaning that
+	 * it won't be able to sleep for the specified
+	 * amount of seconds. If the player is already
+	 * present on the list or <b>seconds</b> is minor
+	 * or equal to zero, the player won't be added to the list.
+	 * 
+	 * @param player the player being added to the cooldown list.
+	 * @param seconds the amount of seconds to add the <b>player</b>.
+	 * @return true if the player has been added to the sleep cooldown list, false otherwise
+	 * 
+	 * @since v2.0.0
+	 */
 	public boolean addToSleepCooldown(UUID player, int seconds) {
 		if(seconds > 0 && !onDelay.contains(player)) {
 			onDelay.add(player);
@@ -77,6 +106,16 @@ public class USleepAPI {
 		return false;
 	}
 
+	/**
+	 * Handles the waking up of a player, this
+	 * <b>DOES NOT</b> force the player to leave the bed,
+	 * it only calls {@link SleepGroup#handleWakeUp()} on
+	 * the {@link SleepGroup} the <b>player</b> is in.
+	 * 
+	 * @param player the player waking up.
+	 * 
+	 * @since v2.0.0
+	 */
 	public void handleWakeUp(Player player) {
 		getSleepGroup(player.getWorld()).handleWakeUp();
 	}
@@ -103,6 +142,14 @@ public class USleepAPI {
 		return Bukkit.getOnlinePlayers().size() - list.size();
 	}
 
+	/**
+	 * Checks if <b>player</b> is vanished.
+	 * 
+	 * @param player the player to check.
+	 * @return true if <b>player</b> is vanished, false otherwise.
+	 * 
+	 * @since v2.0.0
+	 */
 	public boolean isVanished(Player player) {
 		for(MetadataValue meta : player.getMetadata("vanished"))
 			if(meta.asBoolean())
@@ -110,6 +157,14 @@ public class USleepAPI {
 		return false;
 	}
 
+	/**
+	 * Starts a {@link NightSkipEffectTask} on the
+	 * specified {@link SleepGroup}.
+	 * 
+	 * @param group the group affected by the night skip effect.
+	 * 
+	 * @since v2.0.0
+	 */
 	public void doNightSkipEffect(SleepGroup group) {
 		new NightSkipEffectTask(group, USPSetting.NIGHT_SKIP_EFFECT_INCREMENT.asInt()).runTaskTimer(USleep.getPlugin(USleep.class), 0, 1);
 	}
@@ -120,6 +175,16 @@ public class USleepAPI {
 	 * 
 	 */
 
+	/**
+	 * Gets the {@link SleepGroup} a world is in.
+	 * Null shouln't be returned as every world has
+	 * to be at least on the default sleep group.
+	 * 
+	 * @param world the world to check.
+	 * @return the sleep group a world is in.
+	 * 
+	 * @since v2.0.0
+	 */
 	public SleepGroup getSleepGroup(World world) {
 		for(SleepGroup group : sleepGroups)
 			if(group.contains(world))
@@ -127,6 +192,15 @@ public class USleepAPI {
 		return null;
 	}
 
+	/**
+	 * Checks if <b>version</b> is the latest version, superior
+	 * non-released versions will also be considered latest.
+	 * 
+	 * @param version the version to check.
+	 * @return true if latest, false otherwise.
+	 * 
+	 * @since v2.0.0
+	 */
 	public boolean isLatest(String version) {
 		return USleep.getPlugin(USleep.class).getDescription().getVersion().compareTo(version) >= 0;
 	}

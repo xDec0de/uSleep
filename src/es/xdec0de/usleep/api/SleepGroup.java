@@ -2,7 +2,6 @@ package es.xdec0de.usleep.api;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -35,7 +34,7 @@ public class SleepGroup {
 	List<String> build() {
 		if(!worlds.isEmpty())
 			worlds.clear();
-		List<String> errors = new LinkedList<String>();
+		List<String> errors = new ArrayList<String>();
 		for(String worldName : USPWorlds.getWorldsInGroup(id)) {
 			World world = Bukkit.getWorld(worldName);
 			if(world != null)

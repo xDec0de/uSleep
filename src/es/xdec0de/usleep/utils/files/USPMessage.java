@@ -1,6 +1,6 @@
 package es.xdec0de.usleep.utils.files;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -90,87 +90,35 @@ public enum USPMessage implements USleepMessage {
 
 	@Override
 	public void broadcast() {
-		String str = getString();
-		if(str != null && !str.isEmpty()) {
-			if(actionDelay >= 0 && USPSetting.ACTIONBAR_ENABLED.asBoolean()) {
-				if(actionDelay == 0)
-					Bukkit.getOnlinePlayers().forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
-				else
-					Bukkit.getScheduler().runTaskLater(USleep.getPlugin(USleep.class), () -> Bukkit.getOnlinePlayers().forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str))), actionDelay);
-			} else
-				Bukkit.getOnlinePlayers().forEach(on -> on.sendMessage(str));
-			if(broadcastsConsole)
-				Bukkit.getConsoleSender().sendMessage(str);
-		}
+		broadcastUtil(Bukkit.getOnlinePlayers(), getString());
 	}
 
 	@Override
 	public void broadcast(Replacer replacer) {
-		String str = getString(replacer);
-		if(str != null && !str.isEmpty()) {
-			if(actionDelay >= 0 && USPSetting.ACTIONBAR_ENABLED.asBoolean()) {
-				if(actionDelay == 0)
-					Bukkit.getOnlinePlayers().forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
-				else
-					Bukkit.getScheduler().runTaskLater(USleep.getPlugin(USleep.class), () -> Bukkit.getOnlinePlayers().forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str))), actionDelay);
-			} else
-				Bukkit.getOnlinePlayers().forEach(on -> on.sendMessage(str));
-			if(broadcastsConsole)
-				Bukkit.getConsoleSender().sendMessage(str);
-		}
+		broadcastUtil(Bukkit.getOnlinePlayers(), getString(replacer));
 	}
 
 	@Override
 	public void broadcast(String... replacements) {
-		String str = getString(replacements);
-		if(str != null && !str.isEmpty()) {
-			if(actionDelay >= 0 && USPSetting.ACTIONBAR_ENABLED.asBoolean()) {
-				if(actionDelay == 0)
-					Bukkit.getOnlinePlayers().forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
-				else
-					Bukkit.getScheduler().runTaskLater(USleep.getPlugin(USleep.class), () -> Bukkit.getOnlinePlayers().forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str))), actionDelay);
-			} else
-				Bukkit.getOnlinePlayers().forEach(on -> on.sendMessage(str));
-			if(broadcastsConsole)
-				Bukkit.getConsoleSender().sendMessage(str);
-		}
+		broadcastUtil(Bukkit.getOnlinePlayers(), getString(replacements));
 	}
 
 	@Override
-	public void broadcast(List<Player> players) {
-		String str = getString();
-		if(str != null && !str.isEmpty()) {
-			if(actionDelay >= 0 && USPSetting.ACTIONBAR_ENABLED.asBoolean()) {
-				if(actionDelay == 0)
-					players.forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
-				else
-					Bukkit.getScheduler().runTaskLater(USleep.getPlugin(USleep.class), () -> players.forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str))), actionDelay);
-			} else
-				players.forEach(on -> on.sendMessage(str));
-			if(broadcastsConsole)
-				Bukkit.getConsoleSender().sendMessage(str);
-		}
+	public void broadcast(Collection<Player> players) {
+		broadcastUtil(players, getString());
 	}
 
 	@Override
-	public void broadcast(List<Player> players, Replacer replacer) {
-		String str = getString(replacer);
-		if(str != null && !str.isEmpty()) {
-			if(actionDelay >= 0 && USPSetting.ACTIONBAR_ENABLED.asBoolean()) {
-				if(actionDelay == 0)
-					players.forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
-				else
-					Bukkit.getScheduler().runTaskLater(USleep.getPlugin(USleep.class), () -> players.forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str))), actionDelay);
-			} else
-				players.forEach(on -> on.sendMessage(str));
-			if(broadcastsConsole)
-				Bukkit.getConsoleSender().sendMessage(str);
-		}
+	public void broadcast(Collection<Player> players, Replacer replacer) {
+		broadcastUtil(players, getString(replacer));
 	}
 
 	@Override
-	public void broadcast(List<Player> players, String... replacements) {
-		String str = getString(replacements);
+	public void broadcast(Collection<Player> players, String... replacements) {
+		broadcastUtil(players, getString(replacements));
+	}
+
+	private void broadcastUtil(Collection<? extends Player> players, String str) {
 		if(str != null && !str.isEmpty()) {
 			if(actionDelay >= 0 && USPSetting.ACTIONBAR_ENABLED.asBoolean()) {
 				if(actionDelay == 0)

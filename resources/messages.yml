@@ -39,7 +39,7 @@ Events:
     SubTitle: "&b&l%current%&7&l/&9&l%required%"
   Updater:
     Available:
-      Player: "%prefix% &7A new version &8(&6v%ver%&8) &7is available, using&8: &cv%current%&7."
+      Player: "%prefix% &7A new version &8(&6v%new%&8) &7is available, using&8: &cv%current%&7."
       Console: |
         &8|------------------------------------------>
         &7 

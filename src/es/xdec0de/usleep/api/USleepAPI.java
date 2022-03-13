@@ -1,6 +1,7 @@
 package es.xdec0de.usleep.api;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -9,6 +10,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.plugin.Plugin;
+
+import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.User;
 
 import es.xdec0de.usleep.utils.ListUtils;
 import es.xdec0de.usleep.utils.files.USPMessages;
@@ -73,6 +78,7 @@ public class USleepAPI {
 	 * Checks if <b>player</b> is on the sleep cooldown list.
 	 * 
 	 * @param player the player to check.
+	 * 
 	 * @return true if the player is on the list, false otherwise.
 	 * 
 	 * @since v2.0.0
@@ -91,6 +97,7 @@ public class USleepAPI {
 	 * 
 	 * @param player the player being added to the cooldown list.
 	 * @param seconds the amount of seconds to add the <b>player</b>.
+	 * 
 	 * @return true if the player has been added to the sleep cooldown list, false otherwise
 	 * 
 	 * @since v2.0.0
@@ -111,6 +118,7 @@ public class USleepAPI {
 	 * the {@link SleepGroup} the <b>player</b> is in.
 	 * 
 	 * @param player the player sleeping
+	 * 
 	 * @return true if <b>player<b> is able to sleep, false otherwise.
 	 * being "able" to sleep means that <b>player</b> actually has
 	 * permissions to sleep, as if percent and instant sleep are disabled
@@ -141,15 +149,160 @@ public class USleepAPI {
 	 * Checks if <b>player</b> is vanished.
 	 * 
 	 * @param player the player to check.
+	 * 
 	 * @return true if <b>player</b> is vanished, false otherwise.
 	 * 
 	 * @since v2.0.0
 	 */
 	public boolean isVanished(Player player) {
+		Plugin ess = Bukkit.getPluginManager().getPlugin("Essentials");
+		if(ess != null && ess.isEnabled()) {
+			if(((Essentials)ess).getUser(player).isVanished());
+				return true;
+		}
 		for(MetadataValue meta : player.getMetadata("vanished"))
 			if(meta.asBoolean())
 				return true;
 		return false;
+	}
+
+	/**
+	 * Checks if <b>player</b> is afk.
+	 * 
+	 * @param player the player to check.
+	 * 
+	 * @return true if <b>player</b> is afk, false otherwise.
+	 * 
+	 * @since v2.0.0
+	 */
+	public boolean isAfk(Player player) {
+		Plugin ess = Bukkit.getPluginManager().getPlugin("Essentials");
+			if(ess != null && ess.isEnabled())
+				return (((Essentials)Bukkit.getServer().getPluginManager().getPlugin("Essentials")).getUser(player).isVanished());
+		return false;
+	}
+
+	/**
+	 * Checks if <b>player</b> is vanished or afk.
+	 * 
+	 * @param player the player to check.
+	 * 
+	 * @return true if <b>player</b> is vanished or afk, false otherwise.
+	 * 
+	 * @since v2.0.0
+	 */
+	public boolean isInactive(Player player) {
+		Plugin ess = Bukkit.getPluginManager().getPlugin("Essentials");
+		if(ess != null && ess.isEnabled()) {
+			User user = ((Essentials)ess).getUser(player);
+			if(user.isVanished() || user.isAfk());
+				return true;
+		}
+		for(MetadataValue meta : player.getMetadata("vanished"))
+			if(meta.asBoolean())
+				return true;
+		return false;
+	}
+
+	/**
+	 * Gets the list of afk players in <b>players</b>.
+	 * 
+	 * @param players the list of players to check.
+	 * 
+	 * @return a new list of players containing the afk players.
+	 * 
+	 * @since v2.0.0
+	 */
+	public <T extends Player> Collection<T> getAfk(Collection<T> players) {
+		final Collection<T> res = new ArrayList<T>(players);
+		Plugin pl = Bukkit.getPluginManager().getPlugin("Essentials");
+		if(pl != null && pl.isEnabled()) {
+			for(T player : players) {
+				User user = ((Essentials)pl).getUser(player);
+				if(user.isAfk());
+					res.add(player);
+			}
+		}
+		return res;
+	}
+
+	/**
+	 * Gets the list of vanished players in <b>players</b>.
+	 * 
+	 * @param players the list of players to check.
+	 * 
+	 * @return a new list of players containing the vanished players.
+	 * 
+	 * @since v2.0.0
+	 */
+	public <T extends Player> Collection<T> getVanished(Collection<T> players) {
+		final Collection<T> res = new ArrayList<T>(players);
+		Plugin pl;
+		pl = Bukkit.getPluginManager().getPlugin("Essentials");
+		if(pl != null && pl.isEnabled()) {
+			for(T player : players) {
+				User user = ((Essentials)pl).getUser(player);
+				if(user.isVanished());
+					res.add(player);
+			}
+		}
+		pl = Bukkit.getPluginManager().getPlugin("SuperVanish");
+		pl = pl != null ? pl : Bukkit.getPluginManager().getPlugin("PremiumVanish");
+		if(pl != null && pl.isEnabled()) {
+			for(T player : players) {
+				if(!res.contains(player)) {
+					for(MetadataValue meta : player.getMetadata("vanished"))
+						if(meta.asBoolean())
+							res.add(player);
+				}
+			}
+		}
+		return res;
+	}
+
+	/**
+	 * Gets the list of afk or vanished players in <b>players</b>.
+	 * This method is designed for efficiency to use instead of calling
+	 * both {@link #getVanished(Collection)} and {@link #getAfk(Collection)},
+	 * as this method will only loop once through the players, it's also useful
+	 * for variable afk and vanish including.
+	 * 
+	 * @param players the list of players to check.
+	 * @param includeAfk whether to include afk players to the list or not.
+	 * @param includeVanished whether to include vanished players to the list or not.
+	 *
+	 * @return a new list of players containing the afk players.
+	 * 
+	 * @see {@link USPSetting#PERCENT_SLEEP_IGNORE_AFK}
+	 * @see {@link USPSetting#PERCENT_SLEEP_IGNORE_VANISHED}
+	 * 
+	 * @since v2.0.0
+	 */
+	public <T extends Player> Collection<T> getInactivePlayers(Collection<T> players, boolean includeAfk, boolean includeVanished) {
+		final Collection<T> res = new ArrayList<T>(players);
+		if(includeAfk || includeVanished) {
+			Plugin ess = Bukkit.getPluginManager().getPlugin("Essentials");
+			boolean checkEss = ess != null && ess.isEnabled();
+			boolean checkV = false;
+			if(includeVanished) {
+				Plugin v = Bukkit.getPluginManager().getPlugin("SuperVanish");
+				v = v != null ? v : Bukkit.getPluginManager().getPlugin("PremiumVanish");
+				checkV = v != null && v.isEnabled();
+			}
+			for(T player : players) {
+				if(checkEss) {
+					User user = ((Essentials)ess).getUser(player);
+					if((includeVanished && user.isVanished()) || (includeAfk && user.isAfk()));
+						res.add(player);
+				}
+				if(checkV) {
+					for(MetadataValue meta : player.getMetadata("vanished"))
+						if(meta.asBoolean())
+							res.add(player);
+				}
+			}
+		}
+		return res;
 	}
 
 	/**
@@ -176,6 +329,7 @@ public class USleepAPI {
 	 * to be at least on the default sleep group.
 	 * 
 	 * @param world the world to check.
+	 * 
 	 * @return the sleep group a world is in.
 	 * 
 	 * @since v2.0.0
@@ -192,6 +346,7 @@ public class USleepAPI {
 	 * non-released versions will also be considered latest.
 	 * 
 	 * @param version the version to check.
+	 * 
 	 * @return true if latest, false otherwise.
 	 * 
 	 * @since v2.0.0

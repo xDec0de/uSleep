@@ -1,16 +1,13 @@
 package es.xdec0de.usleep.api;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-
-import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.User;
 
 import es.xdec0de.usleep.api.events.NightSkipEvent;
 import es.xdec0de.usleep.utils.SoundHandler;
@@ -108,27 +105,8 @@ public class SleepGroup {
 		return Math.round((getPlayers().size() - getInactivePlayers().size()) * percent / 100.0F);
 	}
 
-	public List<Player> getInactivePlayers() {
-		List<Player> players = getPlayers();
-		List<Player> list = new LinkedList<Player>();
-		boolean ignoreAFK = USPSetting.PERCENT_SLEEP_IGNORE_AFK.asBoolean();
-		boolean ignoreVanished = USPSetting.PERCENT_SLEEP_IGNORE_VANISHED.asBoolean();
-		if(ignoreAFK || ignoreVanished) {
-			if(Bukkit.getPluginManager().getPlugin("Essentials") != null) {
-				Essentials ess = (Essentials)Bukkit.getServer().getPluginManager().getPlugin("Essentials");
-				for(Player p : players.stream().filter(on -> !list.contains(on)).collect(Collectors.toList())) {
-					User user = ess.getUser(p);
-					if((ignoreAFK && user.isAfk()) || (ignoreVanished && user.isVanished()))
-						list.add(p);
-				}
-			}
-			if(ignoreVanished)
-				if(Bukkit.getPluginManager().getPlugin("SuperVanish") != null || Bukkit.getPluginManager().getPlugin("PremiumVanish") != null)
-					for(Player p : players.stream().filter(on -> !list.contains(on)).collect(Collectors.toList()))
-						if(USleepAPI.getInstance().isVanished(p))
-							list.add(p);
-		}
-		return list;
+	public Collection<Player> getInactivePlayers() {
+		return USleepAPI.getInstance().getInactivePlayers(getPlayers(), USPSetting.PERCENT_SLEEP_IGNORE_AFK.asBoolean(), USPSetting.PERCENT_SLEEP_IGNORE_VANISHED.asBoolean());
 	}
 
 	public List<Player> getPlayers() {

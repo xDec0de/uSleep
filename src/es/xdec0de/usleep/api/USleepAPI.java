@@ -62,10 +62,6 @@ public class USleepAPI {
 		return true;
 	}
 
-	public boolean handleSleep(Player player) {
-		return getSleepGroup(player.getWorld()).handleSleep(player);
-	}
-
 	/**
 	 * Checks if <b>player</b> is on the sleep cooldown list.
 	 * 
@@ -99,6 +95,25 @@ public class USleepAPI {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Handles the sleeping of <b>player</b>, this
+	 * <b>DOES NOT</b> force the player to enter a bed,
+	 * it only calls {@link SleepGroup#handleSleep(Player)} on
+	 * the {@link SleepGroup} the <b>player</b> is in.
+	 * 
+	 * @param player the player sleeping
+	 * @return true if <b>player<b> is able to sleep, false otherwise.
+	 * being "able" to sleep means that <b>player</b> actually has
+	 * permissions to sleep, as if percent and instant sleep are disabled
+	 * or <b>player</b> lacks permission on both, it won't be able to sleep
+	 * and thus, call sleep handling on any world.
+	 * 
+	 * @since v2.0.0
+	 */
+	public boolean handleSleep(Player player) {
+		return getSleepGroup(player.getWorld()).handleSleep(player);
 	}
 
 	/**

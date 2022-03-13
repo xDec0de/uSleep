@@ -93,7 +93,7 @@ public enum USPMessage implements USleepMessage {
 		String str = getString();
 		if(str != null && !str.isEmpty()) {
 			if(actionDelay >= 0 && USPSetting.ACTIONBAR_ENABLED.asBoolean()) {
-				if(isActionBarCompatible())
+				if(actionDelay == 0)
 					Bukkit.getOnlinePlayers().forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
 				else
 					Bukkit.getScheduler().runTaskLater(USleep.getPlugin(USleep.class), () -> Bukkit.getOnlinePlayers().forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str))), actionDelay);
@@ -109,7 +109,7 @@ public enum USPMessage implements USleepMessage {
 		String str = getString(replacer);
 		if(str != null && !str.isEmpty()) {
 			if(actionDelay >= 0 && USPSetting.ACTIONBAR_ENABLED.asBoolean()) {
-				if(isActionBarCompatible())
+				if(actionDelay == 0)
 					Bukkit.getOnlinePlayers().forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
 				else
 					Bukkit.getScheduler().runTaskLater(USleep.getPlugin(USleep.class), () -> Bukkit.getOnlinePlayers().forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str))), actionDelay);
@@ -125,7 +125,7 @@ public enum USPMessage implements USleepMessage {
 		String str = getString(replacements);
 		if(str != null && !str.isEmpty()) {
 			if(actionDelay >= 0 && USPSetting.ACTIONBAR_ENABLED.asBoolean()) {
-				if(isActionBarCompatible())
+				if(actionDelay == 0)
 					Bukkit.getOnlinePlayers().forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
 				else
 					Bukkit.getScheduler().runTaskLater(USleep.getPlugin(USleep.class), () -> Bukkit.getOnlinePlayers().forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str))), actionDelay);
@@ -141,7 +141,7 @@ public enum USPMessage implements USleepMessage {
 		String str = getString();
 		if(str != null && !str.isEmpty()) {
 			if(actionDelay >= 0 && USPSetting.ACTIONBAR_ENABLED.asBoolean()) {
-				if(isActionBarCompatible())
+				if(actionDelay == 0)
 					players.forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
 				else
 					Bukkit.getScheduler().runTaskLater(USleep.getPlugin(USleep.class), () -> players.forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str))), actionDelay);
@@ -157,7 +157,7 @@ public enum USPMessage implements USleepMessage {
 		String str = getString(replacer);
 		if(str != null && !str.isEmpty()) {
 			if(actionDelay >= 0 && USPSetting.ACTIONBAR_ENABLED.asBoolean()) {
-				if(isActionBarCompatible())
+				if(actionDelay == 0)
 					players.forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
 				else
 					Bukkit.getScheduler().runTaskLater(USleep.getPlugin(USleep.class), () -> players.forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str))), actionDelay);
@@ -173,7 +173,7 @@ public enum USPMessage implements USleepMessage {
 		String str = getString(replacements);
 		if(str != null && !str.isEmpty()) {
 			if(actionDelay >= 0 && USPSetting.ACTIONBAR_ENABLED.asBoolean()) {
-				if(isActionBarCompatible())
+				if(actionDelay == 0)
 					players.forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str)));
 				else
 					Bukkit.getScheduler().runTaskLater(USleep.getPlugin(USleep.class), () -> players.forEach(on -> on.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(str))), actionDelay);

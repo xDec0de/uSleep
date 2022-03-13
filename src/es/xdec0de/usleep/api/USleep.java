@@ -79,7 +79,7 @@ public class USleep extends JavaPlugin {
 		if(USPSetting.UPDATER_NOTIFY_CONSOLE.asBoolean()) {
 			UpdateChecker.getLatestVersion(version -> {
 				USPMessages.log(" ");
-				if(isLatest(version))
+				if(USleepAPI.getInstance().isLatest(version))
 					USPMessage.UPDATE_LATEST_CONSOLE.send(Bukkit.getConsoleSender());
 				else
 					USPMessage.UPDATE_AVAILABLE_CONSOLE.send(Bukkit.getConsoleSender(), "%new%", version, "%current%", getDescription().getVersion());
@@ -96,9 +96,5 @@ public class USleep extends JavaPlugin {
 				USPMessages.log(" ");
 			}, 1L); // Same as the asynchronous method but as we aren't checking for updates there is no need to create another thread just for three messages.
 		}
-	}
-
-	public boolean isLatest(String update) {
-		return getDescription().getVersion().compareTo(update) >= 0;
 	}
 }

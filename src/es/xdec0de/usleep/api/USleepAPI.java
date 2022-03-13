@@ -126,4 +126,8 @@ public class USleepAPI {
 				return group;
 		return null;
 	}
+
+	public boolean isLatest(String version) {
+		return USleep.getPlugin(USleep.class).getDescription().getVersion().compareTo(version) >= 0;
+	}
 }

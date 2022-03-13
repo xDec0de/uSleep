@@ -38,7 +38,7 @@ public class UpdateChecker implements Listener {
 			String current = USleep.getPlugin(USleep.class).getDescription().getVersion();
 			getLatestVersion(version -> {
 				if(USleep.getPlugin(USleep.class).isLatest(version))
-					USPMessage.UPDATE_LATEST_PLAYER.send(e.getPlayer());
+					USPMessage.UPDATE_LATEST_PLAYER.send(e.getPlayer(), "%current%", current);
 				else
 					USPMessage.UPDATE_AVAILABLE_PLAYER.send(e.getPlayer(), "%new%", version, "%current%", current);
 			});

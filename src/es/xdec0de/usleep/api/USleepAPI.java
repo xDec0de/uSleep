@@ -15,6 +15,13 @@ import es.xdec0de.usleep.utils.files.USPMessages;
 import es.xdec0de.usleep.utils.files.USPSetting;
 import es.xdec0de.usleep.utils.files.USPWorlds;
 
+/**
+ * The main API class of the plugin.
+ * 
+ * @author xDec0de_
+ *
+ * @since v2.0.0
+ */
 public class USleepAPI {
 
 	private static USleepAPI instance;

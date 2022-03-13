@@ -2,18 +2,13 @@ package es.xdec0de.usleep.api;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
-
-import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.User;
 
 import es.xdec0de.usleep.utils.ListUtils;
 import es.xdec0de.usleep.utils.files.USPMessages;
@@ -118,28 +113,6 @@ public class USleepAPI {
 	 */
 	public void handleWakeUp(Player player) {
 		getSleepGroup(player.getWorld()).handleWakeUp();
-	}
-
-	public int getActivePlayers() {
-		List<Player> list = new LinkedList<Player>();
-		boolean ignoreAFK = USPSetting.PERCENT_SLEEP_IGNORE_AFK.asBoolean();
-		boolean ignoreVanished = USPSetting.PERCENT_SLEEP_IGNORE_VANISHED.asBoolean();
-		if(ignoreAFK || ignoreVanished) {
-			if(Bukkit.getPluginManager().getPlugin("Essentials") != null) {
-				Essentials ess = (Essentials)Bukkit.getServer().getPluginManager().getPlugin("Essentials");
-				for(Player p : Bukkit.getOnlinePlayers().stream().filter(on -> !list.contains(on)).collect(Collectors.toList())) {
-					User user = ess.getUser(p);
-					if((ignoreAFK && user.isAfk()) || (ignoreVanished && user.isVanished()))
-						list.add(p);
-				}
-			}
-			if(ignoreVanished)
-				if(Bukkit.getPluginManager().getPlugin("SuperVanish") != null || Bukkit.getPluginManager().getPlugin("PremiumVanish") != null)
-					for(Player p : Bukkit.getOnlinePlayers().stream().filter(on -> !list.contains(on)).collect(Collectors.toList()))
-						if(isVanished(p))
-							list.add(p);
-		}
-		return Bukkit.getOnlinePlayers().size() - list.size();
 	}
 
 	/**

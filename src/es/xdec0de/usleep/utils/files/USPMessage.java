@@ -74,12 +74,9 @@ public enum USPMessage implements USleepMessage {
 	}
 
 	public void setActionBarCompatible(boolean compatible) {
-		if(compatible) {
-			if(defActionDelay != -1)
-				this.actionDelay = defActionDelay;
-			else
-				this.actionDelay = 0;
-		} else
+		if(compatible)
+			this.actionDelay = this.defActionDelay != -1 ? defActionDelay : 0;
+		else
 			this.actionDelay = -1;
 	}
 

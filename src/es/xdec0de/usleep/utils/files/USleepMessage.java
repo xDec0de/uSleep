@@ -216,7 +216,7 @@ public interface USleepMessage {
 	 * 
 	 * @since uSleep v2.0.0
 	 */
-	default public void broadcast(Collection<Player> players) {
+	default public void broadcast(Collection<? extends Player> players) {
 		String str = getString();
 		if(str != null && !str.isEmpty()) {
 			if(isActionBarCompatible() && USPSetting.ACTIONBAR_ENABLED.asBoolean())
@@ -236,7 +236,7 @@ public interface USleepMessage {
 	 * 
 	 * @since uSleep v2.0.0
 	 */
-	default public void broadcast(Collection<Player> players, Replacer replacer) {
+	default public void broadcast(Collection<? extends Player> players, Replacer replacer) {
 		String str = getString(replacer);
 		if(str != null && !str.isEmpty()) {
 			if(isActionBarCompatible() && USPSetting.ACTIONBAR_ENABLED.asBoolean())
@@ -256,7 +256,7 @@ public interface USleepMessage {
 	 * 
 	 * @since uSleep v2.0.0
 	 */
-	default public void broadcast(Collection<Player> players, String... replacements) {
+	default public void broadcast(Collection<? extends Player> players, String... replacements) {
 		String str = getString(replacements);
 		if(str != null && !str.isEmpty()) {
 			if(isActionBarCompatible() && USPSetting.ACTIONBAR_ENABLED.asBoolean())

@@ -104,17 +104,17 @@ public enum USPMessage implements USleepMessage {
 	}
 
 	@Override
-	public void broadcast(Collection<Player> players) {
+	public void broadcast(Collection<? extends Player> players) {
 		broadcastUtil(players, getString());
 	}
 
 	@Override
-	public void broadcast(Collection<Player> players, Replacer replacer) {
+	public void broadcast(Collection<? extends Player> players, Replacer replacer) {
 		broadcastUtil(players, getString(replacer));
 	}
 
 	@Override
-	public void broadcast(Collection<Player> players, String... replacements) {
+	public void broadcast(Collection<? extends Player> players, String... replacements) {
 		broadcastUtil(players, getString(replacements));
 	}
 

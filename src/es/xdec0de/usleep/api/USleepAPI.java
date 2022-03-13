@@ -22,13 +22,19 @@ import es.xdec0de.usleep.utils.files.USPWorlds;
 
 public class USleepAPI {
 
+	private static USleepAPI instance;
+
 	private List<UUID> onDelay = new ArrayList<UUID>();
 	private List<SleepGroup> sleepGroups = new ArrayList<SleepGroup>();
 
 	USleepAPI() { // Just to avoid accidental instantiation by other plugins...
 		// Fun fact: Even non-accessible constructors can be called with reflection, and we don't want that!
-		if(USleep.getPlugin(USleep.class).getAPI() != null)
-			throw new SecurityException("Creating new instances of USleepAPI is not allowed!");
+		if(instance != null)
+			throw new SecurityException("Creating new instances of USleepAPI is not allowed! Please use USleepAPI#getInstance()");
+	}
+
+	public static USleepAPI getInstance() {
+		return instance != null ? instance : (instance = new USleepAPI());
 	}
 
 	boolean setup() {

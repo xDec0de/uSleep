@@ -11,7 +11,6 @@ import org.bukkit.event.player.PlayerBedEnterEvent.BedEnterResult;
 import org.bukkit.event.player.PlayerBedLeaveEvent;
 
 import es.xdec0de.usleep.api.SleepGroup;
-import es.xdec0de.usleep.api.USleep;
 import es.xdec0de.usleep.api.USleepAPI;
 import es.xdec0de.usleep.api.events.SleepErrorEvent;
 import es.xdec0de.usleep.utils.SoundHandler;
@@ -21,10 +20,10 @@ import es.xdec0de.usleep.utils.files.USPSetting;
 
 public class SleepHandler implements Listener {
 
-	private USleepAPI api;
+	private final USleepAPI api;
 
 	public SleepHandler() {
-		this.api = USleep.getPlugin(USleep.class).getAPI();
+		this.api = USleepAPI.getInstance();
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)

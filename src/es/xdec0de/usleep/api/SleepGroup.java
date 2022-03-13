@@ -52,8 +52,7 @@ public class SleepGroup {
 
 	public boolean handleSleep(Player player) {
 		List<Player> players = getPlayers();
-		USleepAPI api = USleep.getPlugin(USleep.class).getAPI();
-		api.addToSleepCooldown(player.getUniqueId(), USPSetting.PERCENT_SLEEP_COOLDOWN.asInt());
+		USleepAPI.getInstance().addToSleepCooldown(player.getUniqueId(), USPSetting.PERCENT_SLEEP_COOLDOWN.asInt());
 		if(USPSetting.INSTANT_SLEEP_ENABLED.asBoolean() && player.hasPermission(USPSetting.PERM_INSTANT_SLEEP.asString())) // instant
 			resetTime(player);
 		else if(USPSetting.PERCENT_SLEEP_ENABLED.asBoolean() && player.hasPermission(USPSetting.PERM_PERCENT_SLEEP.asString())) { // percent
@@ -87,7 +86,7 @@ public class SleepGroup {
 			boolean skipEffect = USPSetting.NIGHT_SKIP_EFFECT_ENABLED.asBoolean();
 			List<Player> players = getPlayers();
 			if(skipEffect)
-				USleep.getPlugin(USleep.class).getAPI().doNightSkipEffect(this);
+				USleepAPI.getInstance().doNightSkipEffect(this);
 			else {
 				for(World world : worlds) {
 					world.setTime(0L);
@@ -110,7 +109,6 @@ public class SleepGroup {
 	}
 
 	public List<Player> getInactivePlayers() {
-		USleepAPI api = USleep.getPlugin(USleep.class).getAPI();
 		List<Player> players = getPlayers();
 		List<Player> list = new LinkedList<Player>();
 		boolean ignoreAFK = USPSetting.PERCENT_SLEEP_IGNORE_AFK.asBoolean();
@@ -127,7 +125,7 @@ public class SleepGroup {
 			if(ignoreVanished)
 				if(Bukkit.getPluginManager().getPlugin("SuperVanish") != null || Bukkit.getPluginManager().getPlugin("PremiumVanish") != null)
 					for(Player p : players.stream().filter(on -> !list.contains(on)).collect(Collectors.toList()))
-						if(api.isVanished(p))
+						if(USleepAPI.getInstance().isVanished(p))
 							list.add(p);
 		}
 		return list;

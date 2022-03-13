@@ -16,8 +16,6 @@ import es.xdec0de.usleep.utils.files.USPWorlds;
 
 public class USleep extends JavaPlugin {
 
-	private USleepAPI api;
-
 	public void onEnable() {
 		boolean fileSuccess = executeEnable();
 		USPMessages.log(" ");
@@ -50,7 +48,7 @@ public class USleep extends JavaPlugin {
 	}
 
 	private boolean executeEnable() {
-		boolean fileSuccess = (USPConfig.setup(false) && USPMessages.setup(false) && USPWorlds.setup() && (this.api = new USleepAPI()).setup());
+		boolean fileSuccess = (USPConfig.setup(false) && USPMessages.setup(false) && USPWorlds.setup() && USleepAPI.getInstance().setup());
 		getCommand("usleep").setExecutor(new USleepCMD());
 		getCommand("bedtp").setExecutor(new BedTP());
 		getServer().getPluginManager().registerEvents(new SleepHandler(), this);
@@ -102,9 +100,5 @@ public class USleep extends JavaPlugin {
 
 	public boolean isLatest(String update) {
 		return getDescription().getVersion().compareTo(update) >= 0;
-	}
-
-	public USleepAPI getAPI() {
-		return api;
 	}
 }

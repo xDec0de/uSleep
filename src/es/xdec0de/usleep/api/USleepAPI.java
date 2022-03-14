@@ -31,8 +31,8 @@ public class USleepAPI {
 
 	private static USleepAPI instance;
 
-	private List<UUID> onDelay = new ArrayList<UUID>();
-	private List<SleepGroup> sleepGroups = new ArrayList<SleepGroup>();
+	private final List<UUID> onDelay = new ArrayList<UUID>();
+	private final List<SleepGroup> sleepGroups = new ArrayList<SleepGroup>();
 
 	USleepAPI() { // Just to avoid accidental instantiation by other plugins...
 		// Fun fact: Even non-accessible constructors can be called with reflection, and we don't want that!

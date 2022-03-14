@@ -13,6 +13,8 @@ import org.bukkit.event.player.PlayerBedLeaveEvent;
 import es.xdec0de.usleep.api.SleepGroup;
 import es.xdec0de.usleep.api.USleepAPI;
 import es.xdec0de.usleep.api.events.SleepErrorEvent;
+import es.xdec0de.usleep.api.events.SleepErrorEvent.SleepErrorReason;
+import es.xdec0de.usleep.utils.EnumUtils;
 import es.xdec0de.usleep.utils.SoundHandler;
 import es.xdec0de.usleep.utils.files.USPMessage;
 import es.xdec0de.usleep.utils.files.USPMessages;
@@ -31,6 +33,7 @@ public class SleepHandler implements Listener {
 		Player p = e.getPlayer();
 		Environment env = e.getBed().getWorld().getEnvironment();
 		boolean cancel = true;
+		SleepErrorEvent see = null;
 		if(env.equals(Environment.NORMAL) || env.equals(Environment.CUSTOM)) {
 			if(e.getBedEnterResult().equals(BedEnterResult.OK)) {
 				SleepGroup group = api.getSleepGroup(e.getBed().getWorld());
@@ -38,21 +41,32 @@ public class SleepHandler implements Listener {
 					if(!api.hasSleepCooldown(p)) {
 						if(cancel = !api.handleSleep(p))
 							USPMessage.NO_PERMS.send(p, "%perm%", USPSetting.PERM_PERCENT_SLEEP.asString());
+						else
+							see = new SleepErrorEvent(p, SleepErrorReason.NO_PERMISSIONS);
 					} else
-						USPMessage.TOO_FAST.send(p);
+						see = new SleepErrorEvent(p, SleepErrorReason.TOO_FAST);
 				} else
-					USPMessage.ALREADY_SKIPPING.send(p);
+					see = new SleepErrorEvent(p, SleepErrorReason.ALREADY_SKIPPING);
 			} else {
-				SleepErrorEvent see = new SleepErrorEvent(p, e.getBedEnterResult());
-				Bukkit.getPluginManager().callEvent(see);
+				see = new SleepErrorEvent(p, (SleepErrorReason)EnumUtils.ofOther(SleepErrorReason.class, e.getBedEnterResult()));
 				if(USPSetting.ACTIONBAR_ENABLED.asBoolean())
 					USPMessages.sendActionBar(p, see.getMessage());
 				else
 					USPMessages.sendMessage(p, see.getMessage());
 				SoundHandler.playSound(p, see.getSound());
 			}
-		} else
+		} else {
+			see = new SleepErrorEvent(p, SleepErrorReason.NOT_POSSIBLE_HERE);
 			cancel = false;
+		}
+		if(see != null) {
+			Bukkit.getPluginManager().callEvent(see);
+			if(USPSetting.ACTIONBAR_ENABLED.asBoolean())
+				USPMessages.sendActionBar(p, see.getMessage());
+			else
+				USPMessages.sendMessage(p, see.getMessage());
+			SoundHandler.playSound(p, see.getSound());
+		}
 		e.setCancelled(cancel);
 	}
 

@@ -3,7 +3,6 @@ package es.xdec0de.usleep.api.events;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerBedEnterEvent.BedEnterResult;
 import org.bukkit.event.player.PlayerEvent;
 
 import es.xdec0de.usleep.utils.EnumUtils;
@@ -12,21 +11,21 @@ import es.xdec0de.usleep.utils.files.USPSetting;
 
 public class SleepErrorEvent extends PlayerEvent {
 
-	private final BedEnterResult result;
+	private final SleepErrorReason reason;
 	private String message;
 	private Sound sound = (Sound) EnumUtils.getEnum(Sound.class, USPSetting.SOUND_SLEEP_ERROR.asString());
 
 	private static final HandlerList HANDLERS = new HandlerList();
 
-	public SleepErrorEvent(Player player, BedEnterResult result) {
+	public SleepErrorEvent(Player player, SleepErrorReason result) {
 		super(player);
-		this.result = result;
+		this.reason = result;
 		USPMessage msg = ((USPMessage) EnumUtils.ofOther(USPMessage.class, result));
 		this.message = msg != null ? msg.getString() : null;
 	}
 
-	public BedEnterResult getResult() {
-		return result;
+	public SleepErrorReason getError() {
+		return reason;
 	}
 
 	public String getMessage() {
@@ -51,5 +50,16 @@ public class SleepErrorEvent extends PlayerEvent {
 
 	public static HandlerList getHandlerList() {
 		return HANDLERS;
+	}
+
+	public enum SleepErrorReason {
+		NOT_POSSIBLE_HERE,
+		NOT_POSSIBLE_NOW,
+		TOO_FAR_AWAY,
+		NOT_SAFE,
+		OTHER_PROBLEM,
+		NO_PERMISSIONS,
+		TOO_FAST,
+		ALREADY_SKIPPING;
 	}
 }

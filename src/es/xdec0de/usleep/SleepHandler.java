@@ -38,7 +38,7 @@ public class SleepHandler implements Listener {
 				SleepGroup group = api.getSleepGroup(e.getBed().getWorld());
 				if(!group.isNightSkipping()) {
 					if(!api.hasSleepCooldown(p)) {
-						if(cancel = !api.handleSleep(p))
+						if(cancel = !api.handleSleep(p, false))
 							USPMessage.NO_PERMS.send(p, "%perm%", USPSetting.PERM_PERCENT_SLEEP.asString());
 						else
 							see = new SleepErrorEvent(p, USPMessage.NO_PERMS.getString("%perm%", USPSetting.PERM_PERCENT_SLEEP.asString()), SleepErrorReason.NO_PERMISSIONS);

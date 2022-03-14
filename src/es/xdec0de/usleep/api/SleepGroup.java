@@ -46,12 +46,12 @@ public class SleepGroup {
 		return errors;
 	}
 
-	public boolean handleSleep(Player player) {
+	public boolean handleSleep(Player player, boolean forced) {
 		List<Player> players = getPlayers();
 		USleepAPI.getInstance().addToSleepCooldown(player.getUniqueId(), USPSetting.PERCENT_SLEEP_COOLDOWN.asInt());
-		if(USPSetting.INSTANT_SLEEP_ENABLED.asBoolean() && player.hasPermission(USPSetting.PERM_INSTANT_SLEEP.asString())) // instant
+		if(USPSetting.INSTANT_SLEEP_ENABLED.asBoolean() && (forced || player.hasPermission(USPSetting.PERM_INSTANT_SLEEP.asString()))) // instant
 			resetTime(player);
-		else if(USPSetting.PERCENT_SLEEP_ENABLED.asBoolean() && player.hasPermission(USPSetting.PERM_PERCENT_SLEEP.asString())) { // percent
+		else if(USPSetting.PERCENT_SLEEP_ENABLED.asBoolean() && (forced || player.hasPermission(USPSetting.PERM_PERCENT_SLEEP.asString()))) { // percent
 			sleeping++;
 			int required = getRequiredPlayers();
 			if(required > sleeping) {

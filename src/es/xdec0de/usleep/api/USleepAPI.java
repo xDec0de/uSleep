@@ -118,8 +118,11 @@ public class USleepAPI {
 	 * the {@link SleepGroup} the <b>player</b> is in.
 	 * 
 	 * @param player the player sleeping
+	 * @param forced whether to force sleeping or not, this is <b>NOT</b> able
+	 * to force sleep if both {@link USPSetting#PERCENT_SLEEP_ENABLED} and
+	 * {@link USPSetting#INSTANT_SLEEP_ENABLED} return false.
 	 * 
-	 * @return true if <b>player<b> is able to sleep, false otherwise.
+	 * @return true if <b>player</b> is able to sleep, false otherwise.
 	 * being "able" to sleep means that <b>player</b> actually has
 	 * permissions to sleep, as if percent and instant sleep are disabled
 	 * or <b>player</b> lacks permission on both, it won't be able to sleep
@@ -127,8 +130,8 @@ public class USleepAPI {
 	 * 
 	 * @since v2.0.0
 	 */
-	public boolean handleSleep(Player player) {
-		return getSleepGroup(player.getWorld()).handleSleep(player);
+	public boolean handleSleep(Player player, boolean forced) {
+		return getSleepGroup(player.getWorld()).handleSleep(player, forced);
 	}
 
 	/**

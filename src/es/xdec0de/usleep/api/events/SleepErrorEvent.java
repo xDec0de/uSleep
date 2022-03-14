@@ -18,9 +18,9 @@ public class SleepErrorEvent extends PlayerEvent implements Cancellable {
 
 	private static final HandlerList HANDLERS = new HandlerList();
 
-	public SleepErrorEvent(Player player, String message, SleepErrorReason result) {
+	public SleepErrorEvent(Player player, String message, SleepErrorReason reason) {
 		super(player);
-		this.reason = result;
+		this.reason = reason;
 		this.message = message;
 	}
 

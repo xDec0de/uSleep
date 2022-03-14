@@ -2,17 +2,16 @@ package es.xdec0de.usleep.api.events;
 
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerBedEnterEvent.BedEnterResult;
+import org.bukkit.event.player.PlayerEvent;
 
 import es.xdec0de.usleep.utils.EnumUtils;
 import es.xdec0de.usleep.utils.files.USPMessage;
 import es.xdec0de.usleep.utils.files.USPSetting;
 
-public class SleepErrorEvent extends Event {
+public class SleepErrorEvent extends PlayerEvent {
 
-	private final Player player;
 	private final BedEnterResult result;
 	private String message;
 	private Sound sound = (Sound) EnumUtils.getEnum(Sound.class, USPSetting.SOUND_SLEEP_ERROR.asString());
@@ -20,14 +19,10 @@ public class SleepErrorEvent extends Event {
 	private static final HandlerList HANDLERS = new HandlerList();
 
 	public SleepErrorEvent(Player player, BedEnterResult result) {
-		this.player = player;
+		super(player);
 		this.result = result;
 		USPMessage msg = ((USPMessage) EnumUtils.ofOther(USPMessage.class, result));
 		this.message = msg != null ? msg.getString() : null;
-	}
-
-	public Player getPlayer() {
-		return player;
 	}
 
 	public BedEnterResult getResult() {

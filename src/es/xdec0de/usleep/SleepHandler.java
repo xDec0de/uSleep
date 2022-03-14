@@ -14,7 +14,6 @@ import es.xdec0de.usleep.api.SleepGroup;
 import es.xdec0de.usleep.api.USleepAPI;
 import es.xdec0de.usleep.api.events.SleepErrorEvent;
 import es.xdec0de.usleep.api.events.SleepErrorEvent.SleepErrorReason;
-import es.xdec0de.usleep.utils.EnumUtils;
 import es.xdec0de.usleep.utils.SoundHandler;
 import es.xdec0de.usleep.utils.files.USPMessage;
 import es.xdec0de.usleep.utils.files.USPMessages;
@@ -42,21 +41,15 @@ public class SleepHandler implements Listener {
 						if(cancel = !api.handleSleep(p))
 							USPMessage.NO_PERMS.send(p, "%perm%", USPSetting.PERM_PERCENT_SLEEP.asString());
 						else
-							see = new SleepErrorEvent(p, SleepErrorReason.NO_PERMISSIONS);
+							see = new SleepErrorEvent(p, USPMessage.NO_PERMS.getString("%perm%", USPSetting.PERM_PERCENT_SLEEP.asString()), SleepErrorReason.NO_PERMISSIONS);
 					} else
-						see = new SleepErrorEvent(p, SleepErrorReason.TOO_FAST);
+						see = new SleepErrorEvent(p, USPMessage.TOO_FAST.getString(), SleepErrorReason.TOO_FAST);
 				} else
-					see = new SleepErrorEvent(p, SleepErrorReason.ALREADY_SKIPPING);
-			} else {
-				see = new SleepErrorEvent(p, (SleepErrorReason)EnumUtils.ofOther(SleepErrorReason.class, e.getBedEnterResult()));
-				if(USPSetting.ACTIONBAR_ENABLED.asBoolean())
-					USPMessages.sendActionBar(p, see.getMessage());
-				else
-					USPMessages.sendMessage(p, see.getMessage());
-				SoundHandler.playSound(p, see.getSound());
-			}
+					see = new SleepErrorEvent(p, USPMessage.ALREADY_SKIPPING.getString(), SleepErrorReason.ALREADY_SKIPPING);
+			} else
+				see = new SleepErrorEvent(p, USPMessage.valueOf(e.getBedEnterResult().name()).getString(), SleepErrorReason.valueOf(e.getBedEnterResult().name()));
 		} else {
-			see = new SleepErrorEvent(p, SleepErrorReason.NOT_POSSIBLE_HERE);
+			see = new SleepErrorEvent(p, USPMessage.NOT_POSSIBLE_HERE.getString(), SleepErrorReason.NOT_POSSIBLE_HERE);
 			cancel = false;
 		}
 		if(see != null) {

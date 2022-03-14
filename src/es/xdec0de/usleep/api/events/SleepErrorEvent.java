@@ -6,7 +6,6 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 
 import es.xdec0de.usleep.utils.EnumUtils;
-import es.xdec0de.usleep.utils.files.USPMessage;
 import es.xdec0de.usleep.utils.files.USPSetting;
 
 public class SleepErrorEvent extends PlayerEvent {
@@ -17,11 +16,10 @@ public class SleepErrorEvent extends PlayerEvent {
 
 	private static final HandlerList HANDLERS = new HandlerList();
 
-	public SleepErrorEvent(Player player, SleepErrorReason result) {
+	public SleepErrorEvent(Player player, String message, SleepErrorReason result) {
 		super(player);
 		this.reason = result;
-		USPMessage msg = ((USPMessage) EnumUtils.ofOther(USPMessage.class, result));
-		this.message = msg != null ? msg.getString() : null;
+		this.message = message;
 	}
 
 	public SleepErrorReason getError() {

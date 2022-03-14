@@ -54,11 +54,13 @@ public class SleepHandler implements Listener {
 		}
 		if(see != null) {
 			Bukkit.getPluginManager().callEvent(see);
-			if(USPSetting.ACTIONBAR_ENABLED.asBoolean())
-				USPMessages.sendActionBar(p, see.getMessage());
-			else
-				USPMessages.sendMessage(p, see.getMessage());
-			SoundHandler.playSound(p, see.getSound());
+			if(!(cancel = !see.isCancelled())) {
+				if(USPSetting.ACTIONBAR_ENABLED.asBoolean())
+					USPMessages.sendActionBar(p, see.getMessage());
+				else
+					USPMessages.sendMessage(p, see.getMessage());
+				SoundHandler.playSound(p, see.getSound());
+			}
 		}
 		e.setCancelled(cancel);
 	}

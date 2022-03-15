@@ -2,7 +2,6 @@ package es.xdec0de.usleep.api;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,10 +14,7 @@ import org.bukkit.plugin.Plugin;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 
-import es.xdec0de.usleep.utils.ListUtils;
-import es.xdec0de.usleep.utils.files.USPMessages;
 import es.xdec0de.usleep.utils.files.USPSetting;
-import es.xdec0de.usleep.utils.files.USPWorlds;
 
 /**
  * The main API class of the plugin.
@@ -32,7 +28,6 @@ public class USleepAPI {
 	private static USleepAPI instance;
 
 	private final List<UUID> onDelay = new ArrayList<UUID>();
-	private final List<SleepGroup> sleepGroups = new ArrayList<SleepGroup>();
 
 	USleepAPI() { // Just to avoid accidental instantiation by other plugins...
 		// Fun fact: Even non-accessible constructors can be called with reflection, and we don't want that!
@@ -49,29 +44,6 @@ public class USleepAPI {
 	 */
 	public static USleepAPI getInstance() {
 		return instance != null ? instance : (instance = new USleepAPI());
-	}
-
-	boolean setup() {
-		HashMap<String, List<String>> errors = new HashMap<String, List<String>>();
-		List<World> worlds = new ArrayList<World>(Bukkit.getWorlds());
-		for(String id : USPWorlds.getGroupIdentifiers()) {
-			SleepGroup group = new SleepGroup(id);
-			List<String> groupErrors = group.build();
-			if(!groupErrors.isEmpty())
-				errors.put(id, groupErrors);
-			group.worlds.forEach(world -> worlds.remove(world));
-			sleepGroups.add(group);
-		}
-		if(!worlds.isEmpty())
-			sleepGroups.add(new SleepGroup(worlds));
-		if(!errors.isEmpty()) {
-			USPMessages.log(" ");
-			USPMessages.logCol("&cSleep group errors detected at &4worlds.yml&8:");
-			for(String id : errors.keySet())
-				USPMessages.logCol("  &4- &6"+id+" &chas non-existing worlds&8: &e"+ListUtils.join(errors.get(id).toArray(), "&8, &e")+"&c.");
-			return false;
-		}
-		return true;
 	}
 
 	/**
@@ -338,8 +310,24 @@ public class USleepAPI {
 	 * @since v2.0.0
 	 */
 	public SleepGroup getSleepGroup(World world) {
-		for(SleepGroup group : sleepGroups)
+		for(SleepGroup group : WorldHandler.getInstance().sleepGroups)
 			if(group.contains(world))
+				return group;
+		return null;
+	}
+
+	/**
+	 * Gets a {@link SleepGroup} by name.
+	 * 
+	 * @param id the SleepGroup name to get.
+	 * 
+	 * @return the SleepGroup with the specified <b>id</b>. Can be null.
+	 * 
+	 * @since v2.0.0
+	 */
+	public SleepGroup getSleepGroup(String id) {
+		for(SleepGroup group : WorldHandler.getInstance().sleepGroups)
+			if(group.getID().equals(id))
 				return group;
 		return null;
 	}

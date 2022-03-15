@@ -18,7 +18,7 @@ public class USleep extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		boolean fileSuccess = executeEnable();
+		boolean success = executeEnable();
 		USPMessages.log(" ");
 		USPMessages.logCol("&8|------------------------------------------>");
 		USPMessages.log(" ");
@@ -31,7 +31,7 @@ public class USleep extends JavaPlugin {
 		USPMessages.logCol("&8|------------------------------------------>");
 		USPMessages.log(" ");
 		checkDependencies();
-		checkUpdates(fileSuccess);
+		checkUpdates(success);
 	}
 
 	@Override
@@ -50,11 +50,12 @@ public class USleep extends JavaPlugin {
 	}
 
 	private boolean executeEnable() {
-		boolean fileSuccess = (USPConfig.setup(false) && USPMessages.setup(false) && USPWorlds.setup() && USleepAPI.getInstance().setup());
+		boolean fileSuccess = (USPConfig.setup(false) && USPMessages.setup(false) && USPWorlds.setup());
 		getCommand("usleep").setExecutor(new USleepCMD());
 		getCommand("bedtp").setExecutor(new BedTP());
 		getServer().getPluginManager().registerEvents(new SleepHandler(), this);
 		getServer().getPluginManager().registerEvents(new UpdateChecker(), this);
+		getServer().getPluginManager().registerEvents(WorldHandler.getInstance(), this);
 		return fileSuccess;
 	}
 
@@ -77,7 +78,7 @@ public class USleep extends JavaPlugin {
 		USPMessages.log(" ");
 	}
 
-	private void checkUpdates(boolean fileSuccess) {
+	private void checkUpdates(boolean success) {
 		if(USPSetting.UPDATER_NOTIFY_CONSOLE.asBoolean()) {
 			UpdateChecker.getLatestVersion(version -> {
 				USPMessages.log(" ");
@@ -86,17 +87,13 @@ public class USleep extends JavaPlugin {
 				else
 					USPMessage.UPDATE_AVAILABLE_CONSOLE.send(Bukkit.getConsoleSender(), "%new%", version, "%current%", getDescription().getVersion());
 				USPMessages.log(" ");
-				if(!fileSuccess) {
+				if(!success) {
 					USPMessages.logCol("&8&l[&4&l!&8&l] &4uSleep &chas configuration errors, please check them above &8&l[&4&l!&8&l]");
-					USPMessages.log(" "); // Notification is sent after update checking as it runs asynchronously, so it's executed after the server finishes loading.
+					USPMessages.log(" ");
 				}
 			});
-		} else if(!fileSuccess) {
-			Bukkit.getScheduler().runTaskLater(this, () -> {
-				USPMessages.log(" ");
-				USPMessages.logCol("&8&l[&4&l!&8&l] &4uSleep &chas configuration errors, please check them above &8&l[&4&l!&8&l]");
-				USPMessages.log(" ");
-			}, 1L); // Same as the asynchronous method but as we aren't checking for updates there is no need to create another thread just for three messages.
-		}
+		} else
+			if(!success)
+				Bukkit.getScheduler().runTaskLater(this, () -> USPMessages.logColSpaced("&8&l[&4&l!&8&l] &4uSleep &chas configuration errors, please check them above &8&l[&4&l!&8&l]"), 1);
 	}
 }

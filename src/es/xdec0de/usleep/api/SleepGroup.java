@@ -21,29 +21,13 @@ public class SleepGroup {
 	private int sleeping = 0, percent;
 	boolean isNightSkipping = false;
 
-	SleepGroup(String id) {
+	SleepGroup(String id, List<World> worlds) {
 		this.id = id;
-	}
-
-	SleepGroup(List<World> worlds) {
-		this("__usleep_def_sleep_group__");
 		this.worlds = worlds;
-		this.percent = USPSetting.PERCENT_SLEEP_PERCENT.asInt();
-	}
-
-	List<String> build() {
-		if(!worlds.isEmpty())
-			worlds.clear();
-		List<String> errors = new ArrayList<String>();
-		for(String worldName : USPWorlds.getWorldsInGroup(id)) {
-			World world = Bukkit.getWorld(worldName);
-			if(world != null)
-				worlds.add(Bukkit.getWorld(worldName));
-			else
-				errors.add(worldName);
-		}
-		this.percent = USPWorlds.getPercentRequired(id);
-		return errors;
+		if(id.equals("__usleep_def_sleep_group__"))
+			this.percent = USPSetting.PERCENT_SLEEP_PERCENT.asInt();
+		else
+			this.percent = USPWorlds.getPercentRequired(id);
 	}
 
 	public boolean handleSleep(Player player, boolean forced) {

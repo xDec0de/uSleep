@@ -30,6 +30,7 @@ Events:
     TooFarAway: "&cYou may not rest now; the bed is too far away."
     TooFast: "%error% &cYou are sleeping too fast!"
     AlreadySkipping: "%error% The night is already being skipped."
+    CancelOther: "%error% Sleep handling has been cancelled by other plugin."
   InstantSleep:
     OK: "%prefix% &e%player% &bhas slept, we move on to the next day."
   PercentSleep:

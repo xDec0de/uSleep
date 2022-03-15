@@ -33,6 +33,7 @@ public class SleepHandler implements Listener {
 		if(e.isCancelled()) {
 			SleepErrorEvent see = new SleepErrorEvent(p, null, SleepErrorReason.OTHER_PLUGIN_CANCELLED);
 			Bukkit.getPluginManager().callEvent(see);
+			USPMessage.SLEEP_CANCELLED_OTHER.send(Bukkit.getConsoleSender());
 			return;
 		}
 		Environment env = e.getBed().getWorld().getEnvironment();

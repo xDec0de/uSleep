@@ -31,6 +31,7 @@ public enum USPMessage implements USleepMessage {
 	TOO_FAR_AWAY("Events.Sleep.TooFarAway", (byte) 1, false),
 	TOO_FAST("Events.Sleep.TooFast", (byte) 0, false),
 	ALREADY_SKIPPING("Events.Sleep.AlreadySkipping", (byte) 0, false),
+	SLEEP_CANCELLED_OTHER("Events.Sleep.CancelOther", (byte) -1, false),
 
 	INSTANT_OK("Events.InstantSleep.OK", (byte) -1, true),
 

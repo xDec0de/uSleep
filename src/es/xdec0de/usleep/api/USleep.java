@@ -16,6 +16,7 @@ import es.xdec0de.usleep.utils.files.USPWorlds;
 
 public class USleep extends JavaPlugin {
 
+	@Override
 	public void onEnable() {
 		boolean fileSuccess = executeEnable();
 		USPMessages.log(" ");
@@ -33,6 +34,7 @@ public class USleep extends JavaPlugin {
 		checkUpdates(fileSuccess);
 	}
 
+	@Override
 	public void onDisable() {
 		USPMessages.log(" ");
 		USPMessages.logCol("&8|------------------------------------------>");

@@ -7,20 +7,20 @@
 # |------------------------------------------------------------------------| #
 
 Core:
-  Prefix: "&7&l<&b&lu&9&lSleep&7&l>"
-  ErrorPrefix: "&8&l[&4&l!&8&l]"
-  NoPerms: "%error% &cInsufficient permissions &8(&e%perm%&8)&c."
-  NoConsole: "%error% &cThis command can't be executed from the console."
-  PlayerNotFound: "%error% &cThat player is not online."
+  Prefix: "&7&l<&b&lu&9&lSleep&7&l>&7"
+  ErrorPrefix: "&8&l[&4&l!&8&l]&c"
+  NoPerms: "%error% Insufficient permissions &8(&e%perm%&8)&c."
+  NoConsole: "%error% This command can't be executed from the console."
+  PlayerNotFound: "%error% That player is not online."
 Commands:
   usleep:
     Reload: "%prefix% &aPlugin reloaded."
-    Usage: "%error% &cUsage&8: /&eusleep &8<&ereload&8>&c."
+    Usage: "%error% Usage&8: /&eusleep &8<&ereload&8>&c."
   BedTP:
     Teleport: "%prefix% &bYou have been teleported to &eyour &bbed."
     TeleportOther: "%prefix% &bYou have been teleported to &e%player%'s &bbed."
-    Error: "%error% &cBed is missing or obstructed."
-    Usage: "%error% &cUsage&8: /&ebedtp &8<&eplayer&8>&c."
+    Error: "%error% Bed is missing or obstructed."
+    Usage: "%error% Usage&8: /&ebedtp &8<&eplayer&8>&c."
 Events:
   Sleep:
     NotPossibleHere: "&cWhoops!"
@@ -28,7 +28,7 @@ Events:
     NotSafe: "&cYou may not rest now, there are monsters nearby"
     Other: "&cYou can't sleep right now."
     TooFarAway: "&cYou may not rest now; the bed is too far away."
-    TooFast: "%error% &cYou are sleeping too fast!"
+    TooFast: "%error% You are sleeping too fast!"
     AlreadySkipping: "%error% The night is already being skipped."
     CancelOther: "%error% Sleep handling has been cancelled by other plugin."
   InstantSleep:
@@ -40,7 +40,7 @@ Events:
     SubTitle: "&b&l%current%&7&l/&9&l%required%"
   Updater:
     Available:
-      Player: "%prefix% &7A new version &8(&6v%new%&8) &7is available, using&8: &cv%current%&7."
+      Player: "%prefix% A new version &8(&6v%new%&8) &7is available, using&8: &cv%current%&7."
       Console: |
         &8|------------------------------------------>
         &7 
@@ -52,7 +52,7 @@ Events:
         &7 
         &8|------------------------------------------>
     Latest:
-      Player: "%prefix% &7You are running the latest version."
+      Player: "%prefix% You are running the latest version."
       Console: |
         &8|------------------------------------------>
         &7 

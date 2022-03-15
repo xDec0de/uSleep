@@ -16,6 +16,12 @@ class WorldHandler implements Listener {
 
 	private static WorldHandler instance;
 
+	/*
+	 *  I decided to go with an ArrayList instead of a HashMap id/SleepGroup
+	 *  because, being realistic, it's rare for a server to use more than
+	 *  3 sleep groups (If any), so looping through them isn't really an issue and
+	 *  I prefer saving up some ram even if it's only a few bytes of strings.
+	 */
 	final ArrayList<SleepGroup> sleepGroups = new ArrayList<SleepGroup>();
 
 	private WorldHandler() {

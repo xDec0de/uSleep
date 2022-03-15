@@ -60,7 +60,8 @@ public class SleepErrorEvent extends PlayerEvent implements Cancellable {
 		OTHER_PROBLEM,
 		NO_PERMISSIONS,
 		TOO_FAST,
-		ALREADY_SKIPPING;
+		ALREADY_SKIPPING,
+		OTHER_PLUGIN_CANCELLED;
 	}
 
 	@Override

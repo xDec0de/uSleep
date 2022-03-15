@@ -103,6 +103,23 @@ public class USPMessages {
 	}
 
 	/**
+	 * Applies color ({@link #applyColor(String)}) to the specified string
+	 * and then sends it to the console with an empty message before and after it,
+	 * if the string is null, "null" will be sent, if the string is empty, nothing will be done.
+	 * 
+	 * @param str The string to send
+	 */
+	public static void logColSpaced(String str) {
+		if(str == null)
+			str = "null";
+		if(!str.isEmpty()) {
+			Bukkit.getConsoleSender().sendMessage(" ");
+			Bukkit.getConsoleSender().sendMessage(str);
+			Bukkit.getConsoleSender().sendMessage(" ");
+		}
+	}
+
+	/**
 	 * Applies color ({@link #applyColor(String)}) and the default {@link Replacer} to the specified string and then sends it to the console, 
 	 * if the string is null, "null" will be sent, if the string is empty, nothing will be done.
 	 * 

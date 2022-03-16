@@ -21,11 +21,7 @@ import es.xdec0de.usleep.utils.files.USPSetting;
 
 public class SleepHandler implements Listener {
 
-	private final USleepAPI api;
-
-	public SleepHandler() {
-		this.api = USleepAPI.getInstance();
-	}
+	private final USleepAPI api = USleepAPI.getInstance();
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBedEnter(PlayerBedEnterEvent e) {

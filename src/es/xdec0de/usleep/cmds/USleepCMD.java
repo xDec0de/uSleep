@@ -8,6 +8,7 @@ import es.xdec0de.usleep.utils.files.USPConfig;
 import es.xdec0de.usleep.utils.files.USPMessage;
 import es.xdec0de.usleep.utils.files.USPMessages;
 import es.xdec0de.usleep.utils.files.USPSetting;
+import es.xdec0de.usleep.utils.files.USPWorlds;
 
 public class USleepCMD implements CommandExecutor {
 
@@ -18,6 +19,7 @@ public class USleepCMD implements CommandExecutor {
 				if(sndr.hasPermission(USPSetting.PERM_RELOAD.asString())) {
 					USPConfig.setup(true);
 					USPMessages.setup(true);
+					USPWorlds.setup();
 					USPMessage.RELOAD.send(sndr);
 				} else
 					USPMessage.NO_PERMS.send(sndr, "%perm%", USPSetting.PERM_RELOAD.asString());

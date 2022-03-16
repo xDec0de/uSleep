@@ -7,8 +7,14 @@ public enum USPSetting implements USleepSetting {
 	UPDATER_NOTIFY_CONSOLE("Features.Updater.Console"),
 	UPDATER_NOTIFY_PLAYERS("Features.Updater.Players"),
 
+	/**
+	 * Used {@link #asBoolean()}, gets if instant sleep is enabled.
+	 */
 	INSTANT_SLEEP_ENABLED("Features.InstantSleep.Enabled"),
 
+	/**
+	 * Used {@link #asBoolean()}, gets if percent sleep is enabled.
+	 */
 	PERCENT_SLEEP_ENABLED("Features.PercentSleep.Enabled"),
 	PERCENT_SLEEP_PERCENT("Features.PercentSleep.Percentage"),
 	PERCENT_SLEEP_IGNORE_AFK("Features.PercentSleep.Ignored.AFK"),

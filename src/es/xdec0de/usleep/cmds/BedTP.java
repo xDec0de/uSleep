@@ -20,7 +20,7 @@ public class BedTP implements CommandExecutor {
 			if(args.length == 0) {
 				if(p.hasPermission(USPSetting.PERM_BEDTP_SELF.asString())) {
 					Location bed = p.getBedSpawnLocation();
-					BedTeleportTryEvent bte = new BedTeleportTryEvent(p, bed);
+					BedTeleportTryEvent bte = new BedTeleportTryEvent(p, p, bed);
 					Bukkit.getPluginManager().callEvent(bte);
 					if(!bte.isCancelled() && (bed = bte.getBedSpawnLocation()) != null) {
 						p.teleport(bed);
@@ -33,7 +33,7 @@ public class BedTP implements CommandExecutor {
 				if(sndr.hasPermission(USPSetting.PERM_BEDTP_OTHER.asString())) {
 					OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
 					Location bed = target != null ? target.getBedSpawnLocation() : null;
-					BedTeleportTryEvent bte = new BedTeleportTryEvent(p, bed);
+					BedTeleportTryEvent bte = new BedTeleportTryEvent(p, target, bed);
 					Bukkit.getPluginManager().callEvent(bte);
 					if(!bte.isCancelled() && (bed = bte.getBedSpawnLocation()) != null) {
 						p.teleport(bed);

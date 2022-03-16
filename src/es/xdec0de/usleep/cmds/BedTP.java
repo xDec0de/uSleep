@@ -7,6 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import es.xdec0de.usleep.api.events.BedTeleportTryEvent;
 import es.xdec0de.usleep.utils.files.USPMessage;
 import es.xdec0de.usleep.utils.files.USPSetting;
 
@@ -18,7 +19,9 @@ public class BedTP implements CommandExecutor {
 			if(args.length == 0) {
 				if(p.hasPermission(USPSetting.PERM_BEDTP_SELF.asString())) {
 					Location bed = p.getBedSpawnLocation();
-					if(bed != null)
+					BedTeleportTryEvent bte = new BedTeleportTryEvent(p, bed);
+					Bukkit.getPluginManager().callEvent(bte);
+					if(!bte.isCancelled() && (bed = bte.getBedSpawnLocation()) != null)
 						p.teleport(bed);
 					else
 						USPMessage.BEDTP_ERROR.send(p);
@@ -27,7 +30,9 @@ public class BedTP implements CommandExecutor {
 			} else if(args.length == 1) {
 				if(sndr.hasPermission(USPSetting.PERM_BEDTP_OTHER.asString())) {
 					Location bed = getBedLocation(args[0]);
-					if(bed != null) {
+					BedTeleportTryEvent bte = new BedTeleportTryEvent(p, bed);
+					Bukkit.getPluginManager().callEvent(bte);
+					if(!bte.isCancelled() && (bed = bte.getBedSpawnLocation()) != null) {
 						p.teleport(bed);
 						USPMessage.BEDTP_TELEPORT_OTHER.send(p, "%player%", args[0]);
 					} else

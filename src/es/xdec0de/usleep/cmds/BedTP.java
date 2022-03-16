@@ -21,9 +21,10 @@ public class BedTP implements CommandExecutor {
 					Location bed = p.getBedSpawnLocation();
 					BedTeleportTryEvent bte = new BedTeleportTryEvent(p, bed);
 					Bukkit.getPluginManager().callEvent(bte);
-					if(!bte.isCancelled() && (bed = bte.getBedSpawnLocation()) != null)
+					if(!bte.isCancelled() && (bed = bte.getBedSpawnLocation()) != null) {
 						p.teleport(bed);
-					else
+						USPMessage.BEDTP_TELEPORT.send(p);
+					} else
 						USPMessage.BEDTP_ERROR.send(p);
 				} else
 					USPMessage.NO_PERMS.send(p, "%perm%", USPSetting.PERM_BEDTP_SELF.asString());

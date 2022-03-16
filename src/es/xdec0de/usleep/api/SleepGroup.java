@@ -9,6 +9,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import es.xdec0de.usleep.api.events.NightSkipEvent;
+import es.xdec0de.usleep.api.events.SleepHandleEvent;
 import es.xdec0de.usleep.utils.SoundHandler;
 import es.xdec0de.usleep.utils.files.USPMessage;
 import es.xdec0de.usleep.utils.files.USPSetting;
@@ -31,21 +32,26 @@ public class SleepGroup {
 	}
 
 	public boolean handleSleep(Player player, boolean forced) {
-		List<Player> players = getPlayers();
-		USleepAPI.getInstance().addToSleepCooldown(player.getUniqueId(), USPSetting.PERCENT_SLEEP_COOLDOWN.asInt());
-		if(USPSetting.INSTANT_SLEEP_ENABLED.asBoolean() && (forced || player.hasPermission(USPSetting.PERM_INSTANT_SLEEP.asString()))) // instant
-			resetTime(player);
-		else if(USPSetting.PERCENT_SLEEP_ENABLED.asBoolean() && (forced || player.hasPermission(USPSetting.PERM_PERCENT_SLEEP.asString()))) { // percent
-			sleeping++;
-			int required = getRequiredPlayers();
-			if(required > sleeping) {
-				USPMessage.PERCENT_OK.broadcast(players, "%required%", Integer.toString(required), "%current%", Integer.toString(sleeping));
-				SoundHandler.broadcastSound(players, USPSetting.SOUND_SLEEP_OK);
+		SleepHandleEvent she = new SleepHandleEvent(player, this);
+		Bukkit.getPluginManager().callEvent(she);
+		if(!she.isCancelled()) {
+			List<Player> players = getPlayers();
+			USleepAPI.getInstance().addToSleepCooldown(player.getUniqueId(), USPSetting.PERCENT_SLEEP_COOLDOWN.asInt());
+			if(USPSetting.INSTANT_SLEEP_ENABLED.asBoolean() && (forced || player.hasPermission(USPSetting.PERM_INSTANT_SLEEP.asString()))) // instant
+				resetTime(player);
+			else if(USPSetting.PERCENT_SLEEP_ENABLED.asBoolean() && (forced || player.hasPermission(USPSetting.PERM_PERCENT_SLEEP.asString()))) { // percent
+				sleeping++;
+				int required = getRequiredPlayers();
+				if(required > sleeping) {
+					USPMessage.PERCENT_OK.broadcast(players, "%required%", Integer.toString(required), "%current%", Integer.toString(sleeping));
+					SoundHandler.broadcastSound(players, USPSetting.SOUND_SLEEP_OK);
+				} else
+					resetTime(null);
 			} else
-				resetTime(null);
-		} else
-			return false;
-		return true;
+				return false;
+			return true;
+		}
+		return false;
 	}
 
 	public void handleWakeUp() {

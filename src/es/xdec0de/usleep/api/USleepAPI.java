@@ -333,6 +333,17 @@ public class USleepAPI {
 	}
 
 	/**
+	 * Gets the default SleepGroup ID, which is "__usleep_def_sleep_group__".
+	 * 
+	 * @return "__usleep_def_sleep_group__"
+	 * 
+	 * @since v2.0.0
+	 */
+	public String getDefaultSleepGroupID() {
+		return "__usleep_def_sleep_group__";
+	}
+
+	/**
 	 * Checks if <b>version</b> is the latest version, superior
 	 * non-released versions will also be considered latest.
 	 * 

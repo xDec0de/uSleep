@@ -35,10 +35,7 @@ public class SleepGroup {
 	SleepGroup(String id, List<World> worlds) {
 		this.id = id;
 		this.worlds = worlds;
-		if(id.equals("__usleep_def_sleep_group__"))
-			this.percent = USPSetting.PERCENT_SLEEP_PERCENT.asInt();
-		else
-			this.percent = USPWorlds.getPercentRequired(id);
+		this.percent = id.equals(USleepAPI.getInstance().getDefaultSleepGroupID()) ? this.percent = USPSetting.PERCENT_SLEEP_PERCENT.asInt() : USPWorlds.getPercentRequired(id);
 	}
 
 	/**

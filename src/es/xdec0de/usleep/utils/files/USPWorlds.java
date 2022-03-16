@@ -13,6 +13,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import es.xdec0de.usleep.api.USleep;
+import es.xdec0de.usleep.api.USleepAPI;
 import es.xdec0de.usleep.utils.ListUtils;
 
 public class USPWorlds {
@@ -69,7 +70,7 @@ public class USPWorlds {
 		for(String groupID : groups.keySet())
 			if(groups.get(groupID).contains(world.getName()))
 				return groupID;
-		return "__usleep_def_sleep_group__";
+		return USleepAPI.getInstance().getDefaultSleepGroupID();
 	}
 
 	public static int getPercentRequired(String groupID) {

@@ -1,17 +1,21 @@
 package es.xdec0de.usleep.cmds;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import es.xdec0de.usleep.api.events.BedTeleportTryEvent;
 import es.xdec0de.usleep.utils.files.USPMessage;
 import es.xdec0de.usleep.utils.files.USPSetting;
 
-public class BedTP implements CommandExecutor {
+public class BedTP implements TabExecutor {
 
 	@SuppressWarnings("deprecation")
 	public boolean onCommand(CommandSender sndr, Command cmd, String label, String[] args) {
@@ -50,5 +54,15 @@ public class BedTP implements CommandExecutor {
 		} else
 			USPMessage.NO_CONSOLE.send(sndr);
 		return true;
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+		if(args.length == 1 && sender.hasPermission(USPSetting.PERM_BEDTP_OTHER.asString())) {
+			List<String> players = new ArrayList<String>();
+			Bukkit.getServer().getOnlinePlayers().forEach(on -> players.add(on.getName()));
+			return players;
+		}
+		return Arrays.asList("");
 	}
 }

@@ -12,14 +12,15 @@ public class NightSkipEvent extends PlayerEvent implements Cancellable {
 
 	private final SleepGroup group;
 	private final SleepMode mode;
-	private boolean cancelled;
+	private boolean cancelled, skipEffect;
 
 	private static final HandlerList HANDLERS = new HandlerList();
 
-	public NightSkipEvent(SleepGroup group, SleepMode mode, Player player) {
+	public NightSkipEvent(SleepGroup group, SleepMode mode, Player player, boolean skipEffect) {
 		super(player);
 		this.group = group;
 		this.mode = mode;
+		this.skipEffect = skipEffect;
 	}
 
 	public SleepGroup getGroup() {
@@ -28,6 +29,14 @@ public class NightSkipEvent extends PlayerEvent implements Cancellable {
 
 	public SleepMode getMode() {
 		return mode;
+	}
+
+	public void setDoSkipEffect(boolean skipEffect) {
+		this.skipEffect = skipEffect;
+	}
+
+	public boolean doesSkipEffect() {
+		return skipEffect;
 	}
 
 	public HandlerList getHandlers() {

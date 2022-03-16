@@ -69,13 +69,12 @@ public class SleepGroup {
 	}
 
 	private void resetTime(Player player, SleepMode mode) {
-		NightSkipEvent nse = new NightSkipEvent(this, mode, player);
+		NightSkipEvent nse = new NightSkipEvent(this, mode, player, USPSetting.NIGHT_SKIP_EFFECT_ENABLED.asBoolean());
 		Bukkit.getPluginManager().callEvent(nse);
 		if(!nse.isCancelled()) {
 			sleeping = 0;
-			boolean skipEffect = USPSetting.NIGHT_SKIP_EFFECT_ENABLED.asBoolean();
 			List<Player> players = getPlayers();
-			if(skipEffect)
+			if(nse.doesSkipEffect())
 				USleepAPI.getInstance().doNightSkipEffect(this);
 			else {
 				for(World world : worlds) {

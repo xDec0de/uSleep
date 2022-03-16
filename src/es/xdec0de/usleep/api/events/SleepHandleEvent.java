@@ -51,6 +51,8 @@ public class SleepHandleEvent extends PlayerEvent implements Cancellable {
 	 * 
 	 * @return the SleepMode used to handle this
 	 * sleep event.
+	 * 
+	 * @since v2.0.0
 	 */
 	public SleepMode getMode() {
 		return mode;

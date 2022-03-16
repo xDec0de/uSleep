@@ -43,7 +43,7 @@ public class SleepGroup {
 			List<Player> players = getPlayers();
 			USleepAPI.getInstance().addToSleepCooldown(player.getUniqueId(), USPSetting.PERCENT_SLEEP_COOLDOWN.asInt());
 			if(mode.equals(SleepMode.INSTANT))
-				resetTime(player);
+				resetTime(player, mode);
 			else if(mode.equals(SleepMode.PERCENT)) {
 				sleeping++;
 				int required = getRequiredPlayers();
@@ -51,7 +51,7 @@ public class SleepGroup {
 					USPMessage.PERCENT_OK.broadcast(players, "%required%", Integer.toString(required), "%current%", Integer.toString(sleeping));
 					SoundHandler.broadcastSound(players, USPSetting.SOUND_SLEEP_OK);
 				} else
-					resetTime(null);
+					resetTime(player, mode);
 			} else
 				return false;
 			return true;
@@ -68,8 +68,7 @@ public class SleepGroup {
 		}
 	}
 
-	private void resetTime(Player player) {
-		SleepMode mode = player != null ? SleepMode.INSTANT : SleepMode.PERCENT;
+	private void resetTime(Player player, SleepMode mode) {
 		NightSkipEvent nse = new NightSkipEvent(this, mode);
 		Bukkit.getPluginManager().callEvent(nse);
 		if(!nse.isCancelled()) {

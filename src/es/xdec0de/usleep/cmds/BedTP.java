@@ -37,7 +37,10 @@ public class BedTP implements CommandExecutor {
 					Bukkit.getPluginManager().callEvent(bte);
 					if(!bte.isCancelled() && (bed = bte.getBedSpawnLocation()) != null) {
 						p.teleport(bed);
-						USPMessage.BEDTP_TELEPORT_OTHER.send(p, "%player%", args[0]);
+						if(target != null && target.getUniqueId().equals(p.getUniqueId()))
+							USPMessage.BEDTP_TELEPORT.send(p);
+						else
+							USPMessage.BEDTP_TELEPORT_OTHER.send(p, "%player%", args[0]);
 					} else
 						USPMessage.BEDTP_ERROR.send(p);
 				} else

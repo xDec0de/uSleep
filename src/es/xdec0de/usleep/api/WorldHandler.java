@@ -38,7 +38,8 @@ class WorldHandler implements Listener {
 					defaults.remove(world);
 				}
 			}
-			sleepGroups.add(new SleepGroup(groupID, worlds));
+			if(!worlds.isEmpty())
+				sleepGroups.add(new SleepGroup(groupID, worlds));
 		}
 		sleepGroups.add(new SleepGroup(USleepAPI.getInstance().getDefaultSleepGroupID(), defaults));
 	}

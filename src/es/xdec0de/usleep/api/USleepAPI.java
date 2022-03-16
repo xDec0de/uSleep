@@ -246,12 +246,12 @@ public class USleepAPI {
 	 * @param includeAfk whether to include afk players to the list or not.
 	 * @param includeVanished whether to include vanished players to the list or not.
 	 *
-	 * @return a new list of players containing the afk players.
+	 * @return a new list of players containing the afk or vanished players.
+	 * 
+	 * @since v2.0.0
 	 * 
 	 * @see {@link USPSetting#PERCENT_SLEEP_IGNORE_AFK}
 	 * @see {@link USPSetting#PERCENT_SLEEP_IGNORE_VANISHED}
-	 * 
-	 * @since v2.0.0
 	 */
 	public <T extends Player> Collection<T> getInactivePlayers(Collection<T> players, boolean includeAfk, boolean includeVanished) {
 		final Collection<T> res = new ArrayList<T>(players);
@@ -300,7 +300,7 @@ public class USleepAPI {
 
 	/**
 	 * Gets the {@link SleepGroup} a world is in.
-	 * Null shouln't be returned as every world has
+	 * Null shouldn't be returned as every world has
 	 * to be at least on the default sleep group.
 	 * 
 	 * @param world the world to check.

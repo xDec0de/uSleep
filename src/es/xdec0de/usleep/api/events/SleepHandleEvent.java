@@ -6,6 +6,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 
 import es.xdec0de.usleep.api.SleepGroup;
+import es.xdec0de.usleep.api.SleepMode;
 
 /**
  * Called whenever a {@link SleepGroup} handles sleeping.
@@ -17,13 +18,15 @@ import es.xdec0de.usleep.api.SleepGroup;
 public class SleepHandleEvent extends PlayerEvent implements Cancellable {
 
 	private final SleepGroup group;
+	private final SleepMode mode;
 	private boolean cancelled = false;
 
 	private static final HandlerList HANDLERS = new HandlerList();
 
-	public SleepHandleEvent(Player player, SleepGroup group) {
+	public SleepHandleEvent(Player player, SleepGroup group, SleepMode mode) {
 		super(player);
 		this.group = group;
+		this.mode = mode;
 	}
 
 	/**
@@ -40,6 +43,17 @@ public class SleepHandleEvent extends PlayerEvent implements Cancellable {
 	 */
 	public SleepGroup getGroup() {
 		return group;
+	}
+
+	/**
+	 * Gets the {@link SleepMode} used to
+	 * handle this sleep event.
+	 * 
+	 * @return the SleepMode used to handle this
+	 * sleep event.
+	 */
+	public SleepMode getMode() {
+		return mode;
 	}
 
 	@Override

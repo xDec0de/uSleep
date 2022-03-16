@@ -32,14 +32,19 @@ public class SleepGroup {
 	}
 
 	public boolean handleSleep(Player player, boolean forced) {
-		SleepHandleEvent she = new SleepHandleEvent(player, this);
+		SleepMode mode = null;
+		if(USPSetting.INSTANT_SLEEP_ENABLED.asBoolean() && (forced || player.hasPermission(USPSetting.PERM_INSTANT_SLEEP.asString())))
+			mode = SleepMode.INSTANT;
+		else if(USPSetting.PERCENT_SLEEP_ENABLED.asBoolean() && (forced || player.hasPermission(USPSetting.PERM_PERCENT_SLEEP.asString())))
+			mode = SleepMode.PERCENT;
+		SleepHandleEvent she = new SleepHandleEvent(player, this, mode);
 		Bukkit.getPluginManager().callEvent(she);
 		if(!she.isCancelled()) {
 			List<Player> players = getPlayers();
 			USleepAPI.getInstance().addToSleepCooldown(player.getUniqueId(), USPSetting.PERCENT_SLEEP_COOLDOWN.asInt());
-			if(USPSetting.INSTANT_SLEEP_ENABLED.asBoolean() && (forced || player.hasPermission(USPSetting.PERM_INSTANT_SLEEP.asString()))) // instant
+			if(mode.equals(SleepMode.INSTANT))
 				resetTime(player);
-			else if(USPSetting.PERCENT_SLEEP_ENABLED.asBoolean() && (forced || player.hasPermission(USPSetting.PERM_PERCENT_SLEEP.asString()))) { // percent
+			else if(mode.equals(SleepMode.PERCENT)) {
 				sleeping++;
 				int required = getRequiredPlayers();
 				if(required > sleeping) {

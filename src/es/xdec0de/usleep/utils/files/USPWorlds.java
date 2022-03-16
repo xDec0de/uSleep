@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -14,7 +15,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import es.xdec0de.usleep.api.USleep;
 import es.xdec0de.usleep.api.USleepAPI;
-import es.xdec0de.usleep.utils.ListUtils;
 
 public class USPWorlds {
 
@@ -91,7 +91,7 @@ public class USPWorlds {
 		if(!groupErrors.isEmpty()) {
 			USPMessages.logCol("&cSleep group errors detected at &4worlds.yml&8:");
 			for(String id : groupErrors.keySet())
-				USPMessages.logCol("  &4- &6"+id+" &chas non-existing worlds&8: &e"+ListUtils.join(groupErrors.get(id).toArray(), "&8, &e")+"&c.");
+				USPMessages.logCol("  &4- &6"+id+" &chas non-existing worlds&8: &e"+groupErrors.get(id).stream().collect(Collectors.joining("&8, &e"))+"&c.");
 			return false;
 		}
 		return true;

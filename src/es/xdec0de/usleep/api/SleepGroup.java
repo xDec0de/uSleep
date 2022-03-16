@@ -69,7 +69,7 @@ public class SleepGroup {
 	}
 
 	private void resetTime(Player player, SleepMode mode) {
-		NightSkipEvent nse = new NightSkipEvent(this, mode);
+		NightSkipEvent nse = new NightSkipEvent(this, mode, player);
 		Bukkit.getPluginManager().callEvent(nse);
 		if(!nse.isCancelled()) {
 			sleeping = 0;

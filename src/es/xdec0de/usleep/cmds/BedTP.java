@@ -13,6 +13,7 @@ import es.xdec0de.usleep.utils.files.USPSetting;
 
 public class BedTP implements CommandExecutor {
 
+	@SuppressWarnings("deprecation")
 	public boolean onCommand(CommandSender sndr, Command cmd, String label, String[] args) {
 		if(sndr instanceof Player) {
 			Player p = (Player)sndr;
@@ -30,7 +31,8 @@ public class BedTP implements CommandExecutor {
 					USPMessage.NO_PERMS.send(p, "%perm%", USPSetting.PERM_BEDTP_SELF.asString());
 			} else if(args.length == 1) {
 				if(sndr.hasPermission(USPSetting.PERM_BEDTP_OTHER.asString())) {
-					Location bed = getBedLocation(args[0]);
+					OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
+					Location bed = target != null ? target.getBedSpawnLocation() : null;
 					BedTeleportTryEvent bte = new BedTeleportTryEvent(p, bed);
 					Bukkit.getPluginManager().callEvent(bte);
 					if(!bte.isCancelled() && (bed = bte.getBedSpawnLocation()) != null) {
@@ -45,16 +47,5 @@ public class BedTP implements CommandExecutor {
 		} else
 			USPMessage.NO_CONSOLE.send(sndr);
 		return true;
-	}
-
-	@SuppressWarnings("deprecation")
-	private Location getBedLocation(String player) {
-		Player target = Bukkit.getPlayerExact(player);
-		if(target != null)
-			return target.getBedSpawnLocation();
-		OfflinePlayer offlineTarget = Bukkit.getOfflinePlayer(player);
-		if(offlineTarget != null)
-			return offlineTarget.getBedSpawnLocation();
-		return null;
 	}
 }

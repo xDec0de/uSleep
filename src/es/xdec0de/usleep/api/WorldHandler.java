@@ -2,6 +2,7 @@ package es.xdec0de.usleep.api;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -27,15 +28,19 @@ class WorldHandler implements Listener {
 	private WorldHandler() {
 		if(instance != null)
 			throw new SecurityException("Creating new instances of WorldHandler is not allowed!");
+		List<World> defaults = new ArrayList<World>(Bukkit.getWorlds());
 		for(String groupID : USPWorlds.getGroupIdentifiers()) {
 			ArrayList<World> worlds = new ArrayList<World>();
 			for(String worldName : USPWorlds.getWorldsInGroup(groupID)) {
 				World world = Bukkit.getWorld(worldName);
-				if(world != null)
+				if(world != null) {
 					worlds.add(world);
+					defaults.remove(world);
+				}
 			}
 			sleepGroups.add(new SleepGroup(groupID, worlds));
 		}
+		sleepGroups.add(new SleepGroup(USleepAPI.getInstance().getDefaultSleepGroupID(), defaults));
 	}
 
 	static WorldHandler getInstance() {

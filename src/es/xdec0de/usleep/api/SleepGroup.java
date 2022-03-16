@@ -54,7 +54,9 @@ public class SleepGroup {
 	 * @param player the player sleeping, see {@link HumanEntity#isSleeping()},
 	 * uSleep doesn't check if the <b>player</b> is already sleeping as
 	 * this shouldn't happen in any case with the default plugin behavior.
-	 * @param forced whether to bypass permission check or not.
+	 * @param forced whether to bypass permission check or not, this is <b>NOT</b>
+	 * able to force sleep if both {@link USPSetting#PERCENT_SLEEP_ENABLED} and
+	 * {@link USPSetting#INSTANT_SLEEP_ENABLED} return false.
 	 * 
 	 * @return true if the player was allowed to sleep, false otherwise.
 	 * 

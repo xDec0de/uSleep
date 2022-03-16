@@ -58,12 +58,15 @@ public class SleepGroup {
 	 * able to force sleep if both {@link USPSetting#PERCENT_SLEEP_ENABLED} and
 	 * {@link USPSetting#INSTANT_SLEEP_ENABLED} return false.
 	 * 
-	 * @return true if the player was allowed to sleep, false otherwise.
+	 * @return true if <b>player</b> is able to sleep, false otherwise.
+	 * being "able" to sleep means that <b>player</b> actually has
+	 * permissions to sleep, as if percent and instant sleep are disabled
+	 * or <b>player</b> lacks permission on both, it won't be able to sleep
+	 * and thus, call sleep handling on any world.
 	 * 
 	 * @since v2.0.0
 	 * 
 	 * @see SleepHandleEvent
-	 * 
 	 */
 	public boolean handleSleep(Player player, boolean forced) {
 		SleepMode mode = null;

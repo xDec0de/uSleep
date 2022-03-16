@@ -25,6 +25,8 @@ class WorldHandler implements Listener {
 	final ArrayList<SleepGroup> sleepGroups = new ArrayList<SleepGroup>();
 
 	private WorldHandler() {
+		if(instance != null)
+			throw new SecurityException("Creating new instances of WorldHandler is not allowed!");
 		for(String groupID : USPWorlds.getGroupIdentifiers()) {
 			ArrayList<World> worlds = new ArrayList<World>();
 			for(String worldName : USPWorlds.getWorldsInGroup(groupID)) {

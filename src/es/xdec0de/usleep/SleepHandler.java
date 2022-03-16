@@ -41,15 +41,15 @@ public class SleepHandler implements Listener {
 						if(cancel = !api.handleSleep(p, false))
 							USPMessage.NO_PERMS.send(p, "%perm%", USPSetting.PERM_PERCENT_SLEEP.asString());
 						else
-							see = new SleepErrorEvent(p, USPMessage.NO_PERMS.getString("%perm%", USPSetting.PERM_PERCENT_SLEEP.asString()), SleepErrorReason.NO_PERMISSIONS);
+							see = new SleepErrorEvent(p, USPMessage.NO_PERMS.getString("%perm%", USPSetting.PERM_PERCENT_SLEEP.asString()), SleepErrorReason.NO_PERMISSIONS, e.getBed());
 					} else
-						see = new SleepErrorEvent(p, USPMessage.TOO_FAST.getString(), SleepErrorReason.TOO_FAST);
+						see = new SleepErrorEvent(p, USPMessage.TOO_FAST.getString(), SleepErrorReason.TOO_FAST, e.getBed());
 				} else
-					see = new SleepErrorEvent(p, USPMessage.ALREADY_SKIPPING.getString(), SleepErrorReason.ALREADY_SKIPPING);
+					see = new SleepErrorEvent(p, USPMessage.ALREADY_SKIPPING.getString(), SleepErrorReason.ALREADY_SKIPPING, e.getBed());
 			} else
-				see = new SleepErrorEvent(p, USPMessage.valueOf(e.getBedEnterResult().name()).getString(), SleepErrorReason.valueOf(e.getBedEnterResult().name()));
+				see = new SleepErrorEvent(p, USPMessage.valueOf(e.getBedEnterResult().name()).getString(), SleepErrorReason.valueOf(e.getBedEnterResult().name()), e.getBed());
 		} else {
-			see = new SleepErrorEvent(p, USPMessage.NOT_POSSIBLE_HERE.getString(), SleepErrorReason.NOT_POSSIBLE_HERE);
+			see = new SleepErrorEvent(p, USPMessage.NOT_POSSIBLE_HERE.getString(), SleepErrorReason.NOT_POSSIBLE_HERE, e.getBed());
 			cancel = false;
 		}
 		if(see != null) {

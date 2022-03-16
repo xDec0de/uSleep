@@ -2,6 +2,7 @@ package es.xdec0de.usleep.api.events;
 
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
@@ -26,13 +27,15 @@ public class SleepErrorEvent extends PlayerEvent implements Cancellable {
 	private String message;
 	private Sound sound = (Sound) EnumUtils.getEnum(Sound.class, USPSetting.SOUND_SLEEP_ERROR.asString());
 	private boolean cancelled;
+	private final Block bed;
 
 	private static final HandlerList HANDLERS = new HandlerList();
 
-	public SleepErrorEvent(Player player, String message, SleepErrorReason reason) {
+	public SleepErrorEvent(Player player, String message, SleepErrorReason reason, Block bed) {
 		super(player);
 		this.reason = reason;
 		this.message = message;
+		this.bed = bed;
 	}
 
 	/**
@@ -90,6 +93,17 @@ public class SleepErrorEvent extends PlayerEvent implements Cancellable {
 	 */
 	public Sound getSound() {
 		return sound;
+	}
+
+	/**
+	 * Returns the bed {@link Block} involved in this event.
+	 * 
+	 * @return the bed block involved in this event.
+	 * 
+	 * @since v2.0.0
+	 */
+	public Block getBed() {
+		return bed;
 	}
 
 	public HandlerList getHandlers() {

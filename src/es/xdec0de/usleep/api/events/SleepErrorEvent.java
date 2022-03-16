@@ -158,14 +158,7 @@ public class SleepErrorEvent extends PlayerEvent implements Cancellable {
 		 * 
 		 * @since v2.0.0
 		 */
-		ALREADY_SKIPPING,
-		/**
-		 * Entering the bed is prevented due to another plugin 
-		 * canceling the event before uSleep takes any action on it.
-		 * 
-		 * @since v2.0.0
-		 */
-		OTHER_PLUGIN_CANCELLED;
+		ALREADY_SKIPPING;
 	}
 
 	@Override

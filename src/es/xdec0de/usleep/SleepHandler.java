@@ -30,12 +30,6 @@ public class SleepHandler implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBedEnter(PlayerBedEnterEvent e) {
 		Player p = e.getPlayer();
-		if(e.isCancelled()) {
-			SleepErrorEvent see = new SleepErrorEvent(p, null, SleepErrorReason.OTHER_PLUGIN_CANCELLED);
-			Bukkit.getPluginManager().callEvent(see);
-			USPMessage.SLEEP_CANCELLED_OTHER.send(Bukkit.getConsoleSender());
-			return;
-		}
 		Environment env = e.getBed().getWorld().getEnvironment();
 		boolean cancel = true;
 		SleepErrorEvent see = null;

@@ -29,7 +29,7 @@ public class USleepAPI {
 
 	private final List<UUID> onDelay = new ArrayList<UUID>();
 
-	USleepAPI() { // Just to avoid accidental instantiation by other plugins...
+	private USleepAPI() { // Just to avoid accidental instantiation by other plugins...
 		// Fun fact: Even non-accessible constructors can be called with reflection, and we don't want that!
 		if(instance != null)
 			throw new SecurityException("Creating new instances of USleepAPI is not allowed! Please use USleepAPI#getInstance()");

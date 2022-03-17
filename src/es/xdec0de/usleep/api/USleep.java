@@ -50,11 +50,11 @@ public class USleep extends JavaPlugin {
 	}
 
 	private boolean executeEnable() {
+		// UpdateChecker event is registered on checkUpdates(boolean)
 		boolean fileSuccess = (USPConfig.setup(false) && USPMessages.setup(false) && USPWorlds.setup());
 		getCommand("usleep").setExecutor(new USleepCMD());
 		getCommand("bedtp").setExecutor(new BedTP());
 		getServer().getPluginManager().registerEvents(new SleepHandler(), this);
-		getServer().getPluginManager().registerEvents(new UpdateChecker(), this);
 		getServer().getPluginManager().registerEvents(WorldHandler.getInstance(), this);
 		return fileSuccess;
 	}
@@ -79,8 +79,10 @@ public class USleep extends JavaPlugin {
 	}
 
 	private void checkUpdates(boolean success) {
+		UpdateChecker checker = new UpdateChecker();
+		getServer().getPluginManager().registerEvents(checker, this);
 		if(USPSetting.UPDATER_NOTIFY_CONSOLE.asBoolean()) {
-			UpdateChecker.getLatestVersion(version -> {
+			checker.getLatestVersion(version -> {
 				USPMessages.log(" ");
 				if(USleepAPI.getInstance().isLatest(version))
 					USPMessage.UPDATE_LATEST_CONSOLE.send(Bukkit.getConsoleSender());

@@ -19,11 +19,9 @@ import net.md_5.bungee.api.ChatColor;
 
 public class UpdateChecker implements Listener {
 
-	private final static int resourceId = 72205;
-
-	public static void getLatestVersion(Consumer<String> consumer) {
+	public void getLatestVersion(Consumer<String> consumer) {
 		Bukkit.getScheduler().runTaskAsynchronously(USleep.getPlugin(USleep.class), () -> {
-			try (InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + resourceId).openStream(); Scanner scanner = new Scanner(inputStream)) {
+			try (InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + 72205).openStream(); Scanner scanner = new Scanner(inputStream)) {
 				if (scanner.hasNext())
 					consumer.accept(scanner.next());
 			} catch (IOException ex) {

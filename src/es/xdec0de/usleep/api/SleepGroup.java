@@ -5,13 +5,14 @@ import java.util.Collection;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 
 import es.xdec0de.usleep.api.events.NightSkipEvent;
 import es.xdec0de.usleep.api.events.SleepHandleEvent;
-import es.xdec0de.usleep.utils.SoundHandler;
+import es.xdec0de.usleep.utils.EnumUtils;
 import es.xdec0de.usleep.utils.files.USPMessage;
 import es.xdec0de.usleep.utils.files.USPSetting;
 import es.xdec0de.usleep.utils.files.USPWorlds;
@@ -83,7 +84,7 @@ public class SleepGroup {
 				int required = getRequiredPlayers();
 				if(required > sleeping) {
 					USPMessage.PERCENT_OK.broadcast(players, "%required%", Integer.toString(required), "%current%", Integer.toString(sleeping));
-					SoundHandler.broadcastSound(players, USPSetting.SOUND_SLEEP_OK);
+					broadcastSound(players, USPSetting.SOUND_SLEEP_OK);
 				} else
 					resetTime(player, mode);
 			} else
@@ -109,7 +110,7 @@ public class SleepGroup {
 			sleeping--;
 			List<Player> players = getPlayers();
 			USPMessage.PERCENT_OK.broadcast(players, "%required%", Integer.toString(getRequiredPlayers()), "%current%", Integer.toString(sleeping));
-			SoundHandler.broadcastSound(players, USPSetting.SOUND_SLEEP_LEAVE);
+			broadcastSound(players, USPSetting.SOUND_SLEEP_LEAVE);
 		}
 	}
 
@@ -130,10 +131,10 @@ public class SleepGroup {
 			}
 			if(mode.equals(SleepMode.INSTANT)) {
 				USPMessage.INSTANT_OK.broadcast(players, "%player%", player.getName());
-				SoundHandler.broadcastSound(players, USPSetting.SOUND_NEXTDAY_PERCENT);
+				broadcastSound(players, USPSetting.SOUND_NEXTDAY_PERCENT);
 			} else {
 				USPMessage.PERCENT_NEXT_DAY.broadcast(players);
-				SoundHandler.broadcastSound(players, USPSetting.SOUND_NEXTDAY_INSTANT);
+				broadcastSound(players, USPSetting.SOUND_NEXTDAY_INSTANT);
 			}
 		}
 	}
@@ -235,5 +236,14 @@ public class SleepGroup {
 	 */
 	public boolean isNightSkipping() {
 		return isNightSkipping;
+	}
+
+	private void broadcastSound(List<Player> players, USPSetting setting) {
+		String soundStr = setting.asString();
+		if(soundStr != null && !soundStr.isEmpty()) {
+			Sound sound = (Sound)EnumUtils.getEnum(Sound.class, soundStr);
+			if(sound != null)
+				players.forEach(on -> on.playSound(on.getLocation(), sound, 1.0F, 1.0F));
+		}
 	}
 }

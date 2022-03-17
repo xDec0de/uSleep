@@ -14,7 +14,6 @@ import es.xdec0de.usleep.api.SleepGroup;
 import es.xdec0de.usleep.api.USleepAPI;
 import es.xdec0de.usleep.api.events.SleepErrorEvent;
 import es.xdec0de.usleep.api.events.SleepErrorEvent.SleepErrorReason;
-import es.xdec0de.usleep.utils.SoundHandler;
 import es.xdec0de.usleep.utils.files.USPMessage;
 import es.xdec0de.usleep.utils.files.USPMessages;
 import es.xdec0de.usleep.utils.files.USPSetting;
@@ -55,7 +54,7 @@ public class SleepHandler implements Listener {
 					USPMessages.sendActionBar(p, see.getMessage());
 				else
 					USPMessages.sendMessage(p, see.getMessage());
-				SoundHandler.playSound(p, see.getSound());
+				p.playSound(p, see.getSound(), 1.0F, 1.0F);
 			}
 		}
 		e.setCancelled(cancel);

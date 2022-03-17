@@ -10,9 +10,10 @@ import org.bukkit.World;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 
+import com.google.common.base.Enums;
+
 import es.xdec0de.usleep.api.events.NightSkipEvent;
 import es.xdec0de.usleep.api.events.SleepHandleEvent;
-import es.xdec0de.usleep.utils.EnumUtils;
 import es.xdec0de.usleep.utils.files.USPMessage;
 import es.xdec0de.usleep.utils.files.USPSetting;
 import es.xdec0de.usleep.utils.files.USPWorlds;
@@ -241,7 +242,7 @@ public class SleepGroup {
 	private void broadcastSound(List<Player> players, USPSetting setting) {
 		String soundStr = setting.asString();
 		if(soundStr != null && !soundStr.isEmpty()) {
-			Sound sound = (Sound)EnumUtils.getEnum(Sound.class, soundStr);
+			Sound sound = Enums.getIfPresent(Sound.class, soundStr).orNull();
 			if(sound != null)
 				players.forEach(on -> on.playSound(on.getLocation(), sound, 1.0F, 1.0F));
 		}

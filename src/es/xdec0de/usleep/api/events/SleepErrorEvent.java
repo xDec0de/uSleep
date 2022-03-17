@@ -9,9 +9,10 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerBedEnterEvent.BedEnterResult;
 import org.bukkit.event.player.PlayerEvent;
 
+import com.google.common.base.Enums;
+
 import es.xdec0de.usleep.api.NightSkipEffectTask;
 import es.xdec0de.usleep.api.SleepGroup;
-import es.xdec0de.usleep.utils.EnumUtils;
 import es.xdec0de.usleep.utils.files.USPSetting;
 
 /**
@@ -25,7 +26,7 @@ public class SleepErrorEvent extends PlayerEvent implements Cancellable {
 
 	private final SleepErrorReason reason;
 	private String message;
-	private Sound sound = (Sound) EnumUtils.getEnum(Sound.class, USPSetting.SOUND_SLEEP_ERROR.asString());
+	private Sound sound = Enums.getIfPresent(Sound.class, USPSetting.SOUND_SLEEP_ERROR.asString()).orNull();
 	private boolean cancelled;
 	private final Block bed;
 

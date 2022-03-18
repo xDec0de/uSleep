@@ -15,6 +15,7 @@ import es.xdec0de.usleep.utils.files.USPWorlds;
 
 public class USleepCMD implements TabExecutor {
 
+	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (args.length == 1) {
 			switch(args[0].toLowerCase()) {

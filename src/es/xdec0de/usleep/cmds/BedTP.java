@@ -18,6 +18,7 @@ import es.xdec0de.usleep.utils.files.USPSetting;
 public class BedTP implements TabExecutor {
 
 	@SuppressWarnings("deprecation")
+	@Override
 	public boolean onCommand(CommandSender sndr, Command cmd, String label, String[] args) {
 		if(sndr instanceof Player) {
 			Player p = (Player)sndr;

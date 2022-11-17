@@ -18,6 +18,11 @@
 			<id>spigot-repo</id>
 			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
+		<!-- MCUtils repository -->
+		<repository>
+			<id>mcutils</id>
+			<url>https://github.com/xDec0de/MCUtils/tree/mvn-repo/es/xdec0de/MCUtils</url>
+		</repository>
 		<!-- EssentialsX repository-->
 		<repository>
 			<id>essentials-releases</id>
@@ -31,6 +36,13 @@
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
 			<version>1.18.2-R0.1-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- MCUtils dependency-->
+		<dependency>
+			<groupId>me.xdec0de</groupId>
+			<artifactId>MCUtils</artifactId>
+			<version>1.0.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<!-- EssentialsX dependency --> 

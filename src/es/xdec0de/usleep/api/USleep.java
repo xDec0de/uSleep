@@ -1,62 +1,74 @@
 package es.xdec0de.usleep.api;
 
+import javax.annotation.Nonnull;
+
 import org.bukkit.Bukkit;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import es.xdec0de.usleep.SleepHandler;
 import es.xdec0de.usleep.cmds.BedTP;
 import es.xdec0de.usleep.cmds.USleepCMD;
 import es.xdec0de.usleep.utils.UpdateChecker;
-import es.xdec0de.usleep.utils.files.USPConfig;
-import es.xdec0de.usleep.utils.files.USPMessage;
-import es.xdec0de.usleep.utils.files.USPMessages;
-import es.xdec0de.usleep.utils.files.USPSetting;
-import es.xdec0de.usleep.utils.files.USPWorlds;
+import me.xdec0de.mcutils.MCPlugin;
+import me.xdec0de.mcutils.files.MessagesFile;
+import me.xdec0de.mcutils.files.PluginFile;
 
-public class USleep extends JavaPlugin {
+public class USleep extends MCPlugin {
+
+	private PluginFile cfg, worlds;
+	private MessagesFile msg;
+
+	private final USleepAPI api = new USleepAPI(this);
 
 	@Override
 	public void onEnable() {
-		boolean success = executeEnable();
-		USPMessages.log(" ");
-		USPMessages.logCol("&8|------------------------------------------>");
-		USPMessages.log(" ");
-		USPMessages.logCol("             &e&luSleep &8- &aEnabled");
-		USPMessages.log(" ");
-		USPMessages.logCol("  &b- &7Author&8: &bxDec0de_");
-		USPMessages.log(" ");
-		USPMessages.logCol("  &b- &7Version: &b"+getDescription().getVersion());
-		USPMessages.log(" ");
-		USPMessages.logCol("&8|------------------------------------------>");
-		USPMessages.log(" ");
+		this.cfg = registerFile("config", PluginFile.class);
+		this.msg = registerFile("messages", MessagesFile.class);
+		this.worlds = registerFile("messages", PluginFile.class);
+		registerCommand("usleep", new USleepCMD());
+		registerCommand("bedtp", new BedTP());
+		registerEvents(new SleepHandler(), WorldHandler.getInstance(), new UpdateChecker());
+		log(" ");
+		logCol("&8|------------------------------------------>");
+		log(" ");
+		logCol("             &e&luSleep &8- &aEnabled");
+		log(" ");
+		logCol("  &b- &7Author&8: &bxDec0de_");
+		log(" ");
+		logCol("  &b- &7Version: &b"+getDescription().getVersion());
+		log(" ");
+		logCol("&8|------------------------------------------>");
+		log(" ");
 		checkDependencies();
-		checkUpdates(success);
+		checkUpdates();
+		this.getLatestVersion(0, null);
+		checkFileStatus();
 	}
 
 	@Override
 	public void onDisable() {
-		USPMessages.log(" ");
-		USPMessages.logCol("&8|------------------------------------------>");
-		USPMessages.log(" ");
-		USPMessages.logCol("             &e&luSleep &8- &cDisabled");
-		USPMessages.log(" ");
-		USPMessages.logCol("  &b- &7Author&8: &bxDec0de_");
-		USPMessages.log(" ");
-		USPMessages.logCol("  &b- &7Version: &b"+getDescription().getVersion());
-		USPMessages.log(" ");
-		USPMessages.logCol("&8|------------------------------------------>");
-		USPMessages.log(" ");
+		log(" ");
+		logCol("&8|------------------------------------------>");
+		log(" ");
+		logCol("             &e&luSleep &8- &cDisabled");
+		log(" ");
+		logCol("  &b- &7Author&8: &bxDec0de_");
+		log(" ");
+		logCol("  &b- &7Version: &b"+getDescription().getVersion());
+		log(" ");
+		logCol("&8|------------------------------------------>");
+		log(" ");
 	}
 
-	private boolean executeEnable() {
-		// UpdateChecker event is registered on checkUpdates(boolean)
-		boolean fileSuccess = (USPConfig.setup(false) && USPMessages.setup(false) && USPWorlds.setup());
-		getCommand("usleep").setExecutor(new USleepCMD());
-		getCommand("bedtp").setExecutor(new BedTP());
-		getServer().getPluginManager().registerEvents(new SleepHandler(), this);
-		getServer().getPluginManager().registerEvents(WorldHandler.getInstance(), this);
-		return fileSuccess;
+	private void checkFileStatus() {
+		int percent = cfg.getInt("Features.PercentSleep.Percentage");
+		if(percent > 100 || percent < 1 ) {
+			logCol(" ", "&cConfiguration errors detected at &4config.yml&8:",
+				"  &4- &cPercent value is invalid, using default &8(&e50&8)");
+			cfg.set("Features.PercentSleep.Percentage", 50);
+			cfg.save();
+		}
 	}
 
 	private void checkDependencies() {
@@ -65,37 +77,40 @@ public class USleep extends JavaPlugin {
 		if(vanish == null)
 			vanish = Bukkit.getPluginManager().getPlugin("PremiumVanish");
 		if(ess != null) {
-			USPMessages.logCol("  &e- &bEssentials &7detected &8(&av" + ess.getDescription().getVersion() + "&8) &8[&dVanish &7and &dAFK&8]");
-			if(vanish == null)
+			if(vanish == null) {
 				vanish = ess;
+				logCol("  &e- &bEssentials &7detected &8(&av" + ess.getDescription().getVersion() + "&8) &8[&dVanish &7and &dAFK&8]");
+			} else
+				logCol("  &e- &bEssentials &7detected &8(&av" + ess.getDescription().getVersion() + "&8) &8[&dAFK&8]");
 		} else
-			USPMessages.logCol("  &6- &cNo &eAFK &cplugin detected &8- &cAFK support disabled");
-		USPMessages.log(" ");
+			logCol("  &6- &cNo &eAFK &cplugin detected &8- &cAFK support disabled", " ");
 		if(vanish != null)
-			USPMessages.logCol("  &e- &b"+vanish.getName()+" &7detected &8(&av"+vanish.getDescription().getVersion()+"&8) &8[&dVanish&8]");
+			logCol("  &e- &b"+vanish.getName()+" &7detected &8(&av"+vanish.getDescription().getVersion()+"&8) &8[&dVanish&8]", " ");
 		else
-			USPMessages.logCol("  &6- &cNo &evanish &cplugin detected &8- &cVanish support disabled");
-		USPMessages.log(" ");
+			logCol("  &6- &cNo &evanish &cplugin detected &8- &cVanish support disabled", " ");
 	}
 
-	private void checkUpdates(boolean success) {
-		UpdateChecker checker = new UpdateChecker();
-		getServer().getPluginManager().registerEvents(checker, this);
-		if(USPSetting.UPDATER_NOTIFY_CONSOLE.asBoolean()) {
-			checker.getLatestVersion(version -> {
-				USPMessages.log(" ");
-				if(USleepAPI.getInstance().isLatest(version))
-					USPMessage.UPDATE_LATEST_CONSOLE.send(Bukkit.getConsoleSender());
-				else
-					USPMessage.UPDATE_AVAILABLE_CONSOLE.send(Bukkit.getConsoleSender(), "%new%", version, "%current%", getDescription().getVersion());
-				USPMessages.log(" ");
-				if(!success) {
-					USPMessages.logCol("&8&l[&4&l!&8&l] &4uSleep &chas configuration errors, please check them above &8&l[&4&l!&8&l]");
-					USPMessages.log(" ");
-				}
-			});
-		} else
-			if(!success)
-				Bukkit.getScheduler().runTaskLater(this, () -> USPMessages.logColSpaced("&8&l[&4&l!&8&l] &4uSleep &chas configuration errors, please check them above &8&l[&4&l!&8&l]"), 1);
+	private void checkUpdates() {
+		if (!cfg.getBoolean("Features.Updater.Console"))
+			return;
+		final ConsoleCommandSender console = Bukkit.getConsoleSender();
+		getLatestVersion(72205, version ->
+			msg.sendColored(console, api.isLatest(version) ? "Events.Updater.Latest.Console" : "Events.Updater.Available.Console"));
+	}
+
+	/**
+	 * Provides access to the {@link USleepAPI}.
+	 * 
+	 * @return An instance of {@link USleepAPI}.
+	 * 
+	 * @since uSleep 2.0.0
+	 */
+	@Nonnull
+	public USleepAPI getAPI() {
+		return api;
+	}
+
+	public MessagesFile getMessages() {
+		return msg;
 	}
 }

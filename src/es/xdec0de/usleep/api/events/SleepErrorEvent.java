@@ -13,7 +13,6 @@ import com.google.common.base.Enums;
 
 import es.xdec0de.usleep.api.NightSkipEffectTask;
 import es.xdec0de.usleep.api.SleepGroup;
-import es.xdec0de.usleep.utils.files.USPSetting;
 
 /**
  * Called whenever a player fails to sleep.

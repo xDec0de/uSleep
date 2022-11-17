@@ -14,36 +14,21 @@ import org.bukkit.plugin.Plugin;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 
-import es.xdec0de.usleep.utils.files.USPSetting;
-
 /**
  * The main API class of the plugin.
  * 
  * @author xDec0de_
  *
- * @since v2.0.0
+ * @since uSleep 2.0.0
  */
 public class USleepAPI {
 
-	private static USleepAPI instance;
-
 	private final List<UUID> onDelay = new ArrayList<UUID>();
 
-	private USleepAPI() { // Just to avoid accidental instantiation by other plugins...
+	USleepAPI(USleep plugin) { // Just to avoid accidental instantiation by other plugins...
 		// Fun fact: Even non-accessible constructors can be called with reflection, and we don't want that!
-		if(instance != null)
-			throw new SecurityException("Creating new instances of USleepAPI is not allowed! Please use USleepAPI#getInstance()");
-	}
-
-	/**
-	 * Gets the current instance of the API.
-	 * 
-	 * @return the instance of the API.
-	 * 
-	 * @since v2.0.0
-	 */
-	public static USleepAPI getInstance() {
-		return instance != null ? instance : (instance = new USleepAPI());
+		if(plugin.getAPI() != null)
+			throw new SecurityException("Creating new instances of USleepAPI is not allowed! Please use USleep#getAPI()");
 	}
 
 	/**
@@ -53,7 +38,7 @@ public class USleepAPI {
 	 * 
 	 * @return true if the player is on the list, false otherwise.
 	 * 
-	 * @since v2.0.0
+	 * @since uSleep 2.0.0
 	 */
 	public boolean hasSleepCooldown(Player player) {
 		return onDelay.contains(player.getUniqueId());
@@ -72,7 +57,7 @@ public class USleepAPI {
 	 * 
 	 * @return true if the player has been added to the sleep cooldown list, false otherwise
 	 * 
-	 * @since v2.0.0
+	 * @since uSleep 2.0.0
 	 */
 	public boolean addToSleepCooldown(UUID player, int seconds) {
 		if(seconds > 0 && !onDelay.contains(player)) {
@@ -100,7 +85,7 @@ public class USleepAPI {
 	 * or <b>player</b> lacks permission on both, it won't be able to sleep
 	 * and thus, call sleep handling on any world.
 	 * 
-	 * @since v2.0.0
+	 * @since uSleep 2.0.0
 	 */
 	public boolean handleSleep(Player player, boolean forced) {
 		return getSleepGroup(player.getWorld()).handleSleep(player, forced);
@@ -114,7 +99,7 @@ public class USleepAPI {
 	 * 
 	 * @param player the player waking up.
 	 * 
-	 * @since v2.0.0
+	 * @since uSleep 2.0.0
 	 */
 	public void handleWakeUp(Player player) {
 		getSleepGroup(player.getWorld()).handleWakeUp();
@@ -127,7 +112,7 @@ public class USleepAPI {
 	 * 
 	 * @return true if <b>player</b> is vanished, false otherwise.
 	 * 
-	 * @since v2.0.0
+	 * @since uSleep 2.0.0
 	 */
 	public boolean isVanished(Player player) {
 		Plugin ess = Bukkit.getPluginManager().getPlugin("Essentials");
@@ -148,7 +133,7 @@ public class USleepAPI {
 	 * 
 	 * @return true if <b>player</b> is afk, false otherwise.
 	 * 
-	 * @since v2.0.0
+	 * @since uSleep 2.0.0
 	 */
 	public boolean isAfk(Player player) {
 		Plugin ess = Bukkit.getPluginManager().getPlugin("Essentials");
@@ -164,7 +149,7 @@ public class USleepAPI {
 	 * 
 	 * @return true if <b>player</b> is vanished or afk, false otherwise.
 	 * 
-	 * @since v2.0.0
+	 * @since uSleep 2.0.0
 	 */
 	public boolean isInactive(Player player) {
 		Plugin ess = Bukkit.getPluginManager().getPlugin("Essentials");
@@ -186,7 +171,7 @@ public class USleepAPI {
 	 * 
 	 * @return a new list of players containing the afk players.
 	 * 
-	 * @since v2.0.0
+	 * @since uSleep 2.0.0
 	 */
 	public <T extends Player> Collection<T> getAfk(Collection<T> players) {
 		final Collection<T> res = new ArrayList<T>(players);
@@ -208,7 +193,7 @@ public class USleepAPI {
 	 * 
 	 * @return a new list of players containing the vanished players.
 	 * 
-	 * @since v2.0.0
+	 * @since uSleep 2.0.0
 	 */
 	public <T extends Player> Collection<T> getVanished(Collection<T> players) {
 		final Collection<T> res = new ArrayList<T>(players);
@@ -248,7 +233,7 @@ public class USleepAPI {
 	 *
 	 * @return a new list of players containing the afk or vanished players.
 	 * 
-	 * @since v2.0.0
+	 * @since uSleep 2.0.0
 	 * 
 	 * @see {@link USPSetting#PERCENT_SLEEP_IGNORE_AFK}
 	 * @see {@link USPSetting#PERCENT_SLEEP_IGNORE_VANISHED}
@@ -286,7 +271,7 @@ public class USleepAPI {
 	 * 
 	 * @param group the group affected by the night skip effect.
 	 * 
-	 * @since v2.0.0
+	 * @since uSleep 2.0.0
 	 */
 	public void doNightSkipEffect(SleepGroup group) {
 		new NightSkipEffectTask(group, USPSetting.NIGHT_SKIP_EFFECT_INCREMENT.asInt()).runTaskTimer(USleep.getPlugin(USleep.class), 0, 1);
@@ -307,7 +292,7 @@ public class USleepAPI {
 	 * 
 	 * @return the sleep group a world is in.
 	 * 
-	 * @since v2.0.0
+	 * @since uSleep 2.0.0
 	 */
 	public SleepGroup getSleepGroup(World world) {
 		for(SleepGroup group : WorldHandler.getInstance().sleepGroups)
@@ -323,7 +308,7 @@ public class USleepAPI {
 	 * 
 	 * @return the SleepGroup with the specified <b>id</b>. Can be null.
 	 * 
-	 * @since v2.0.0
+	 * @since uSleep 2.0.0
 	 */
 	public SleepGroup getSleepGroup(String id) {
 		for(SleepGroup group : WorldHandler.getInstance().sleepGroups)
@@ -337,7 +322,7 @@ public class USleepAPI {
 	 * 
 	 * @return "__usleep_def_sleep_group__"
 	 * 
-	 * @since v2.0.0
+	 * @since uSleep 2.0.0
 	 */
 	public String getDefaultSleepGroupID() {
 		return "__usleep_def_sleep_group__";
@@ -351,7 +336,7 @@ public class USleepAPI {
 	 * 
 	 * @return true if latest, false otherwise.
 	 * 
-	 * @since v2.0.0
+	 * @since uSleep 2.0.0
 	 */
 	public boolean isLatest(String version) {
 		return USleep.getPlugin(USleep.class).getDescription().getVersion().compareTo(version) >= 0;

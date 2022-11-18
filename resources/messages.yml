@@ -6,12 +6,11 @@
 # | #                                                                    # | #
 # |------------------------------------------------------------------------| #
 
-Core:
-  Prefix: "&7&l<&b&lu&9&lSleep&7&l>&7"
-  ErrorPrefix: "&8&l[&4&l!&8&l]&c"
-  NoPerms: "%error% Insufficient permissions &8(&e%perm%&8)&c."
-  NoConsole: "%error% This command can't be executed from the console."
-  PlayerNotFound: "%error% That player is not online."
+Prefix: "&7&l<&b&lu&9&lSleep&7&l>&7"
+ErrorPrefix: "&8&l[&4&l!&8&l]&c"
+NoPerms: "%error% Insufficient permissions &8(&e%perm%&8)&c."
+NoConsole: "%error% This command can't be executed from the console."
+PlayerNotFound: "%error% That player is not online."
 Commands:
   usleep:
     Reload: "%prefix% &aPlugin reloaded."
@@ -21,42 +20,41 @@ Commands:
     TeleportOther: "%prefix% &bYou have been teleported to &e%player%'s &bbed."
     Error: "%error% Bed is missing or obstructed."
     Usage: "%error% Usage&8: /&ebedtp &8<&eplayer&8>&c."
-Events:
-  Sleep:
-    NotPossibleHere: "&cWhoops!"
-    NotPossibleNow: "&cYou can sleep only at night and during thunderstorms."
-    NotSafe: "&cYou may not rest now, there are monsters nearby"
-    Other: "&cYou can't sleep right now."
-    TooFarAway: "&cYou may not rest now; the bed is too far away."
-    TooFast: "%error% You are sleeping too fast!"
-    AlreadySkipping: "%error% The night is already being skipped."
-  InstantSleep:
-    OK: "%prefix% &e%player% &bhas slept, we move on to the next day."
-  PercentSleep:
-    OK: "&7Players sleeping: &8[&b%current%&7/&9%required%&8]"
-    NextDay: "%prefix% &bThere are enough players sleeping, we move on to the next day"
-    Title: "&7&lPlayers sleeping"
-    SubTitle: "&b&l%current%&7&l/&9&l%required%"
-  Updater:
-    Available:
-      Player: "%prefix% A new version &8(&6v%new%&8) &7is available, using&8: &cv%current%&7."
-      Console: |
-        &8|------------------------------------------>
-        &7 
-        &e          uSleep &7update checker
-        &7 
-        &b- &7A new version is available&8: &ev%new%
-        &7 
-        &b- &7Currently using&8: &cv%current%
-        &7 
-        &8|------------------------------------------>
-    Latest:
-      Player: "%prefix% You are running the latest version."
-      Console: |
-        &8|------------------------------------------>
-        &7 
-        &e          uSleep &7update checker
-        &7 
-        &b- &7You are running the latest version.
-        &7
-        &8|------------------------------------------>
+Sleep:
+  NotPossibleHere: "&cWhoops!"
+  NotPossibleNow: "&cYou can sleep only at night and during thunderstorms."
+  TooFarAway: "&cYou may not rest now; the bed is too far away."
+  NotSafe: "&cYou may not rest now, there are monsters nearby"
+  Other: "&cYou can't sleep right now."
+  TooFast: "%error% You are sleeping too fast!"
+  AlreadySkipping: "%error% The night is already being skipped."
+InstantSleep:
+  OK: "%prefix% &e%player% &bhas slept, we move on to the next day."
+PercentSleep:
+  OK: "&7Players sleeping: &8[&b%current%&7/&9%required%&8]"
+  NextDay: "%prefix% &bThere are enough players sleeping, we move on to the next day"
+  Title: "&7&lPlayers sleeping"
+  SubTitle: "&b&l%current%&7&l/&9&l%required%"
+Updater:
+  Available:
+    Player: "%prefix% A new version &8(&6v%new%&8) &7is available, using&8: &cv%current%&7."
+    Console: |
+      &8|------------------------------------------>
+      &7 
+      &e          uSleep &7update checker
+      &7 
+      &b- &7A new version is available&8: &ev%new%
+      &7 
+      &b- &7Currently using&8: &cv%current%
+      &7 
+      &8|------------------------------------------>
+  Latest:
+    Player: "%prefix% You are running the latest version."
+    Console: |
+      &8|------------------------------------------>
+      &7 
+      &e          uSleep &7update checker
+      &7 
+      &b- &7You are running the latest version.
+      &7
+      &8|------------------------------------------>

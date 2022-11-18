@@ -8,7 +8,7 @@
 
 Prefix: "&7&l<&b&lu&9&lSleep&7&l>&7"
 ErrorPrefix: "&8&l[&4&l!&8&l]&c"
-NoPerms: "%error% Insufficient permissions &8(&e%perm%&8)&c."
+NoPerms: "%error% Insufficient permissions&c."
 NoConsole: "%error% This command can't be executed from the console."
 PlayerNotFound: "%error% That player is not online."
 Commands:

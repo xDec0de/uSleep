@@ -9,8 +9,6 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerBedEnterEvent.BedEnterResult;
 import org.bukkit.event.player.PlayerEvent;
 
-import com.google.common.base.Enums;
-
 import es.xdec0de.usleep.api.NightSkipEffectTask;
 import es.xdec0de.usleep.api.SleepGroup;
 
@@ -25,16 +23,17 @@ public class SleepErrorEvent extends PlayerEvent implements Cancellable {
 
 	private final SleepErrorReason reason;
 	private String message;
-	private Sound sound = Enums.getIfPresent(Sound.class, USPSetting.SOUND_SLEEP_ERROR.asString()).orNull();
-	private boolean cancelled;
+	private Sound sound;
 	private final Block bed;
 
 	private static final HandlerList HANDLERS = new HandlerList();
+	private boolean cancelled;
 
-	public SleepErrorEvent(Player player, String message, SleepErrorReason reason, Block bed) {
+	public SleepErrorEvent(Player player, String message, SleepErrorReason reason, Sound sound, Block bed) {
 		super(player);
 		this.reason = reason;
 		this.message = message;
+		this.sound = sound;
 		this.bed = bed;
 	}
 
@@ -173,6 +172,19 @@ public class SleepErrorEvent extends PlayerEvent implements Cancellable {
 		 * @since v2.0.0
 		 */
 		ALREADY_SKIPPING;
+
+		public String getMessagePath() {
+			return switch(this) {
+			case NOT_POSSIBLE_HERE -> "Sleep.NotPossibleHere";
+			case NOT_POSSIBLE_NOW -> "Sleep.NotPossibleNow";
+			case TOO_FAR_AWAY -> "Sleep.TooFarAway";
+			case NOT_SAFE -> "Sleep.NotSafe";
+			case OTHER_PROBLEM -> "Sleep.Other";
+			case NO_PERMISSIONS -> "NoPerms";
+			case TOO_FAST -> "Sleep.TooFast";
+			case ALREADY_SKIPPING -> "Sleep.AlreadySkipping";
+			};
+		}
 	}
 
 	@Override

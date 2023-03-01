@@ -28,7 +28,7 @@ public class USleep extends MCPlugin {
 		this.worlds = registerFile("messages", PluginFile.class);
 		registerCommand("usleep", new USleepCMD());
 		registerCommand("bedtp", new BedTP());
-		registerEvents(new SleepHandler(), WorldHandler.getInstance(), new UpdateChecker());
+		registerEvents(new SleepHandler(this), WorldHandler.getInstance(), new UpdateChecker());
 		log(" ");
 		logCol("&8|------------------------------------------>");
 		log(" ");
@@ -108,6 +108,11 @@ public class USleep extends MCPlugin {
 	@Nonnull
 	public USleepAPI getAPI() {
 		return api;
+	}
+
+	@Override
+	public PluginFile getConfig() {
+		return cfg;
 	}
 
 	public MessagesFile getMessages() {

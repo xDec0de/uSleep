@@ -95,7 +95,7 @@ public class USleep extends MCPlugin {
 			return;
 		final ConsoleCommandSender console = Bukkit.getConsoleSender();
 		getLatestVersion(72205, version ->
-			msg.sendColored(console, api.isLatest(version) ? "Events.Updater.Latest.Console" : "Events.Updater.Available.Console"));
+			msg.send(console, api.isLatest(version) ? "Events.Updater.Latest.Console" : "Events.Updater.Available.Console"));
 	}
 
 	/**

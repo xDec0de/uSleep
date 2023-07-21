@@ -17,6 +17,7 @@ import es.xdec0de.usleep.api.SleepGroup;
 import es.xdec0de.usleep.api.USleep;
 import es.xdec0de.usleep.api.events.SleepErrorEvent;
 import es.xdec0de.usleep.api.events.SleepErrorEvent.SleepErrorReason;
+import me.xdec0de.mcutils.strings.MCStrings;
 
 public class SleepHandler implements Listener {
 
@@ -46,11 +47,11 @@ public class SleepHandler implements Listener {
 			errorReason = SleepErrorReason.NO_PERMISSIONS;
 		if (errorReason != null) {
 			Sound errorSound = Enums.getIfPresent(Sound.class, plugin.getConfig().getString("Sounds.Sleep.Error")).orNull();
-			String errorMsg =  plugin.getMessages().getColoredString(errorReason.getMessagePath());
+			String errorMsg =  plugin.getMessages().getString(errorReason.getMessagePath());
 			SleepErrorEvent see = new SleepErrorEvent(p, errorMsg, errorReason, errorSound, e.getBed());
 			Bukkit.getPluginManager().callEvent(see);
 			if (!(cancel = !see.isCancelled())) {
-				plugin.strings().sendFormattedMessage(p, plugin.strings().applyColor(see.getMessage()));
+				MCStrings.sendFormattedMessage(p, MCStrings.applyColor(see.getMessage()));
 				p.playSound(p, see.getSound(), 1.0F, 1.0F);
 			}
 		}

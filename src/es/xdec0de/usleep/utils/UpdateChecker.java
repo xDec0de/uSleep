@@ -19,7 +19,7 @@ public class UpdateChecker implements Listener {
 			final String current = plugin.getDescription().getVersion();
 			plugin.getLatestVersion(72205, version -> {
 				final String path = plugin.getAPI().isLatest(version) ? "Events.Updater.Latest.Player" : "Events.Updater.Available.Player";
-				plugin.getMessages().sendColored(target, path, "%new%", version, "%current%", current);
+				plugin.getMessages().send(target, path, "%new%", version, "%current%", current);
 			});
 		}
 	}

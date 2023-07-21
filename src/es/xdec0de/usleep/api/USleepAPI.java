@@ -10,6 +10,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
@@ -23,12 +24,26 @@ import com.earth2me.essentials.User;
  */
 public class USleepAPI {
 
+	private final USleep uSleep;
 	private final List<UUID> onDelay = new ArrayList<UUID>();
 
 	USleepAPI(USleep plugin) { // Just to avoid accidental instantiation by other plugins...
 		// Fun fact: Even non-accessible constructors can be called with reflection, and we don't want that!
-		if(plugin.getAPI() != null)
+		if (plugin.getAPI() != null)
 			throw new SecurityException("Creating new instances of USleepAPI is not allowed! Please use USleep#getAPI()");
+		this.uSleep = plugin;
+	}
+
+	/**
+	 * Provides access back to {@link USleep}
+	 * 
+	 * @return an instance of {@link USleep}.
+	 * 
+	 * @since uSleep 2.0.0
+	 */
+	@NonNull
+	public USleep getPlugin() {
+		return this.uSleep;
 	}
 
 	/**
@@ -240,22 +255,22 @@ public class USleepAPI {
 	 */
 	public <T extends Player> Collection<T> getInactivePlayers(Collection<T> players, boolean includeAfk, boolean includeVanished) {
 		final Collection<T> res = new ArrayList<T>(players);
-		if(includeAfk || includeVanished) {
+		if (includeAfk || includeVanished) {
 			Plugin ess = Bukkit.getPluginManager().getPlugin("Essentials");
 			boolean checkEss = ess != null && ess.isEnabled();
 			boolean checkV = false;
-			if(includeVanished) {
+			if (includeVanished) {
 				Plugin v = Bukkit.getPluginManager().getPlugin("SuperVanish");
 				v = v != null ? v : Bukkit.getPluginManager().getPlugin("PremiumVanish");
 				checkV = v != null && v.isEnabled();
 			}
-			for(T player : players) {
-				if(checkEss) {
+			for (T player : players) {
+				if (checkEss) {
 					User user = ((Essentials)ess).getUser(player);
 					if((includeVanished && user.isVanished()) || (includeAfk && user.isAfk()));
 						res.add(player);
 				}
-				if(checkV) {
+				if (checkV) {
 					for(MetadataValue meta : player.getMetadata("vanished"))
 						if(meta.asBoolean())
 							res.add(player);
@@ -274,7 +289,7 @@ public class USleepAPI {
 	 * @since uSleep 2.0.0
 	 */
 	public void doNightSkipEffect(SleepGroup group) {
-		new NightSkipEffectTask(group, USPSetting.NIGHT_SKIP_EFFECT_INCREMENT.asInt()).runTaskTimer(USleep.getPlugin(USleep.class), 0, 1);
+		new NightSkipEffectTask(group, uSleep.getConfig().getInt("Features.NightSkipEffect.Increment")).runTaskTimer(uSleep, 0, 1);
 	}
 
 	/**

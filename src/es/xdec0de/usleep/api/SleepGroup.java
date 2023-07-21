@@ -14,9 +14,8 @@ import com.google.common.base.Enums;
 
 import es.xdec0de.usleep.api.events.NightSkipEvent;
 import es.xdec0de.usleep.api.events.SleepHandleEvent;
-import es.xdec0de.usleep.utils.files.USPMessage;
-import es.xdec0de.usleep.utils.files.USPSetting;
-import es.xdec0de.usleep.utils.files.USPWorlds;
+import me.xdec0de.mcutils.files.PluginFile;
+import me.xdec0de.mcutils.general.Replacer;
 
 /**
  * A class representing a group of
@@ -29,15 +28,21 @@ import es.xdec0de.usleep.utils.files.USPWorlds;
  */
 public class SleepGroup {
 
-	List<World> worlds = new ArrayList<World>();
+	private final USleepAPI api;
+
+	private final List<World> worlds = new ArrayList<World>();
 	private final String id;
-	private int sleeping = 0, percent;
+	private final int percent;
+
+	private int sleeping = 0;
 	boolean isNightSkipping = false;
 
-	SleepGroup(String id, List<World> worlds) {
+	SleepGroup(USleepAPI api, String id, List<World> worlds) {
 		this.id = id;
 		this.worlds = worlds;
-		this.percent = id.equals(USleepAPI.getInstance().getDefaultSleepGroupID()) ? this.percent = USPSetting.PERCENT_SLEEP_PERCENT.asInt() : USPWorlds.getPercentRequired(id);
+		this.api = api;
+		// TODO Fix later, this needs a recode for the new worlds.yml file anyways.
+		this.percent = id.equals(api.getDefaultSleepGroupID()) ? this.percent = USPSetting.PERCENT_SLEEP_PERCENT.asInt() : USPWorlds.getPercentRequired(id);
 	}
 
 	/**
@@ -61,38 +66,37 @@ public class SleepGroup {
 	 * being "able" to sleep means that <b>player</b> actually has
 	 * permissions to sleep, as if percent and instant sleep are disabled
 	 * or <b>player</b> lacks permission on both, it won't be able to sleep
-	 * and thus, call sleep handling on any world.
+	 * and thus, call sleep handling on any {@link SleepGroup}.
 	 * 
-	 * @since v2.0.0
+	 * @since uSleep 2.0.0
 	 * 
 	 * @see SleepHandleEvent
 	 */
 	public boolean handleSleep(Player player, boolean forced) {
+		final PluginFile cfg = api.getPlugin().getConfig();
 		SleepMode mode = null;
-		if(USPSetting.INSTANT_SLEEP_ENABLED.asBoolean() && (forced || player.hasPermission(USPSetting.PERM_INSTANT_SLEEP.asString())))
+		if (cfg.getBoolean("Features.InstantSleep.Enabled") && (forced || player.hasPermission(cfg.getString("Permissions.Sleep.Instant"))))
 			mode = SleepMode.INSTANT;
-		else if(USPSetting.PERCENT_SLEEP_ENABLED.asBoolean() && (forced || player.hasPermission(USPSetting.PERM_PERCENT_SLEEP.asString())))
+		else if (cfg.getBoolean("Features.PercentSleep.Enabled") && (forced || player.hasPermission(cfg.getString("Permissions.Sleep.Percent"))))
 			mode = SleepMode.PERCENT;
+		if (mode == null)
+			return false; // Either both modes are off or the player doesn't have access to neither of them.
 		SleepHandleEvent she = new SleepHandleEvent(player, this, mode);
 		Bukkit.getPluginManager().callEvent(she);
-		if(!she.isCancelled()) {
-			List<Player> players = getPlayers();
-			USleepAPI.getInstance().addToSleepCooldown(player.getUniqueId(), USPSetting.PERCENT_SLEEP_COOLDOWN.asInt());
-			if(mode.equals(SleepMode.INSTANT))
-				resetTime(player, mode);
-			else if(mode.equals(SleepMode.PERCENT)) {
-				sleeping++;
-				int required = getRequiredPlayers();
-				if(required > sleeping) {
-					USPMessage.PERCENT_OK.broadcast(players, "%required%", Integer.toString(required), "%current%", Integer.toString(sleeping));
-					broadcastSound(players, USPSetting.SOUND_SLEEP_OK);
-				} else
-					resetTime(player, mode);
-			} else
-				return false;
-			return true;
-		}
-		return false;
+		if (she.isCancelled())
+			return false; // Sleep was cancelled by other plugin, we just return false here.
+		List<Player> players = getPlayers();
+		if (mode == SleepMode.INSTANT)
+			return resetTime(player, mode);
+		// Mode must be SleepMode.PERCENT here, no need to check again.
+		api.addToSleepCooldown(player.getUniqueId(), cfg.getInt("Features.PercentSleep.Cooldown", 5));
+		sleeping++;
+		int required = getRequiredPlayers();
+		if (required > sleeping)
+			broadcast(players, "PercentSleep.OK", "Sounds.Sleep.Ok", "%required%", required, "%current%", sleeping);
+		else
+			resetTime(player, mode);
+		return true; // Either instant or percent sleep were handled at this point.
 	}
 
 	/**
@@ -102,42 +106,38 @@ public class SleepGroup {
 	 * for that you can use {@link HumanEntity#wakeup(boolean)}
 	 * which is recommended over this as this method is only
 	 * intended for sleep count handling while canceling uSleep's
-	 * events to override it's default behavior.
+	 * events to override its default behavior.
 	 * 
-	 * @since v2.0.0
+	 * @since uSleep 2.0.0
 	 */
 	public void handleWakeUp() {
-		if(sleeping > 0) {
-			sleeping--;
-			List<Player> players = getPlayers();
-			USPMessage.PERCENT_OK.broadcast(players, "%required%", Integer.toString(getRequiredPlayers()), "%current%", Integer.toString(sleeping));
-			broadcastSound(players, USPSetting.SOUND_SLEEP_LEAVE);
-		}
+		if (sleeping <= 0)
+			return;
+		sleeping--;
+		broadcast(getPlayers(), "PercentSleep.Leave", "Sounds.Sleep.Leave", "%required%", getRequiredPlayers(), "%current%", sleeping);
 	}
 
-	private void resetTime(Player player, SleepMode mode) {
-		NightSkipEvent nse = new NightSkipEvent(this, mode, player, USPSetting.NIGHT_SKIP_EFFECT_ENABLED.asBoolean());
+	private boolean resetTime(Player player, SleepMode mode) {
+		NightSkipEvent nse = new NightSkipEvent(this, mode, player, api.getPlugin().getConfig().getBoolean("Features.NightSkipEffect.Enabled"));
 		Bukkit.getPluginManager().callEvent(nse);
-		if(!nse.isCancelled()) {
-			sleeping = 0;
-			List<Player> players = getPlayers();
-			if(nse.doesSkipEffect())
-				USleepAPI.getInstance().doNightSkipEffect(this);
-			else {
-				for(World world : worlds) {
-					world.setTime(0L);
-					world.setThundering(false);
-					world.setStorm(false);
-				}
-			}
-			if(mode.equals(SleepMode.INSTANT)) {
-				USPMessage.INSTANT_OK.broadcast(players, "%player%", player.getName());
-				broadcastSound(players, USPSetting.SOUND_NEXTDAY_PERCENT);
-			} else {
-				USPMessage.PERCENT_NEXT_DAY.broadcast(players);
-				broadcastSound(players, USPSetting.SOUND_NEXTDAY_INSTANT);
+		if (nse.isCancelled())
+			return false; // Event was cancelled by another plugin.
+		sleeping = 0;
+		List<Player> players = getPlayers();
+		if (nse.doesSkipEffect())
+			api.doNightSkipEffect(this);
+		else {
+			for(World world : worlds) {
+				world.setTime(0L);
+				world.setThundering(false);
+				world.setStorm(false);
 			}
 		}
+		if (mode.equals(SleepMode.INSTANT))
+			broadcast(players, "InstantSleep.OK", "Sounds.NextDay.Instant");
+		else
+			broadcast(players, "PercentSleep.OK", "Sounds.NextDay.Percent");
+		return true;
 	}
 
 	/**
@@ -165,7 +165,10 @@ public class SleepGroup {
 	 * @since v2.0.0
 	 */
 	public Collection<Player> getInactivePlayers() {
-		return USleepAPI.getInstance().getInactivePlayers(getPlayers(), USPSetting.PERCENT_SLEEP_IGNORE_AFK.asBoolean(), USPSetting.PERCENT_SLEEP_IGNORE_VANISHED.asBoolean());
+		final PluginFile cfg = api.getPlugin().getConfig();
+		final String ignoreAfkPath = "Features.PercentSleep.Ignored.AFK";
+		final String ignoreVanishPath = "Features.PercentSleep.Ignored.Vanished";
+		return api.getInactivePlayers(getPlayers(), !cfg.getBoolean(ignoreAfkPath), !cfg.getBoolean(ignoreVanishPath));
 	}
 
 	/**
@@ -177,7 +180,7 @@ public class SleepGroup {
 	 */
 	public List<Player> getPlayers() {
 		List<Player> players = new ArrayList<Player>();
-		for(World world : worlds)
+		for (World world : worlds)
 			players.addAll(world.getPlayers());
 		return players;
 	}
@@ -239,12 +242,22 @@ public class SleepGroup {
 		return isNightSkipping;
 	}
 
-	private void broadcastSound(List<Player> players, USPSetting setting) {
-		String soundStr = setting.asString();
-		if(soundStr != null && !soundStr.isEmpty()) {
-			Sound sound = Enums.getIfPresent(Sound.class, soundStr).orNull();
-			if(sound != null)
-				players.forEach(on -> on.playSound(on.getLocation(), sound, 1.0F, 1.0F));
+	private void broadcast(List<Player> players, String msgPath, String soundPath, Object... replacements) {
+		Sound sound = Enums.getIfPresent(Sound.class, api.getPlugin().getConfig().getString(soundPath, "")).orNull();
+		String msg = api.getPlugin().getMessages().getColoredString(msgPath);
+		if (sound == null && msg == null)
+			return;
+		if (replacements != null && replacements.length != 0) {
+			Replacer msgReplacer = new Replacer();
+			for (Object obj : replacements)
+				msgReplacer.add(obj.toString()); // TODO Remove #toString (Future MCUtils update)
+			msg = msgReplacer.replaceAt(msg);
+		}
+		for (Player target : players) {
+			if (sound != null)
+				target.playSound(target.getLocation(), sound, 1.0F, 1.0F);
+			if (msg != null && !msg.isBlank())
+				target.sendMessage(msg);
 		}
 	}
 }

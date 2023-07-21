@@ -244,15 +244,11 @@ public class SleepGroup {
 
 	private void broadcast(List<Player> players, String msgPath, String soundPath, Object... replacements) {
 		Sound sound = Enums.getIfPresent(Sound.class, api.getPlugin().getConfig().getString(soundPath, "")).orNull();
-		String msg = api.getPlugin().getMessages().getColoredString(msgPath);
+		String msg = api.getPlugin().getMessages().getString(msgPath);
 		if (sound == null && msg == null)
 			return;
-		if (replacements != null && replacements.length != 0) {
-			Replacer msgReplacer = new Replacer();
-			for (Object obj : replacements)
-				msgReplacer.add(obj.toString()); // TODO Remove #toString (Future MCUtils update)
-			msg = msgReplacer.replaceAt(msg);
-		}
+		if (replacements != null && replacements.length != 0)
+			msg = new Replacer(replacements).replaceAt(msg);
 		for (Player target : players) {
 			if (sound != null)
 				target.playSound(target.getLocation(), sound, 1.0F, 1.0F);

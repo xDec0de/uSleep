@@ -16,20 +16,20 @@ public class USleepCMD extends MCCommand<USleep> {
 
 	@Override
 	public boolean onCommand(CommandSender sender, String[] args) {
-		final String reloadPerm = getPlugin().getConfig().getString("Permissions.Reload");
+		final String reloadPerm = getPlugin().getConfig().getString("perms.reload");
 		if (!sender.hasPermission(reloadPerm))
-			return getPlugin().getMessages().send(sender, "NoPerms", "%perm%", reloadPerm);
+			return getPlugin().getMessages().send(sender, "noPerms", "%perm%", reloadPerm);
 		if (args.length != 1)
-			return getPlugin().getMessages().send(sender, "Commands.usleep.Usage");
+			return getPlugin().getMessages().send(sender, "cmds.usleep.usage");
 		return switch (args[0].toLowerCase()) {
 		case "reload", "rl" -> reload(sender);
-		default -> getPlugin().getMessages().send(sender, "Commands.usleep.Usage");
+		default -> getPlugin().getMessages().send(sender, "cmds.usleep.usage");
 		};
 	}
 
 	private boolean reload(CommandSender sender) {
 		getPlugin().reload();
-		return getPlugin().getMessages().send(sender, "Commands.usleep.Reload");
+		return getPlugin().getMessages().send(sender, "cmds.usleep.reload");
 	}
 
 	@Override

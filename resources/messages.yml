@@ -8,18 +8,18 @@
 
 Prefix: "&7&l<&b&lu&9&lSleep&7&l>&7"
 ErrorPrefix: "&8&l[&4&l!&8&l]&c"
-NoPerms: "%error% Insufficient permissions&c."
+noPerms: "%error% Insufficient permissions&c."
 NoConsole: "%error% This command can't be executed from the console."
 PlayerNotFound: "%error% That player is not online."
-Commands:
+cmds:
   usleep:
-    Reload: "%prefix% &aPlugin reloaded."
-    Usage: "%error% Usage&8: /&eusleep &8<&ereload&8>&c."
-  BedTP:
-    Teleport: "%prefix% &bYou have been teleported to &eyour &bbed."
-    TeleportOther: "%prefix% &bYou have been teleported to &e%player%'s &bbed."
-    Error: "%error% Bed is missing or obstructed."
-    Usage: "%error% Usage&8: /&ebedtp &8<&eplayer&8>&c."
+    reload: "%prefix% &aPlugin reloaded."
+    usage: "%error% Usage&8: /&eusleep &8<&ereload&8>&c."
+  bedTP:
+    offline: "%error% %target% is offline or has never played before&8."
+    noBed: "%error% Bed is missing or obstructed."
+    tp: "%prefix% &bYou have been teleported to &eyour &bbed."
+    tpOther: "%prefix% &bYou have been teleported to &e%player%'s &bbed."
 Sleep:
   NotPossibleHere: "&cWhoops!"
   NotPossibleNow: "&cYou can sleep only at night and during thunderstorms."

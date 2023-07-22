@@ -23,14 +23,14 @@ Features:
   NightSkipEffect:
     Enabled: true
     Increment: 50
-Permissions:
-  Reload: "usp.reload"
+perms:
+  reload: "usp.reload"
   Updater:
     Notify: "usp.updater.notify"
     Check: "usp.updater.check"
-  BedTP:
-    Self: "usp.bed"
-    Other: "usp.bed.other"
+  bedTP:
+    self: "usp.bed"
+    other: "usp.bed.other"
   Sleep:
     Instant: "usp.sleep.instant"
     Percent: "usp.sleep.percent"

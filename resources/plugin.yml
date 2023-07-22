@@ -3,11 +3,3 @@ main: es.xdec0de.usleep.api.USleep
 author: xDec0de_
 version: ${project.version}
 softdepend: [Essentials]
-commands:
-  usleep:
-    usage: /<command>
-    description: Main command of the plugin.
-    aliases: [us]
-  bedtp:
-    usage: /<command>
-    description: Teleport to the bed of a player.

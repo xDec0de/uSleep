@@ -26,8 +26,7 @@ public class USleep extends MCPlugin {
 		this.cfg = registerFile("config", PluginFile.class);
 		this.msg = registerFile("messages", MessagesFile.class);
 		this.worlds = registerFile("messages", PluginFile.class);
-		registerCommand("usleep", new USleepCMD());
-		registerCommand("bedtp", new BedTP());
+		registerCommands(new USleepCMD(this), new BedTP(this));
 		registerEvents(new SleepHandler(this), WorldHandler.getInstance(), new UpdateChecker());
 		log(" ");
 		logCol("&8|------------------------------------------>");

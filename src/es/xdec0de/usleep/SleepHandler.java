@@ -10,21 +10,23 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent.BedEnterResult;
 import org.bukkit.event.player.PlayerBedLeaveEvent;
+import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.event.world.WorldUnloadEvent;
 
 import com.google.common.base.Enums;
 
 import es.xdec0de.usleep.api.SleepGroup;
-import es.xdec0de.usleep.api.USleep;
 import es.xdec0de.usleep.api.events.SleepErrorEvent;
 import es.xdec0de.usleep.api.events.SleepErrorEvent.SleepErrorReason;
+import me.xdec0de.mcutils.files.PluginFile;
 import me.xdec0de.mcutils.strings.MCStrings;
 
 public class SleepHandler implements Listener {
 
-	private final USleep plugin;
+	private final USleep uSleep;
 
 	public SleepHandler(USleep plugin) {
-		this.plugin = plugin;
+		this.uSleep = plugin;
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -38,16 +40,16 @@ public class SleepHandler implements Listener {
 			cancel = false;
 		} else if (!e.getBedEnterResult().equals(BedEnterResult.OK))
 			errorReason = SleepErrorReason.valueOf(e.getBedEnterResult().name());
-		SleepGroup group = plugin.getAPI().getSleepGroup(e.getBed().getWorld());
+		SleepGroup group = uSleep.getAPI().getSleepGroup(e.getBed().getWorld());
 		if (group.isNightSkipping())
 			errorReason = SleepErrorReason.ALREADY_SKIPPING;
-		else if (plugin.getAPI().hasSleepCooldown(p))
+		else if (uSleep.getAPI().hasSleepCooldown(p))
 			errorReason = SleepErrorReason.TOO_FAST;
-		else if (cancel = !plugin.getAPI().handleSleep(p, false))
+		else if (cancel = !uSleep.getAPI().handleSleep(p, false))
 			errorReason = SleepErrorReason.NO_PERMISSIONS;
 		if (errorReason != null) {
-			Sound errorSound = Enums.getIfPresent(Sound.class, plugin.getConfig().getString("Sounds.Sleep.Error")).orNull();
-			String errorMsg =  plugin.getMessages().getString(errorReason.getMessagePath());
+			Sound errorSound = Enums.getIfPresent(Sound.class, uSleep.getConfig().getString("Sounds.Sleep.Error")).orNull();
+			String errorMsg =  uSleep.getMessages().getString(errorReason.getMessagePath());
 			SleepErrorEvent see = new SleepErrorEvent(p, errorMsg, errorReason, errorSound, e.getBed());
 			Bukkit.getPluginManager().callEvent(see);
 			if (!(cancel = !see.isCancelled())) {
@@ -60,6 +62,33 @@ public class SleepHandler implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBedLeave(PlayerBedLeaveEvent e) {
-		plugin.getAPI().handleWakeUp(e.getPlayer());
+		uSleep.getAPI().handleWakeUp(e.getPlayer());
+	}
+
+	/*
+	 * World load & unload for uSleepAPI
+	 */
+
+	@EventHandler
+	public void onWorldLoad(WorldLoadEvent e) {
+		// Find world name in worlds.yml instead of reloading all sleep groups.
+		final PluginFile worlds = uSleep.getWorlds();
+		for (String groupId : worlds.getConfigurationSection("groups").getKeys(false)) {
+			if (!worlds.getStringList("groups." + groupId + ".worlds").contains(e.getWorld().getName()))
+				continue;
+			final SleepGroup group = uSleep.getAPI().getSleepGroup(groupId);
+			if (group == null)
+				continue;
+			group.addWorld(e.getWorld());
+			return;
+		}
+		uSleep.getAPI().getDefaultSleepGroup().addWorld(e.getWorld());
+	}
+
+	@EventHandler
+	public void onWorldUnload(WorldUnloadEvent e) {
+		final SleepGroup group = uSleep.getAPI().getSleepGroup(e.getWorld());
+		if (group != null) // Shouldn't happen, but just in case.
+			group.removeWorld(e.getWorld());
 	}
 }

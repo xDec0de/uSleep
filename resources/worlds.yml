@@ -6,8 +6,9 @@
 # | #                                                                    # | #
 # |------------------------------------------------------------------------| #
 
-Groups:
-  Example:
-    Worlds:
+defaultPercent: 50
+groups:
+  example:
+    worlds:
     - "world"
-    Percent: 50
+    percent: 50

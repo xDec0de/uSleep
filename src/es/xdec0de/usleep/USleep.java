@@ -1,4 +1,4 @@
-package es.xdec0de.usleep.api;
+package es.xdec0de.usleep;
 
 import javax.annotation.Nonnull;
 
@@ -6,10 +6,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.Plugin;
 
-import es.xdec0de.usleep.SleepHandler;
+import es.xdec0de.usleep.api.USleepAPI;
 import es.xdec0de.usleep.cmds.BedTP;
 import es.xdec0de.usleep.cmds.USleepCMD;
-import es.xdec0de.usleep.utils.UpdateChecker;
 import me.xdec0de.mcutils.MCPlugin;
 import me.xdec0de.mcutils.files.MessagesFile;
 import me.xdec0de.mcutils.files.PluginFile;
@@ -27,7 +26,7 @@ public class USleep extends MCPlugin {
 		this.msg = registerFile("messages", MessagesFile.class);
 		this.worlds = registerFile("messages", PluginFile.class);
 		registerCommands(new USleepCMD(this), new BedTP(this));
-		registerEvents(new SleepHandler(this), WorldHandler.getInstance(), new UpdateChecker(this));
+		registerEvents(new SleepHandler(this), new UpdateChecker(this));
 		log(" ");
 		logCol("&8|------------------------------------------>");
 		log(" ");
@@ -118,5 +117,9 @@ public class USleep extends MCPlugin {
 
 	public MessagesFile getMessages() {
 		return msg;
+	}
+
+	public PluginFile getWorlds() {
+		return worlds;
 	}
 }

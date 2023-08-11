@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.bukkit.command.CommandSender;
 
-import es.xdec0de.usleep.api.USleep;
+import es.xdec0de.usleep.USleep;
 import me.xdec0de.mcutils.general.commands.MCCommand;
 
 public class USleepCMD extends MCCommand<USleep> {

@@ -30,19 +30,17 @@ public class SleepGroup {
 
 	private final USleepAPI api;
 
-	private final List<World> worlds = new ArrayList<World>();
+	private List<World> worlds = new ArrayList<World>();
 	private final String id;
 	private final int percent;
 
 	private int sleeping = 0;
 	boolean isNightSkipping = false;
 
-	SleepGroup(USleepAPI api, String id, List<World> worlds) {
+	SleepGroup(USleepAPI api, String id, int percent) {
 		this.id = id;
-		this.worlds = worlds;
 		this.api = api;
-		// TODO Fix later, this needs a recode for the new worlds.yml file anyways.
-		this.percent = id.equals(api.getDefaultSleepGroupID()) ? this.percent = USPSetting.PERCENT_SLEEP_PERCENT.asInt() : USPWorlds.getPercentRequired(id);
+		this.percent = percent;
 	}
 
 	/**
@@ -218,6 +216,22 @@ public class SleepGroup {
 	 */
 	public boolean contains(World world) {
 		return worlds.contains(world);
+	}
+
+	public SleepGroup setWorlds(List<World> worlds) {
+		this.worlds = worlds;
+		return this;
+	}
+
+	public SleepGroup addWorld(World world) {
+		if (!contains(world))
+			worlds.add(world);
+		return this;
+	}
+
+	public SleepGroup removeWorld(World world) {
+		worlds.remove(world);
+		return this;
 	}
 
 	/**

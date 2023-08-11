@@ -1,10 +1,9 @@
-package es.xdec0de.usleep.utils;
+package es.xdec0de.usleep;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import es.xdec0de.usleep.api.USleep;
 import me.xdec0de.mcutils.files.PluginFile;
 
 public class UpdateChecker implements Listener {

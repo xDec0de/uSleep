@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import es.xdec0de.usleep.api.USleep;
+import es.xdec0de.usleep.USleep;
 import es.xdec0de.usleep.api.events.BedTeleportTryEvent;
 import me.xdec0de.mcutils.general.commands.MCCommand;
 

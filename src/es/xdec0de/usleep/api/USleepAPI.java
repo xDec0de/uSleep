@@ -15,6 +15,9 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 
+import es.xdec0de.usleep.USleep;
+import me.xdec0de.mcutils.files.PluginFile;
+
 /**
  * The main API class of the plugin.
  * 
@@ -26,9 +29,9 @@ public class USleepAPI {
 
 	private final USleep uSleep;
 	private final List<UUID> onDelay = new ArrayList<UUID>();
+	final ArrayList<SleepGroup> sleepGroups = new ArrayList<SleepGroup>();
 
-	USleepAPI(USleep plugin) { // Just to avoid accidental instantiation by other plugins...
-		// Fun fact: Even non-accessible constructors can be called with reflection, and we don't want that!
+	public USleepAPI(USleep plugin) {
 		if (plugin.getAPI() != null)
 			throw new SecurityException("Creating new instances of USleepAPI is not allowed! Please use USleep#getAPI()");
 		this.uSleep = plugin;
@@ -44,6 +47,27 @@ public class USleepAPI {
 	@NonNull
 	public USleep getPlugin() {
 		return this.uSleep;
+	}
+
+	public USleepAPI reloadSleepGroups() {
+		sleepGroups.clear();
+		final PluginFile worlds = uSleep.getWorlds();
+		final int defPercent = worlds.getInt("defaultPercent", 50);
+		SleepGroup defGroup = new SleepGroup(this, getDefaultSleepGroupID(), defPercent).setWorlds(Bukkit.getWorlds());
+		for (String groupId : worlds.getConfigurationSection("groups").getKeys(false)) {
+			final SleepGroup group = new SleepGroup(this, groupId, worlds.getInt("groups." + groupId + ".percent", defPercent));
+			for (String worldName : worlds.getStringList("groups." + groupId + ".worlds")) {
+				final World world = Bukkit.getWorld(worldName);
+				if (world != null) {
+					defGroup.removeWorld(world);
+					group.addWorld(world);
+				} else
+					uSleep.logCol("&8[&4USleep&8] &cIgnoring non-existing world \"&6"+ worldName + "&c\" on group &e" + group);
+			}
+			sleepGroups.add(group);
+		}
+		sleepGroups.add(defGroup);
+		return this;
 	}
 
 	/**
@@ -310,10 +334,24 @@ public class USleepAPI {
 	 * @since uSleep 2.0.0
 	 */
 	public SleepGroup getSleepGroup(World world) {
-		for (SleepGroup group : WorldHandler.getInstance().sleepGroups)
+		for (SleepGroup group : sleepGroups)
 			if (group.contains(world))
 				return group;
 		return null;
+	}
+
+	/**
+	 * Shortcut to get the default {@link SleepGroup},
+	 * insead of using {@link #getSleepGroup(String)} with
+	 * {@link #getDefaultSleepGroupID()}, which may result
+	 * in a long line of code.
+	 * 
+	 * @return The default {@link SleepGroup}
+	 * 
+	 * @since uSleep 2.0.0
+	 */
+	public SleepGroup getDefaultSleepGroup() {
+		return getSleepGroup(getDefaultSleepGroupID());
 	}
 
 	/**
@@ -326,7 +364,7 @@ public class USleepAPI {
 	 * @since uSleep 2.0.0
 	 */
 	public SleepGroup getSleepGroup(String id) {
-		for (SleepGroup group : WorldHandler.getInstance().sleepGroups)
+		for (SleepGroup group : sleepGroups)
 			if (group.getID().equals(id))
 				return group;
 		return null;

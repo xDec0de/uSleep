@@ -2,6 +2,7 @@ package es.xdec0de.usleep.cmds;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -28,7 +29,12 @@ public class BedTP extends MCCommand<USleep> {
 			return getPlugin().getMessages().send(sender, "noPerms", "%perm%", perm);
 		if (target == null)
 			return getPlugin().getMessages().send(sender, "cmds.bedTP.offline", "%target%", args[0]);
-		BedTeleportTryEvent bte = new BedTeleportTryEvent(sender, target, target.getBedSpawnLocation());
+		Location bed = target.getBedSpawnLocation();
+		if (bed == null)
+			return getPlugin().getMessages().send(sender, "noBed");
+		BedTeleportTryEvent bte = new BedTeleportTryEvent(sender, target, bed);
+		if (bte.isCancelled())
+			return true;
 		if (bte.getBedSpawnLocation() == null)
 			return getPlugin().getMessages().send(sender, "noBed");
 		sender.teleport(bte.getBedSpawnLocation());

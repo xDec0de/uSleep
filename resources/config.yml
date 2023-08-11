@@ -6,10 +6,10 @@
 # | #                                                                    # | #
 # |------------------------------------------------------------------------| #
 
-Features:
-  Updater:
-    Console: true
-    Players: true
+features:
+  updater:
+    console: true
+    players: true
   InstantSleep:
     Enabled: true
   PercentSleep:
@@ -25,8 +25,8 @@ Features:
     Increment: 50
 perms:
   reload: "usp.reload"
-  Updater:
-    Notify: "usp.updater.notify"
+  updater:
+    notify: "usp.updater.notify"
     Check: "usp.updater.check"
   bedTP:
     self: "usp.bed"

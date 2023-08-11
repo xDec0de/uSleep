@@ -35,10 +35,10 @@ PercentSleep:
   NextDay: "%prefix% &bThere are enough players sleeping, we move on to the next day"
   Title: "&7&lPlayers sleeping"
   SubTitle: "&b&l%current%&7&l/&9&l%required%"
-Updater:
-  Available:
-    Player: "%prefix% A new version &8(&6v%new%&8) &7is available, using&8: &cv%current%&7."
-    Console: |
+updater:
+  available:
+    player: "%prefix% A new version &8(&6v%new%&8) &7is available, using&8: &cv%current%&7."
+    console: |
       &8|------------------------------------------>
       &7 
       &e          uSleep &7update checker
@@ -48,9 +48,9 @@ Updater:
       &b- &7Currently using&8: &cv%current%
       &7 
       &8|------------------------------------------>
-  Latest:
-    Player: "%prefix% You are running the latest version."
-    Console: |
+  latest:
+    player: "%prefix% You are running the latest version."
+    console: |
       &8|------------------------------------------>
       &7 
       &e          uSleep &7update checker

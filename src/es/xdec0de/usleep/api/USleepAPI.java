@@ -310,8 +310,8 @@ public class USleepAPI {
 	 * @since uSleep 2.0.0
 	 */
 	public SleepGroup getSleepGroup(World world) {
-		for(SleepGroup group : WorldHandler.getInstance().sleepGroups)
-			if(group.contains(world))
+		for (SleepGroup group : WorldHandler.getInstance().sleepGroups)
+			if (group.contains(world))
 				return group;
 		return null;
 	}
@@ -326,8 +326,8 @@ public class USleepAPI {
 	 * @since uSleep 2.0.0
 	 */
 	public SleepGroup getSleepGroup(String id) {
-		for(SleepGroup group : WorldHandler.getInstance().sleepGroups)
-			if(group.getID().equals(id))
+		for (SleepGroup group : WorldHandler.getInstance().sleepGroups)
+			if (group.getID().equals(id))
 				return group;
 		return null;
 	}
@@ -344,16 +344,17 @@ public class USleepAPI {
 	}
 
 	/**
-	 * Checks if <b>version</b> is the latest version, superior
-	 * non-released versions will also be considered latest.
+	 * Checks if <b>version</b> is a higher version than the
+	 * currently installed version of uSleep.
 	 * 
 	 * @param version the version to check.
 	 * 
-	 * @return true if latest, false otherwise.
+	 * @return true if <b>version</b> is a higher version than the
+	 * currently installed version of uSleep, false otherwise.
 	 * 
 	 * @since uSleep 2.0.0
 	 */
-	public boolean isLatest(String version) {
-		return USleep.getPlugin(USleep.class).getDescription().getVersion().compareTo(version) >= 0;
+	public boolean isHigher(String version) {
+		return uSleep.getDescription().getVersion().compareTo(version) >= 0;
 	}
 }

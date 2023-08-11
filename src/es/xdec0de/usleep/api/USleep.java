@@ -27,7 +27,7 @@ public class USleep extends MCPlugin {
 		this.msg = registerFile("messages", MessagesFile.class);
 		this.worlds = registerFile("messages", PluginFile.class);
 		registerCommands(new USleepCMD(this), new BedTP(this));
-		registerEvents(new SleepHandler(this), WorldHandler.getInstance(), new UpdateChecker());
+		registerEvents(new SleepHandler(this), WorldHandler.getInstance(), new UpdateChecker(this));
 		log(" ");
 		logCol("&8|------------------------------------------>");
 		log(" ");
@@ -41,7 +41,6 @@ public class USleep extends MCPlugin {
 		log(" ");
 		checkDependencies();
 		checkUpdates();
-		this.getLatestVersion(0, null);
 		checkFileStatus();
 	}
 
@@ -90,11 +89,14 @@ public class USleep extends MCPlugin {
 	}
 
 	private void checkUpdates() {
-		if (!cfg.getBoolean("Features.Updater.Console"))
+		if (!cfg.getBoolean("features.updater.console"))
 			return;
 		final ConsoleCommandSender console = Bukkit.getConsoleSender();
-		getLatestVersion(72205, version ->
-			msg.send(console, api.isLatest(version) ? "Events.Updater.Latest.Console" : "Events.Updater.Available.Console"));
+		final String latest = getLatestVersion(72205);
+		if (api.isHigher(latest))
+			msg.send(console, "updater.available.player", "%current%", getDescription().getVersion(), "%latest%", latest);
+		else
+			msg.send(console, "updater.latest.player", "%current%", latest);
 	}
 
 	/**

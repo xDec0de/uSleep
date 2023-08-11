@@ -3,24 +3,28 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import es.xdec0de.usleep.api.USleep;
 import me.xdec0de.mcutils.files.PluginFile;
 
 public class UpdateChecker implements Listener {
 
+	private final USleep uSleep;
+
+	public UpdateChecker(USleep plugin) {
+		this.uSleep = plugin;
+	}
+
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
-		final USleep plugin = JavaPlugin.getPlugin(USleep.class);
-		final PluginFile cfg = plugin.getConfig();
+		final PluginFile cfg = uSleep.getConfig();
 		final Player target = e.getPlayer();
-		if (cfg.getBoolean("Features.Updater.Players") && target.hasPermission(cfg.getString("Permissions.Updater.Notify"))) {
-			final String current = plugin.getDescription().getVersion();
-			plugin.getLatestVersion(72205, version -> {
-				final String path = plugin.getAPI().isLatest(version) ? "Events.Updater.Latest.Player" : "Events.Updater.Available.Player";
-				plugin.getMessages().send(target, path, "%new%", version, "%current%", current);
-			});
-		}
+		if (!cfg.getBoolean("features.updater.players") || !target.hasPermission(cfg.getString("permissions.updater.notify")))
+			return;
+		final String latest = uSleep.getLatestVersion(72205);
+		if (uSleep.getAPI().isHigher(latest))
+			uSleep.getMessages().send(target, "updater.available.player", "%current%", uSleep.getDescription().getVersion(), "%latest%", latest);
+		else
+			uSleep.getMessages().send(target, "updater.latest.player", "%current%", latest);
 	}
 }

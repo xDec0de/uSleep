@@ -15,16 +15,15 @@ import me.xdec0de.mcutils.files.PluginFile;
 
 public class USleep extends MCPlugin {
 
-	private PluginFile cfg, worlds;
-	private MessagesFile msg;
+	private PluginFile worlds;
 
 	private final USleepAPI api = new USleepAPI(this);
 
 	@Override
 	public void onEnable() {
-		this.cfg = registerFile("config", PluginFile.class);
-		this.msg = registerFile("messages", MessagesFile.class);
-		this.worlds = registerFile("messages", PluginFile.class);
+		registerFile("config.yml", PluginFile.class);
+		registerFile("messages.yml", MessagesFile.class);
+		this.worlds = registerFile("worlds", PluginFile.class);
 		registerCommands(new USleepCMD(this), new BedTP(this));
 		registerEvents(new SleepHandler(this), new UpdateChecker(this));
 		log(" ");
@@ -59,12 +58,12 @@ public class USleep extends MCPlugin {
 	}
 
 	private void checkFileStatus() {
-		int percent = cfg.getInt("Features.PercentSleep.Percentage");
+		int percent = getConfig().getInt("Features.PercentSleep.Percentage");
 		if(percent > 100 || percent < 1 ) {
 			logCol(" ", "&cConfiguration errors detected at &4config.yml&8:",
 				"  &4- &cPercent value is invalid, using default &8(&e50&8)");
-			cfg.set("Features.PercentSleep.Percentage", 50);
-			cfg.save();
+			getConfig().set("Features.PercentSleep.Percentage", 50);
+			getConfig().save();
 		}
 	}
 
@@ -88,14 +87,14 @@ public class USleep extends MCPlugin {
 	}
 
 	private void checkUpdates() {
-		if (!cfg.getBoolean("features.updater.console"))
+		if (!getConfig().getBoolean("features.updater.console"))
 			return;
 		final ConsoleCommandSender console = Bukkit.getConsoleSender();
 		final String latest = getLatestVersion(72205);
 		if (api.isHigher(latest))
-			msg.send(console, "updater.available.player", "%current%", getDescription().getVersion(), "%latest%", latest);
+			getMessages().send(console, "updater.available.player", "%current%", getDescription().getVersion(), "%latest%", latest);
 		else
-			msg.send(console, "updater.latest.player", "%current%", latest);
+			getMessages().send(console, "updater.latest.player", "%current%", latest);
 	}
 
 	/**
@@ -108,15 +107,6 @@ public class USleep extends MCPlugin {
 	@Nonnull
 	public USleepAPI getAPI() {
 		return api;
-	}
-
-	@Override
-	public PluginFile getConfig() {
-		return cfg;
-	}
-
-	public MessagesFile getMessages() {
-		return msg;
 	}
 
 	public PluginFile getWorlds() {

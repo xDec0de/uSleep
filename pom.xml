@@ -43,7 +43,6 @@
 			<groupId>me.xdec0de</groupId>
 			<artifactId>MCUtils</artifactId>
 			<version>1.0.0</version>
-			<scope>provided</scope>
 		</dependency>
 		<!-- EssentialsX dependency --> 
 		<dependency>
@@ -57,6 +56,28 @@
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.5.0</version>
+				<configuration>
+					<minimizeJar>true</minimizeJar>
+					<relocations>
+						<relocation>
+							<pattern>me.xdec0de.mcutils</pattern>
+							<shadedPattern>me.xdec0de.usleep.mcutils</shadedPattern>
+						</relocation>
+					</relocations>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 			<artifactId>maven-compiler-plugin</artifactId>
 			<version>3.10.1</version>

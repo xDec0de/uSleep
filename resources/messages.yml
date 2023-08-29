@@ -6,11 +6,12 @@
 # | #                                                                    # | #
 # |------------------------------------------------------------------------| #
 
-Prefix: "&7&l<&b&lu&9&lSleep&7&l>&7"
-ErrorPrefix: "&8&l[&4&l!&8&l]&c"
+prefix: "&7&l<&b&lu&9&lSleep&7&l>&7"
+errorPrefix: "&8&l[&4&l!&8&l]&c"
 noPerms: "%error% Insufficient permissions&c."
-NoConsole: "%error% This command can't be executed from the console."
-PlayerNotFound: "%error% That player is not online."
+commands:
+  noConsole: "%error% This command can't be executed from the console."
+playerNotFound: "%error% That player is not online."
 cmds:
   usleep:
     reload: "%prefix% &aPlugin reloaded."
@@ -20,21 +21,21 @@ cmds:
     noBed: "%error% Bed is missing or obstructed."
     tp: "%prefix% &bYou have been teleported to &eyour &bbed."
     tpOther: "%prefix% &bYou have been teleported to &e%player%'s &bbed."
-Sleep:
-  NotPossibleHere: "&cWhoops!"
-  NotPossibleNow: "&cYou can sleep only at night and during thunderstorms."
-  TooFarAway: "&cYou may not rest now; the bed is too far away."
-  NotSafe: "&cYou may not rest now, there are monsters nearby"
-  Other: "&cYou can't sleep right now."
-  TooFast: "%error% You are sleeping too fast!"
-  AlreadySkipping: "%error% The night is already being skipped."
-InstantSleep:
-  OK: "%prefix% &e%player% &bhas slept, we move on to the next day."
-PercentSleep:
-  OK: "&7Players sleeping: &8[&b%current%&7/&9%required%&8]"
-  NextDay: "%prefix% &bThere are enough players sleeping, we move on to the next day"
-  Title: "&7&lPlayers sleeping"
-  SubTitle: "&b&l%current%&7&l/&9&l%required%"
+sleep:
+  notPossibleHere: "&cWhoops!"
+  notPossibleNow: "&cYou can sleep only at night and during thunderstorms."
+  tooFarAway: "&cYou may not rest now; the bed is too far away."
+  notSafe: "&cYou may not rest now, there are monsters nearby"
+  other: "&cYou can't sleep right now."
+  tooFast: "%error% You are sleeping too fast!"
+  alreadySkipping: "%error% The night is already being skipped."
+instantSleep:
+  ok: "%prefix% &e%player% &bhas slept, we move on to the next day."
+percentSleep:
+  ok: "&7Players sleeping: &8[&b%current%&7/&9%required%&8]"
+  nextDay: "%prefix% &bThere are enough players sleeping, we move on to the next day"
+  title: "&7&lPlayers sleeping"
+  subTitle: "&b&l%current%&7&l/&9&l%required%"
 updater:
   available:
     player: "%prefix% A new version &8(&6v%new%&8) &7is available, using&8: &cv%current%&7."

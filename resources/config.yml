@@ -10,19 +10,19 @@ features:
   updater:
     console: true
     players: true
-  InstantSleep:
-    Enabled: true
-  PercentSleep:
-    Enabled: true
-    Percentage: 50
-    Ignored:
-      AFK: true
-      Vanished: true
-    Cooldown: 5
-  Actionbar: true
-  NightSkipEffect:
-    Enabled: true
-    Increment: 50
+  instantSleep:
+    enabled: true
+  percentSleep:
+    enabled: true
+    percentage: 50
+    ignored:
+      afk: true
+      vanished: true
+    cooldown: 5
+  actionbar: true
+  nightSkipEffect:
+    enabled: true
+    increment: 50
 perms:
   reload: "usp.reload"
   updater:
@@ -34,11 +34,11 @@ perms:
   Sleep:
     Instant: "usp.sleep.instant"
     Percent: "usp.sleep.percent"
-Sounds: 
-  Sleep:
-    Ok: "BLOCK_NOTE_BLOCK_PLING"
-    Error: "BLOCK_NOTE_BLOCK_BASS"
-    Leave: "BLOCK_NOTE_BLOCK_BASS"
-  NextDay:
-    Percent: "ENTITY_PLAYER_LEVELUP"
-    Instant: "ENTITY_PLAYER_LEVELUP"
+sounds: 
+  sleep:
+    ok: "BLOCK_NOTE_BLOCK_PLING"
+    error: "BLOCK_NOTE_BLOCK_BASS"
+    leave: "BLOCK_NOTE_BLOCK_BASS"
+  nextDay:
+    percent: "ENTITY_PLAYER_LEVELUP"
+    instant: "ENTITY_PLAYER_LEVELUP"

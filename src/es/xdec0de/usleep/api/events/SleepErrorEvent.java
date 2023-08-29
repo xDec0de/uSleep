@@ -175,14 +175,14 @@ public class SleepErrorEvent extends PlayerEvent implements Cancellable {
 
 		public String getMessagePath() {
 			return switch(this) {
-			case NOT_POSSIBLE_HERE -> "Sleep.NotPossibleHere";
-			case NOT_POSSIBLE_NOW -> "Sleep.NotPossibleNow";
-			case TOO_FAR_AWAY -> "Sleep.TooFarAway";
-			case NOT_SAFE -> "Sleep.NotSafe";
-			case OTHER_PROBLEM -> "Sleep.Other";
-			case NO_PERMISSIONS -> "NoPerms";
-			case TOO_FAST -> "Sleep.TooFast";
-			case ALREADY_SKIPPING -> "Sleep.AlreadySkipping";
+			case NOT_POSSIBLE_HERE -> "sleep.notPossibleHere";
+			case NOT_POSSIBLE_NOW -> "sleep.notPossibleNow";
+			case TOO_FAR_AWAY -> "sleep.tooFarAway";
+			case NOT_SAFE -> "sleep.notSafe";
+			case OTHER_PROBLEM -> "sleep.other";
+			case NO_PERMISSIONS -> "noPerms";
+			case TOO_FAST -> "sleep.tooFast";
+			case ALREADY_SKIPPING -> "sleep.alreadySkipping";
 			};
 		}
 	}

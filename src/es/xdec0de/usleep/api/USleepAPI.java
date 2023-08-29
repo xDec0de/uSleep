@@ -16,7 +16,7 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 
 import es.xdec0de.usleep.USleep;
-import me.xdec0de.mcutils.files.PluginFile;
+import me.xdec0de.mcutils.files.yaml.PluginFile;
 
 /**
  * The main API class of the plugin.

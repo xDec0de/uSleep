@@ -10,8 +10,8 @@ import es.xdec0de.usleep.api.USleepAPI;
 import es.xdec0de.usleep.cmds.BedTP;
 import es.xdec0de.usleep.cmds.USleepCMD;
 import me.xdec0de.mcutils.MCPlugin;
-import me.xdec0de.mcutils.files.MessagesFile;
-import me.xdec0de.mcutils.files.PluginFile;
+import me.xdec0de.mcutils.files.yaml.MessagesFile;
+import me.xdec0de.mcutils.files.yaml.PluginFile;
 
 public class USleep extends MCPlugin {
 

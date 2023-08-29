@@ -6,7 +6,7 @@
 	
 	<version>2.0.0</version>
 	<name>uSleep</name>
-	<description>A simple plugin that adds PlaceHolderAPI support to BattleLevels.</description>
+	<description>A simple plugin that will change the way you sleep, custom percentage, AFK and Vanish support.</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

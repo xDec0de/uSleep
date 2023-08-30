@@ -1,10 +1,21 @@
-# |------------------------------------------------------------------------| #
-# | #                                                                    # | #
-# | #                   -----------------------------                    # | #
-# | #                   | uSleep v2.0.0 by xDec0de_ |                    # | #
-# | #                   -----------------------------                    # | #
-# | #                                                                    # | #
-# |------------------------------------------------------------------------| #
+# |-------------------------------------------------------------------------| #
+# | #                                                                     # | #
+# | #                   -----------------------------                     # | #
+# | #                   | uSleep v2.0.0 by xDec0de_ |                     # | #
+# | #                   -----------------------------                     # | #
+# | #                                                                     # | #
+# |-------------------------------------------------------------------------| #
+#                                                                             #
+#   This plugin uses MCUtils, here are some features added to your messages   #
+#                                                                             #
+#  Color patterns:                                                            #
+#  - https://mcutils.xdec0de.me/chat-features/color-patterns                  #
+#  Target patterns:                                                           #
+#  - https://mcutils.xdec0de.me/chat-features/target-patterns                 #
+#  Event patterns:                                                            #
+#  - https://mcutils.xdec0de.me/chat-features/event-patterns                  #
+#                                                                             #
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 
 prefix: "&7&l<&b&lu&9&lSleep&7&l>&7"
 errorPrefix: "&8&l[&4&l!&8&l]&c"

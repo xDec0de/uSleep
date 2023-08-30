@@ -2,4 +2,4 @@ name: ${project.name}
 main: es.xdec0de.usleep.USleep
 author: xDec0de_
 version: ${project.version}
-softdepend: [Essentials, MCUtils]
+softdepend: [Essentials]

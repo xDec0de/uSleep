@@ -15,7 +15,7 @@ import com.google.common.base.Enums;
 import es.xdec0de.usleep.api.events.NightSkipEvent;
 import es.xdec0de.usleep.api.events.SleepHandleEvent;
 import me.xdec0de.mcutils.files.yaml.PluginFile;
-import me.xdec0de.mcutils.general.Replacer;
+import me.xdec0de.mcutils.java.strings.replacers.Replacer;
 
 /**
  * A class representing a group of

@@ -1,4 +1,4 @@
-package es.xdec0de.usleep.api;
+package me.xdec0de.usleep.api;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,8 +15,8 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 
-import es.xdec0de.usleep.USleep;
 import me.xdec0de.mcutils.files.yaml.PluginFile;
+import me.xdec0de.usleep.USleep;
 
 /**
  * The main API class of the plugin.

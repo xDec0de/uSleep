@@ -1,4 +1,4 @@
-package es.xdec0de.usleep.api.events;
+package me.xdec0de.usleep.api.events;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

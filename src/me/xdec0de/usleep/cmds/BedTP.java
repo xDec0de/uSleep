@@ -1,4 +1,4 @@
-package es.xdec0de.usleep.cmds;
+package me.xdec0de.usleep.cmds;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -8,9 +8,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import es.xdec0de.usleep.USleep;
-import es.xdec0de.usleep.api.events.BedTeleportTryEvent;
 import me.xdec0de.mcutils.general.MCCommand;
+import me.xdec0de.usleep.USleep;
+import me.xdec0de.usleep.api.events.BedTeleportTryEvent;
 
 public class BedTP extends MCCommand<USleep> {
 

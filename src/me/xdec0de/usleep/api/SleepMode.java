@@ -1,4 +1,4 @@
-package es.xdec0de.usleep.api;
+package me.xdec0de.usleep.api;
 
 /**
  * Represents the mode used to sleep.

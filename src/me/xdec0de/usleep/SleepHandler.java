@@ -1,4 +1,4 @@
-package es.xdec0de.usleep;
+package me.xdec0de.usleep;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -15,11 +15,11 @@ import org.bukkit.event.world.WorldUnloadEvent;
 
 import com.google.common.base.Enums;
 
-import es.xdec0de.usleep.api.SleepGroup;
-import es.xdec0de.usleep.api.events.SleepErrorEvent;
-import es.xdec0de.usleep.api.events.SleepErrorEvent.SleepErrorReason;
 import me.xdec0de.mcutils.files.yaml.PluginFile;
 import me.xdec0de.mcutils.java.strings.MCStrings;
+import me.xdec0de.usleep.api.SleepGroup;
+import me.xdec0de.usleep.api.events.SleepErrorEvent;
+import me.xdec0de.usleep.api.events.SleepErrorEvent.SleepErrorReason;
 
 public class SleepHandler implements Listener {
 

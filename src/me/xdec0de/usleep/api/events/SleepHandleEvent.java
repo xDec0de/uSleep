@@ -1,12 +1,12 @@
-package es.xdec0de.usleep.api.events;
+package me.xdec0de.usleep.api.events;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 
-import es.xdec0de.usleep.api.SleepGroup;
-import es.xdec0de.usleep.api.SleepMode;
+import me.xdec0de.usleep.api.SleepGroup;
+import me.xdec0de.usleep.api.SleepMode;
 
 /**
  * Called whenever a {@link SleepGroup} handles sleeping.

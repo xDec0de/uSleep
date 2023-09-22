@@ -1,12 +1,12 @@
-package es.xdec0de.usleep.cmds;
+package me.xdec0de.usleep.cmds;
 
 import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
 
-import es.xdec0de.usleep.USleep;
 import me.xdec0de.mcutils.general.MCCommand;
+import me.xdec0de.usleep.USleep;
 
 public class USleepCMD extends MCCommand<USleep> {
 

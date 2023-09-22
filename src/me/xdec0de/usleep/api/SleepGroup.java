@@ -1,4 +1,4 @@
-package es.xdec0de.usleep.api;
+package me.xdec0de.usleep.api;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,10 +12,10 @@ import org.bukkit.entity.Player;
 
 import com.google.common.base.Enums;
 
-import es.xdec0de.usleep.api.events.NightSkipEvent;
-import es.xdec0de.usleep.api.events.SleepHandleEvent;
 import me.xdec0de.mcutils.files.yaml.PluginFile;
 import me.xdec0de.mcutils.java.strings.replacers.Replacer;
+import me.xdec0de.usleep.api.events.NightSkipEvent;
+import me.xdec0de.usleep.api.events.SleepHandleEvent;
 
 /**
  * A class representing a group of

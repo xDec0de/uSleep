@@ -1,4 +1,4 @@
-package es.xdec0de.usleep;
+package me.xdec0de.usleep;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

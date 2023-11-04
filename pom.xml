@@ -21,7 +21,7 @@
 		<!-- MCUtils repository -->
 		<repository>
 			<id>mcutils</id>
-			<url>https://github.com/xDec0de/MCUtils/tree/mvn-repo/es/xdec0de/MCUtils</url>
+			<url>https://mcurepo.codersky.net</url>
 		</repository>
 		<!-- EssentialsX repository-->
 		<repository>
@@ -40,7 +40,7 @@
 		</dependency>
 		<!-- MCUtils dependency-->
 		<dependency>
-			<groupId>me.xdec0de</groupId>
+			<groupId>net.codersky</groupId>
 			<artifactId>MCUtils</artifactId>
 			<version>1.0.0</version>
 		</dependency>

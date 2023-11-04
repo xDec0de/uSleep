@@ -6,12 +6,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.Plugin;
 
-import me.xdec0de.mcutils.MCPlugin;
-import me.xdec0de.mcutils.files.yaml.MessagesFile;
-import me.xdec0de.mcutils.files.yaml.PluginFile;
 import me.xdec0de.usleep.api.USleepAPI;
 import me.xdec0de.usleep.cmds.BedTP;
 import me.xdec0de.usleep.cmds.USleepCMD;
+import net.codersky.mcutils.MCPlugin;
+import net.codersky.mcutils.files.yaml.MessagesFile;
+import net.codersky.mcutils.files.yaml.PluginFile;
 
 public class USleep extends MCPlugin {
 

@@ -8,9 +8,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import me.xdec0de.mcutils.general.MCCommand;
 import me.xdec0de.usleep.USleep;
 import me.xdec0de.usleep.api.events.BedTeleportTryEvent;
+import net.codersky.mcutils.general.MCCommand;
 
 public class BedTP extends MCCommand<USleep> {
 

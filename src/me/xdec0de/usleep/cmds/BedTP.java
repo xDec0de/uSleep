@@ -5,7 +5,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import me.xdec0de.usleep.USleep;
@@ -16,7 +15,7 @@ public class BedTP extends MCCommand<USleep> {
 
 	public BedTP(USleep uSleep) {
 		super(uSleep, "bedtp");
-		setRestrictedSenderClass(ConsoleCommandSender.class);
+		setSenderClass(Player.class);
 	}
 
 	@Override

@@ -48,8 +48,24 @@ percentSleep:
   title: "&7&lPlayers sleeping"
   subTitle: "&b&l%current%&7&l/&9&l%required%"
 updater:
+  error:
+    player: |
+      %error% An error occurred while checking for &6uSleep &cupdates&8.
+      &e   - &7Please check Spigot's API status before reporting this&8.
+    console: |
+      &8|------------------------------------------>
+      &7 
+      &e          uSleep &7update checker
+      &7 
+      &b- &cAn error occurred while getting the latest version.
+      &7
+      &7Please check Spigot's API status before reporting this&8.
+      &7
+      &8|------------------------------------------>
   available:
-    player: "%prefix% A new version &8(&6v%new%&8) &7is available, using&8: &cv%current%&7."
+    player: |
+      %prefix% A new version &8(&6v%new%&8) &7is available, using&8: &cv%current%&7.
+      &b   - &7Download link&8: &9%link%
     console: |
       &8|------------------------------------------>
       &7 
@@ -58,6 +74,8 @@ updater:
       &b- &7A new version is available&8: &ev%new%
       &7 
       &b- &7Currently using&8: &cv%current%
+      &7
+      &b- &7Download link&8: &9%link%
       &7 
       &8|------------------------------------------>
   latest:

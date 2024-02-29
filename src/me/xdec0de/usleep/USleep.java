@@ -3,7 +3,6 @@ package me.xdec0de.usleep;
 import javax.annotation.Nonnull;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.Plugin;
 
 import me.xdec0de.usleep.api.USleepAPI;
@@ -25,7 +24,8 @@ public class USleep extends MCPlugin {
 		registerFile("messages.yml", MessagesFile.class);
 		this.worlds = registerFile("worlds", PluginFile.class);
 		registerCommands(new USleepCMD(this), new BedTP(this));
-		registerEvents(new SleepHandler(this), new UpdateChecker(this));
+		final UpdateChecker updateChecker = new UpdateChecker(this);
+		registerEvents(new SleepHandler(this), updateChecker);
 		log(" ");
 		logCol("&8|------------------------------------------>");
 		log(" ");
@@ -38,7 +38,7 @@ public class USleep extends MCPlugin {
 		logCol("&8|------------------------------------------>");
 		log(" ");
 		checkDependencies();
-		//checkUpdates();
+		updateChecker.checkUpdates(Bukkit.getConsoleSender());
 		checkFileStatus();
 	}
 
@@ -84,17 +84,6 @@ public class USleep extends MCPlugin {
 			logCol("  &e- &b"+vanish.getName()+" &7detected &8(&av"+vanish.getDescription().getVersion()+"&8) &8[&dVanish&8]", " ");
 		else
 			logCol("  &6- &cNo &evanish &cplugin detected &8- &cVanish support disabled", " ");
-	}
-
-	private void checkUpdates() {
-		if (!getConfig().getBoolean("features.updater.console"))
-			return;
-		final ConsoleCommandSender console = Bukkit.getConsoleSender();
-		final String latest = getLatestVersion(72205);
-		if (api.isHigher(latest))
-			getMessages().send(console, "updater.available.player", "%current%", getDescription().getVersion(), "%latest%", latest);
-		else
-			getMessages().send(console, "updater.latest.player", "%current%", latest);
 	}
 
 	/**

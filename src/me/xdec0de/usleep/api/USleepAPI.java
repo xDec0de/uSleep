@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import javax.annotation.Nonnull;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -382,17 +384,19 @@ public class USleepAPI {
 	}
 
 	/**
-	 * Checks if <b>version</b> is a higher version than the
+	 * Checks if <b>version</b> is a newer version than the
 	 * currently installed version of uSleep.
 	 * 
 	 * @param version the version to check.
 	 * 
-	 * @return true if <b>version</b> is a higher version than the
-	 * currently installed version of uSleep, false otherwise.
+	 * @return {@code true} if <b>version</b> is a newer version than the
+	 * currently installed version of uSleep, {@code false} otherwise.
+	 * 
+	 * @throws NullPointerException if <b>version</b> is {@code null}.
 	 * 
 	 * @since uSleep 2.0.0
 	 */
-	public boolean isHigher(String version) {
+	public boolean isNewerVersion(@Nonnull String version) {
 		return uSleep.getDescription().getVersion().compareTo(version) >= 0;
 	}
 }

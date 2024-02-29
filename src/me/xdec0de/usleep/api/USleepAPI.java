@@ -10,15 +10,17 @@ import javax.annotation.Nonnull;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 
 import me.xdec0de.usleep.USleep;
+import me.xdec0de.usleep.api.vanish.EssentialsVanishHook;
+import me.xdec0de.usleep.api.vanish.MetadataVanishHook;
+import me.xdec0de.usleep.api.vanish.VanishHook;
 import net.codersky.mcutils.files.yaml.PluginFile;
+import net.codersky.mcutils.java.MCLists;
 
 /**
  * The main API class of the plugin.
@@ -33,10 +35,19 @@ public class USleepAPI {
 	private final List<UUID> onDelay = new ArrayList<UUID>();
 	final ArrayList<SleepGroup> sleepGroups = new ArrayList<SleepGroup>();
 
+	private List<VanishHook> vanishHooks = new ArrayList<>();
+
 	public USleepAPI(USleep plugin) {
 		if (plugin.getAPI() != null)
 			throw new SecurityException("Creating new instances of USleepAPI is not allowed! Please use USleep#getAPI()");
 		this.uSleep = plugin;
+	}
+
+	void addHooks() {
+		// Vanish
+		vanishHooks.add(new EssentialsVanishHook());
+		vanishHooks.add(new MetadataVanishHook());
+		// AFK
 	}
 
 	/**
@@ -46,7 +57,7 @@ public class USleepAPI {
 	 * 
 	 * @since uSleep 2.0.0
 	 */
-	@NonNull
+	@Nonnull
 	public USleep getPlugin() {
 		return this.uSleep;
 	}
@@ -156,13 +167,8 @@ public class USleepAPI {
 	 * @since uSleep 2.0.0
 	 */
 	public boolean isVanished(Player player) {
-		Plugin ess = Bukkit.getPluginManager().getPlugin("Essentials");
-		if(ess != null && ess.isEnabled()) {
-			if(((Essentials)ess).getUser(player).isVanished());
-				return true;
-		}
-		for(MetadataValue meta : player.getMetadata("vanished"))
-			if(meta.asBoolean())
+		for (VanishHook hook : vanishHooks)
+			if (hook.isVanished(player))
 				return true;
 		return false;
 	}
@@ -193,16 +199,7 @@ public class USleepAPI {
 	 * @since uSleep 2.0.0
 	 */
 	public boolean isInactive(Player player) {
-		Plugin ess = Bukkit.getPluginManager().getPlugin("Essentials");
-		if(ess != null && ess.isEnabled()) {
-			User user = ((Essentials)ess).getUser(player);
-			if(user.isVanished() || user.isAfk());
-				return true;
-		}
-		for(MetadataValue meta : player.getMetadata("vanished"))
-			if(meta.asBoolean())
-				return true;
-		return false;
+		return isVanished(player) || isAfk(player);
 	}
 
 	/**
@@ -236,29 +233,11 @@ public class USleepAPI {
 	 * 
 	 * @since uSleep 2.0.0
 	 */
-	public <T extends Player> Collection<T> getVanished(Collection<T> players) {
-		final Collection<T> res = new ArrayList<T>(players);
-		Plugin pl;
-		pl = Bukkit.getPluginManager().getPlugin("Essentials");
-		if(pl != null && pl.isEnabled()) {
-			for(T player : players) {
-				User user = ((Essentials)pl).getUser(player);
-				if(user.isVanished());
-					res.add(player);
-			}
-		}
-		pl = Bukkit.getPluginManager().getPlugin("SuperVanish");
-		pl = pl != null ? pl : Bukkit.getPluginManager().getPlugin("PremiumVanish");
-		if(pl != null && pl.isEnabled()) {
-			for(T player : players) {
-				if(!res.contains(player)) {
-					for(MetadataValue meta : player.getMetadata("vanished"))
-						if(meta.asBoolean())
-							res.add(player);
-				}
-			}
-		}
-		return res;
+	public List<Player> getVanished(List<Player> players) {
+		final List<Player> remaining = players;
+		for (VanishHook hook : vanishHooks)
+			remaining.removeAll(hook.getVanished(remaining));
+		return remaining;
 	}
 
 	/**
@@ -279,31 +258,13 @@ public class USleepAPI {
 	 * @see {@link USPSetting#PERCENT_SLEEP_IGNORE_AFK}
 	 * @see {@link USPSetting#PERCENT_SLEEP_IGNORE_VANISHED}
 	 */
-	public <T extends Player> Collection<T> getInactivePlayers(Collection<T> players, boolean includeAfk, boolean includeVanished) {
-		final Collection<T> res = new ArrayList<T>(players);
-		if (includeAfk || includeVanished) {
-			Plugin ess = Bukkit.getPluginManager().getPlugin("Essentials");
-			boolean checkEss = ess != null && ess.isEnabled();
-			boolean checkV = false;
-			if (includeVanished) {
-				Plugin v = Bukkit.getPluginManager().getPlugin("SuperVanish");
-				v = v != null ? v : Bukkit.getPluginManager().getPlugin("PremiumVanish");
-				checkV = v != null && v.isEnabled();
-			}
-			for (T player : players) {
-				if (checkEss) {
-					User user = ((Essentials)ess).getUser(player);
-					if((includeVanished && user.isVanished()) || (includeAfk && user.isAfk()));
-						res.add(player);
-				}
-				if (checkV) {
-					for(MetadataValue meta : player.getMetadata("vanished"))
-						if(meta.asBoolean())
-							res.add(player);
-				}
-			}
-		}
-		return res;
+	public List<Player> getInactivePlayers(List<Player> players, boolean includeAfk, boolean includeVanished) {
+		final List<Player> remaining = new ArrayList<>();
+		if (includeVanished)
+			remaining.addAll(getVanished(players));
+		if (includeAfk)
+			remaining.addAll(getAfk(players));
+		return MCLists.removeDuplicates(remaining);
 	}
 
 	/**

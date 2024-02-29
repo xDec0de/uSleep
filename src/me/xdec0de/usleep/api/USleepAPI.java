@@ -10,12 +10,10 @@ import javax.annotation.Nonnull;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-
-import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.User;
 
 import me.xdec0de.usleep.USleep;
+import me.xdec0de.usleep.api.afk.AfkHook;
+import me.xdec0de.usleep.api.afk.EssentialsAfkHook;
 import me.xdec0de.usleep.api.vanish.EssentialsVanishHook;
 import me.xdec0de.usleep.api.vanish.MetadataVanishHook;
 import me.xdec0de.usleep.api.vanish.VanishHook;
@@ -36,6 +34,7 @@ public class USleepAPI {
 	final ArrayList<SleepGroup> sleepGroups = new ArrayList<SleepGroup>();
 
 	private List<VanishHook> vanishHooks = new ArrayList<>();
+	private List<AfkHook> afkHooks = new ArrayList<>();
 
 	public USleepAPI(USleep plugin) {
 		if (plugin.getAPI() != null)
@@ -48,6 +47,7 @@ public class USleepAPI {
 		vanishHooks.add(new EssentialsVanishHook());
 		vanishHooks.add(new MetadataVanishHook());
 		// AFK
+		afkHooks.add(new EssentialsAfkHook());
 	}
 
 	/**
@@ -60,27 +60,6 @@ public class USleepAPI {
 	@Nonnull
 	public USleep getPlugin() {
 		return this.uSleep;
-	}
-
-	public USleepAPI reloadSleepGroups() {
-		sleepGroups.clear();
-		final PluginFile worlds = uSleep.getWorlds();
-		final int defPercent = worlds.getInt("defaultPercent", 50);
-		SleepGroup defGroup = new SleepGroup(this, getDefaultSleepGroupID(), defPercent).setWorlds(Bukkit.getWorlds());
-		for (String groupId : worlds.getConfigurationSection("groups").getKeys(false)) {
-			final SleepGroup group = new SleepGroup(this, groupId, worlds.getInt("groups." + groupId + ".percent", defPercent));
-			for (String worldName : worlds.getStringList("groups." + groupId + ".worlds")) {
-				final World world = Bukkit.getWorld(worldName);
-				if (world != null) {
-					defGroup.removeWorld(world);
-					group.addWorld(world);
-				} else
-					uSleep.logCol("&8[&4USleep&8] &cIgnoring non-existing world \"&6"+ worldName + "&c\" on group &e" + group);
-			}
-			sleepGroups.add(group);
-		}
-		sleepGroups.add(defGroup);
-		return this;
 	}
 
 	/**
@@ -174,57 +153,6 @@ public class USleepAPI {
 	}
 
 	/**
-	 * Checks if <b>player</b> is afk.
-	 * 
-	 * @param player the player to check.
-	 * 
-	 * @return true if <b>player</b> is afk, false otherwise.
-	 * 
-	 * @since uSleep 2.0.0
-	 */
-	public boolean isAfk(Player player) {
-		Plugin ess = Bukkit.getPluginManager().getPlugin("Essentials");
-			if(ess != null && ess.isEnabled())
-				return (((Essentials)Bukkit.getServer().getPluginManager().getPlugin("Essentials")).getUser(player).isVanished());
-		return false;
-	}
-
-	/**
-	 * Checks if <b>player</b> is vanished or afk.
-	 * 
-	 * @param player the player to check.
-	 * 
-	 * @return true if <b>player</b> is vanished or afk, false otherwise.
-	 * 
-	 * @since uSleep 2.0.0
-	 */
-	public boolean isInactive(Player player) {
-		return isVanished(player) || isAfk(player);
-	}
-
-	/**
-	 * Gets the list of afk players in <b>players</b>.
-	 * 
-	 * @param players the list of players to check.
-	 * 
-	 * @return a new list of players containing the afk players.
-	 * 
-	 * @since uSleep 2.0.0
-	 */
-	public <T extends Player> Collection<T> getAfk(Collection<T> players) {
-		final Collection<T> res = new ArrayList<T>(players);
-		Plugin pl = Bukkit.getPluginManager().getPlugin("Essentials");
-		if(pl != null && pl.isEnabled()) {
-			for(T player : players) {
-				User user = ((Essentials)pl).getUser(player);
-				if(user.isAfk());
-					res.add(player);
-			}
-		}
-		return res;
-	}
-
-	/**
 	 * Gets the list of vanished players in <b>players</b>.
 	 * 
 	 * @param players the list of players to check.
@@ -238,6 +166,51 @@ public class USleepAPI {
 		for (VanishHook hook : vanishHooks)
 			remaining.removeAll(hook.getVanished(remaining));
 		return remaining;
+	}
+
+	/**
+	 * Checks if <b>player</b> is afk.
+	 * 
+	 * @param player the player to check.
+	 * 
+	 * @return true if <b>player</b> is afk, false otherwise.
+	 * 
+	 * @since uSleep 2.0.0
+	 */
+	public boolean isAfk(Player player) {
+		for (AfkHook hook : afkHooks)
+			if (hook.isAfk(player))
+				return true;
+		return false;
+	}
+
+	/**
+	 * Gets the list of afk players in <b>players</b>.
+	 * 
+	 * @param players the list of players to check.
+	 * 
+	 * @return a new list of players containing the afk players.
+	 * 
+	 * @since uSleep 2.0.0
+	 */
+	public List<Player> getAfk(List<Player> players) {
+		final List<Player> remaining = players;
+		for (AfkHook hook : afkHooks)
+			remaining.removeAll(hook.getAfk(remaining));
+		return remaining;
+	}
+
+	/**
+	 * Checks if <b>player</b> is vanished or afk.
+	 * 
+	 * @param player the player to check.
+	 * 
+	 * @return true if <b>player</b> is vanished or afk, false otherwise.
+	 * 
+	 * @since uSleep 2.0.0
+	 */
+	public boolean isInactive(Player player) {
+		return isVanished(player) || isAfk(player);
 	}
 
 	/**
@@ -279,11 +252,31 @@ public class USleepAPI {
 		new NightSkipEffectTask(group, uSleep.getConfig().getInt("Features.NightSkipEffect.Increment")).runTaskTimer(uSleep, 0, 1);
 	}
 
-	/**
-	 * 
+	/*
 	 * Sleep groups
-	 * 
 	 */
+
+	@Nonnull
+	public USleepAPI reloadSleepGroups() {
+		sleepGroups.clear();
+		final PluginFile worlds = uSleep.getWorlds();
+		final int defPercent = worlds.getInt("defaultPercent", 50);
+		SleepGroup defGroup = new SleepGroup(this, getDefaultSleepGroupID(), defPercent).setWorlds(Bukkit.getWorlds());
+		for (String groupId : worlds.getConfigurationSection("groups").getKeys(false)) {
+			final SleepGroup group = new SleepGroup(this, groupId, worlds.getInt("groups." + groupId + ".percent", defPercent));
+			for (String worldName : worlds.getStringList("groups." + groupId + ".worlds")) {
+				final World world = Bukkit.getWorld(worldName);
+				if (world != null) {
+					defGroup.removeWorld(world);
+					group.addWorld(world);
+				} else
+					uSleep.logCol("&8[&4USleep&8] &cIgnoring non-existing world \"&6"+ worldName + "&c\" on group &e" + group);
+			}
+			sleepGroups.add(group);
+		}
+		sleepGroups.add(defGroup);
+		return this;
+	}
 
 	/**
 	 * Gets the {@link SleepGroup} a world is in.

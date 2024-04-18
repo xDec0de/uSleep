@@ -48,12 +48,12 @@ public class SleepHandler implements Listener {
 		else if (cancel = !uSleep.getAPI().handleSleep(p, false))
 			errorReason = SleepErrorReason.NO_PERMISSIONS;
 		if (errorReason != null) {
-			Sound errorSound = Enums.getIfPresent(Sound.class, uSleep.getConfig().getString("Sounds.Sleep.Error")).orNull();
+			Sound errorSound = Enums.getIfPresent(Sound.class, uSleep.getConfig().getString("sounds.sleep.error")).orNull();
 			String errorMsg =  uSleep.getMessages().getString(errorReason.getMessagePath());
 			SleepErrorEvent see = new SleepErrorEvent(p, errorMsg, errorReason, errorSound, e.getBed());
 			Bukkit.getPluginManager().callEvent(see);
 			if (!(cancel = !see.isCancelled())) {
-				MCStrings.sendFormattedMessage(p, MCStrings.applyColor(see.getMessage()));
+				MCStrings.sendMessage(p, MCStrings.applyColor(see.getMessage()));
 				p.playSound(p, see.getSound(), 1.0F, 1.0F);
 			}
 		}

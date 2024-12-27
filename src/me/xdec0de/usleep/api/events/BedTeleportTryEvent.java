@@ -72,6 +72,7 @@ public class BedTeleportTryEvent extends PlayerEvent implements Cancellable {
 	 * 
 	 * @since uSleep 2.0.0
 	 */
+	@Nullable
 	public OfflinePlayer getTarget() {
 		return target;
 	}

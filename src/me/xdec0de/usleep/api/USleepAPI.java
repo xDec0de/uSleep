@@ -42,10 +42,18 @@ public class USleepAPI {
 		this.uSleep = plugin;
 	}
 
-	void addHooks() {
+	/*
+	 * Vanish hooks
+	 */
+
+	public USleepAPI addVanishHooks(VanishHook... hooks) {
+		vanishHooks.addAll(vanishHooks);
+		return this;
+	}
+	
+	void addDefaultHooks() {
 		// Vanish
-		vanishHooks.add(new EssentialsVanishHook());
-		vanishHooks.add(new MetadataVanishHook());
+		addVanishHooks(new EssentialsVanishHook(), new MetadataVanishHook());
 		// AFK
 		afkHooks.add(new EssentialsAfkHook());
 	}
